@@ -1,28 +1,47 @@
+:root {
+    color-scheme: light dark;
+    /* --title-color: -apple-system-control-accent;
+    --subhead-color: green;
+    --link-color: blue; */
+}
+
+
+/* @media screen and (prefers-color-scheme: dark) {
+     :root {
+        --title-color: #ffffff;
+        --subhead-color: #80ff80;
+        --link-color: #93d5ff;
+    }
+} */
+
+
 /* some default styles to make the view more native like */
 
 html {
-  box-sizing: border-box;
-  background: transparent;
-
-  /* Prevent the page to be scrollable */
-  overflow: hidden;
-
-  /* Force the default cursor, even on text */
-  cursor: default;
+    box-sizing: border-box;
+    /* background: transparent; */
+    /* Prevent the page to be scrollable */
+    overflow: hidden;
+    /* Force the default cursor, even on text */
+    cursor: default;
+    padding: 8px;
+    font: 100% system-ui;
 }
 
-*, *:before, *:after {
-  box-sizing: inherit;
-  margin: 0;
-  padding: 0;
-  position: relative;
-
-  /* Prevent the content from being selectionable */
-  -webkit-user-select: none;
-  user-select: none;
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    /* Prevent the content from being selectionable */
+    -webkit-user-select: none;
+    user-select: none;
 }
 
-input, textarea {
-  -webkit-user-select: auto;
-  user-select: auto;
+input,
+textarea {
+    -webkit-user-select: auto;
+    user-select: auto;
 }

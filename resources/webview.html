@@ -1,19 +1,31 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <meta charset="utf-8">
-  <title>PrettyButtons</title>
-  <link rel="stylesheet" href="./style.css">
+    <meta charset="utf-8">
+    <title>PrettyButtons</title>
+    <link rel="stylesheet" href="./style.css">
 </head>
+
 <body>
-  PrettyButtons
+    <h1>PrettyButtons</h1>
 
-  <div>
-    <button id="button">Get a random number</button>
-  </div>
-  <div id="answer"></div>
+    <div>
+        <button id="button">Get a random number</button>
+    </div>
+    <form action="/action_page.php">
+        <label for="fname">First name:</label>
+        <input type="text" id="fname" name="fname"><br><br>
+        <label for="lname">Last name:</label>
+        <input type="text" id="lname" name="lname"><br><br>
+        <input type="submit" value="Submit">
+    </form>
 
-  <!-- notice the "../resources_" here. It's because webview.js will be compiled in a different folder with the prefix. -->
-  <script src="../resources_webview.js"></script>
+
+    <div id="answer"></div>
+
+    <!-- notice the "../resources_" here. It's because webview.js will be compiled in a different folder with the prefix. -->
+    <script src="../resources_webview.js"></script>
 </body>
+
 </html>
