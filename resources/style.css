@@ -41,7 +41,8 @@ html {
 }
 
 input,
-textarea {
+textarea,
+select {
     -webkit-user-select: auto;
     user-select: auto;
 }

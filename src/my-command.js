@@ -5,6 +5,7 @@ import UI from 'sketch/ui'
 const webviewIdentifier = 'prettybuttons.webview'
 
 export default function() {
+    /* This is the Webview size */
     const options = {
         identifier: webviewIdentifier,
         width: 400,
@@ -22,16 +23,21 @@ export default function() {
     const webContents = browserWindow.webContents
 
     // print a message when the page loads
+
     webContents.on('did-finish-load', () => {
         UI.message('UI loaded!')
     })
 
     // add a handler for a call from web content's javascript
-    webContents.on('nativeLog', s => {
-        UI.message(s)
-        webContents
-            .executeJavaScript(`setRandomNumber(${Math.random()})`)
-            .catch(console.error)
+    webContents.on('nativeLog', parameters => {
+        console.log(parameters.inputText);
+        console.log(parameters.dropdownValue);
+
+        //browserWindow.close();
+
+        // webContents
+        //     .executeJavaScript(`setRandomNumber(${Math.random()})`)
+        //     .catch(console.error)
     })
 
     browserWindow.loadURL(require('../resources/webview.html'))
