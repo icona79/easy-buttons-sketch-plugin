@@ -6,6 +6,21 @@
 }
 
 
+/* Force a light theme here */
+
+
+/* @media screen and (prefers-color-scheme: light) {
+     :root {
+        --title-color: #ffffff;
+        --subhead-color: #80ff80;
+        --link-color: #93d5ff;
+    }
+} */
+
+
+/* Force a dark theme here */
+
+
 /* @media screen and (prefers-color-scheme: dark) {
      :root {
         --title-color: #ffffff;
@@ -19,7 +34,6 @@
 
 html {
     box-sizing: border-box;
-    /* background: transparent; */
     /* Prevent the page to be scrollable */
     overflow: hidden;
     /* Force the default cursor, even on text */
@@ -38,6 +52,10 @@ html {
     /* Prevent the content from being selectionable */
     -webkit-user-select: none;
     user-select: none;
+}
+
+form>div {
+    margin: 24px auto;
 }
 
 input,
