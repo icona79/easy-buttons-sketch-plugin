@@ -8,6 +8,7 @@ import { SymbolMaster } from "sketch/dom";
 const webviewIdentifier = "prettybuttons.webview";
 
 var sketch = require("sketch");
+var SmartLayout = require("sketch").SmartLayout;
 
 // Document variables
 var doc = context.document;
@@ -102,7 +103,10 @@ export default function() {
 
         // Create the Symbol
         var mainSymbol = SymbolMaster.fromArtboard(buttonArtboard);
-
+        // set Smart Layout
+        console.log("before");
+        mainSymbol.smartLayout = SmartLayout.HorizontallyCenter;
+        console.log("after");
         // console.log(mainSymbol);
 
         document.centerOnLayer(mainSymbol);
@@ -145,6 +149,34 @@ function background(selectedLayer, x, y, width, height, color, cornerRadius) {
 
     console.log(mySquare);
 }
+
+function setPinningOptions() {
+    layer.hasFixedLeft = true;
+    layer.hasFixedRight = false;
+    layer.hasFixedTop = false;
+    layer.hasFixedBottom = false;
+
+    layer.hasFixedWidth = true;
+    layer.hasFixedHeight = true;
+}
+
+function setSmartLayout(type = 0) {
+    switch (type) {
+        case 0:
+            return "LeftToRight";
+        case 1:
+            return "HorizontallyCenter";
+        case 2:
+            return "RightToLeft";
+        case 3:
+            return "TopToBottom";
+        case 4:
+            return "VerticallyCenter";
+        case 5:
+            return "BottomToTop";
+    }
+}
+
 
 // ******************************************************************* //
 // Pages management support functions                                  //
