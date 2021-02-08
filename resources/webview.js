@@ -17,14 +17,14 @@ const uppercaseOnly = /^[A-Z]+$/;
 const lowercaseOnly = /^[a-z]+$/;
 const stringOnly = /^[A-Za-z0-9]+$/;
 
-var buttonWidthID = document.getElementById("buttonWidth");
+var buttonPaddingHorizontalID = document.getElementById("buttonWidth");
 var buttonHeightID = document.getElementById("buttonHeight");
 var cornerRadiusID = document.getElementById("cornerRadius");
 var cornerRadiusValueID = document.getElementById("cornerRadiusValue");
 var backgroundColorValueID = document.getElementById("backgroundColorValue");
 
 document.getElementById("parametersSubmit").addEventListener("click", () => {
-    var buttonWidthValue = buttonWidthID.value;
+    var buttonPaddingHorizontalValue = buttonPaddingHorizontalID.value;
     var buttonHeightValue = buttonHeightID.value;
     var cornerRadiusSelection = cornerRadiusID.value;
     var cornerRadiusValue = 0;
@@ -37,7 +37,7 @@ document.getElementById("parametersSubmit").addEventListener("click", () => {
     var backgroundColorValue = backgroundColorValueID.value;
 
     var parameters = {
-        buttonWidthValue: buttonWidthValue,
+        buttonPaddingHorizontalValue: buttonPaddingHorizontalValue,
         buttonHeightValue: buttonHeightValue,
         cornerRadiusSelection: cornerRadiusSelection,
         cornerRadiusValue: cornerRadiusValue,

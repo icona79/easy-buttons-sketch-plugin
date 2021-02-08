@@ -9,6 +9,7 @@ const webviewIdentifier = "prettybuttons.webview";
 
 var sketch = require("sketch");
 var SmartLayout = require("sketch").SmartLayout;
+var Text = require("sketch/dom").Text;
 
 // Document variables
 var doc = context.document;
@@ -20,6 +21,9 @@ var artboard = sketch.Artboard;
 
 var buttonName = "Buttons/Button";
 var buttonArtboard;
+var buttonText;
+var buttonBackground;
+var textWidth;
 var xPosition = 0;
 var yPosition = 0;
 
@@ -30,12 +34,6 @@ var existingSymbols = 0;
 
 const buttonSymbolsPage = "Buttons";
 var page = selectPage(findOrCreatePage(document, buttonSymbolsPage));
-
-var LayerID;
-
-export function hello() {
-    return "Hello World";
-}
 
 
 export default function() {
@@ -67,7 +65,7 @@ export default function() {
 
         // console.log('Configuration: ', parameters);
 
-        var buttonWidthValue = parameters.buttonWidthValue;
+        var buttonPaddingHorizontalValue = parameters.buttonPaddingHorizontalValue;
         var buttonHeightValue = parameters.buttonHeightValue;
         var buttonBackgroundColorValue = parameters.backgroundColorValue;
         var buttonCornerRadius = parameters.cornerRadiusValue;
@@ -83,30 +81,40 @@ export default function() {
             frame: {
                 x: xPos,
                 y: yPos,
-                width: buttonWidthValue,
+                width: 200,
                 height: buttonHeightValue,
             },
         });
+
+        createText(buttonArtboard, buttonPaddingHorizontalValue, buttonBackgroundColorValue);
+
+        console.log(buttonText);
+
+        var buttonWidth = buttonText.frame.width + (2 * buttonPaddingHorizontalValue);
+
+        buttonArtboard.frame.width = buttonWidth;
+        let buttonTextHeight = buttonText.frame.height
+        let textYposition = Math.floor((buttonHeightValue - buttonTextHeight) / 2);
+        buttonText.frame.y = textYposition
 
         background(
             buttonArtboard,
             xPosition,
             yPosition,
-            buttonWidthValue,
+            buttonWidth,
             buttonHeightValue,
             buttonBackgroundColorValue,
-            buttonCornerRadius,
+            buttonCornerRadius
         );
 
-        // var myArtboardLayers = buttonArtboard.layers;
-        // orderLayers(myArtboardLayers);
+        buttonBackground.moveToBack();
 
         // Create the Symbol
         var mainSymbol = SymbolMaster.fromArtboard(buttonArtboard);
+
         // set Smart Layout
-        console.log("before");
-        mainSymbol.smartLayout = SmartLayout.HorizontallyCenter;
-        console.log("after");
+        setSmartLayout(mainSymbol, "horizontallyCenter");
+
         // console.log(mainSymbol);
 
         document.centerOnLayer(mainSymbol);
@@ -131,7 +139,7 @@ function background(selectedLayer, x, y, width, height, color, cornerRadius) {
     let backgroundCornerRadius = cornerRadius;
 
     let ShapePath = sketch.ShapePath;
-    let mySquare = new ShapePath({
+    buttonBackground = new ShapePath({
         parent: selectedLayer,
         frame: {
             x: xPosition,
@@ -140,14 +148,44 @@ function background(selectedLayer, x, y, width, height, color, cornerRadius) {
             height: backgroundHeight,
         },
         style: { fills: [backgroundColor], borders: [] },
-
         name: "Background",
     });
 
-    mySquare.points.forEach((point) => (point.cornerRadius = backgroundCornerRadius));
-    mySquare.sketchObject.setFixedRadius(backgroundCornerRadius);
+    buttonBackground.points.forEach((point) => (point.cornerRadius = backgroundCornerRadius));
+    buttonBackground.sketchObject.setFixedRadius(backgroundCornerRadius);
 
-    console.log(mySquare);
+    //console.log(background);
+}
+
+function createText(selectedLayer, padding, backgroundColor) {
+    let textX = padding;
+    let textY = 10;
+    let textParent = selectedLayer;
+    let textFontSize = 16;
+    let textColor = colorContrast(backgroundColor);
+    let textLineHeight = 24;
+    let textAlignment = "left";
+    let textFontFamily = "Open Sans";
+    let textFontWeight = 5;
+    let textValue = "Hello!";
+    let textName = "Text Layer";
+
+    buttonText = new Text({
+        parent: textParent,
+        text: textValue,
+    });
+
+    buttonText.frame.x = textX;
+    buttonText.frame.y = textY;
+    buttonText.parent = textParent;
+    buttonText.style.fontSize = textFontSize;
+    buttonText.style.textColor = textColor;
+    buttonText.style.lineHeight = textLineHeight;
+    buttonText.style.alignment = textAlignment;
+    buttonText.style.fontFamily = textFontFamily;
+    buttonText.style.fontWeight = textFontWeight;
+
+    buttonText.name = textName;
 }
 
 function setPinningOptions() {
@@ -160,23 +198,74 @@ function setPinningOptions() {
     layer.hasFixedHeight = true;
 }
 
-function setSmartLayout(type = 0) {
-    switch (type) {
-        case 0:
-            return "LeftToRight";
-        case 1:
-            return "HorizontallyCenter";
-        case 2:
-            return "RightToLeft";
-        case 3:
-            return "TopToBottom";
-        case 4:
-            return "VerticallyCenter";
-        case 5:
-            return "BottomToTop";
+function setSmartLayout(item, type) {
+    let smartLayoutType = type
+    switch (smartLayoutType) {
+        case "LeftToRight":
+            return item.smartLayout = SmartLayout.LeftToRight;
+        case "horizontallyCenter":
+            return item.smartLayout = SmartLayout.HorizontallyCenter;
+        case "RightToLeft":
+            return item.smartLayout = SmartLayout.RightToLeft;
+        case "TopToBottom":
+            return item.smartLayout = SmartLayout.TopToBottom;
+        case "VerticallyCenter":
+            return item.smartLayout = SmartLayout.VerticallyCenter;
+        case "BottomToTop":
+            return item.smartLayout = SmartLayout.BottomToTop;
     }
 }
 
+// ******************************************************************* //
+// Color management support functions                                  //
+// ******************************************************************* //
+function colorContrast(color) {
+    var r = hexToRgb(color).r;
+    var g = hexToRgb(color).g;
+    var b = hexToRgb(color).b;
+    var rB = 255,
+        gB = 255,
+        bB = 255;
+    var rN = 0,
+        gN = 0,
+        bN = 0;
+
+    var cB = Math.abs(r - rB) + Math.abs(g - gB) + Math.abs(b - bB);
+    var br1 = 299 * r + 587 * g + 114 * b;
+    var br2 = 299 * rB + 587 * gB + 114 * bB;
+    var dB = Math.abs(br1 - br2);
+
+    var cN = Math.abs(r - rN) + Math.abs(g - gN) + Math.abs(b - bN);
+    br2 = 299 * rN + 587 * gN + 114 * bN;
+    var dN = Math.abs(br1 - br2);
+
+    if (cB > 500 && dB > 125) {
+        return "#ffffff";
+    } else if (cN > 500 && dN > 125) {
+        return "#000000";
+    } else {
+        if (0.2 * cB + 0.8 * dB > 0.2 * cN + 0.8 * dN) {
+            return "#FFFFFF";
+        } else {
+            return "#000000";
+        }
+    }
+}
+
+function hexToRgb(hex) {
+    var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+    hex = hex.replace(shorthandRegex, function(m, r, g, b) {
+        return r + r + g + g + b + b;
+    });
+
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+            r: parseInt(result[1], 16),
+            g: parseInt(result[2], 16),
+            b: parseInt(result[3], 16),
+        } :
+        null;
+}
 
 // ******************************************************************* //
 // Pages management support functions                                  //
