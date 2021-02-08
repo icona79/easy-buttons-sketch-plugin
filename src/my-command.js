@@ -19,6 +19,9 @@ var artboard = sketch.Artboard;
 
 var buttonName = "Buttons/Button";
 var buttonArtboard;
+var xPosition = 0;
+var yPosition = 0;
+
 var xPos = 0;
 var yPos = 0;
 
@@ -61,14 +64,16 @@ export default function() {
     // add a handler for a call from web content's javascript
     webContents.on("nativeLog", parameters => {
 
-        console.log('Configuration: ', parameters);
+        // console.log('Configuration: ', parameters);
 
-        var buttonWidth = parameters.buttonWidth;
-        var buttonHeight = parameters.buttonHeight;
+        var buttonWidthValue = parameters.buttonWidthValue;
+        var buttonHeightValue = parameters.buttonHeightValue;
+        var buttonBackgroundColorValue = parameters.backgroundColorValue;
+        var buttonCornerRadius = parameters.cornerRadiusValue;
 
         setSymbolsInPage();
 
-        console.log("X: " + xPos);
+        // console.log("X: " + xPos);
 
         // Create the Artboard which will be the Symbol
         buttonArtboard = new artboard({
@@ -77,10 +82,20 @@ export default function() {
             frame: {
                 x: xPos,
                 y: yPos,
-                width: buttonWidth,
-                height: buttonHeight,
+                width: buttonWidthValue,
+                height: buttonHeightValue,
             },
         });
+
+        background(
+            buttonArtboard,
+            xPosition,
+            yPosition,
+            buttonWidthValue,
+            buttonHeightValue,
+            buttonBackgroundColorValue,
+            buttonCornerRadius,
+        );
 
         // var myArtboardLayers = buttonArtboard.layers;
         // orderLayers(myArtboardLayers);
@@ -88,7 +103,7 @@ export default function() {
         // Create the Symbol
         var mainSymbol = SymbolMaster.fromArtboard(buttonArtboard);
 
-        console.log(mainSymbol);
+        // console.log(mainSymbol);
 
         document.centerOnLayer(mainSymbol);
         doc.setZoomValue(75 / 100);
@@ -98,6 +113,37 @@ export default function() {
     });
 
     browserWindow.loadURL(require("../resources/webview.html"));
+}
+
+// ******************************************************************* //
+// Items management support functions                                  //
+// ******************************************************************* //
+function background(selectedLayer, x, y, width, height, color, cornerRadius) {
+    let xPosition = x;
+    let yPosition = y;
+    let backgroundWidth = width;
+    let backgroundHeight = height;
+    let backgroundColor = "#" + color;
+    let backgroundCornerRadius = cornerRadius;
+
+    let ShapePath = sketch.ShapePath;
+    let mySquare = new ShapePath({
+        parent: selectedLayer,
+        frame: {
+            x: xPosition,
+            y: yPosition,
+            width: backgroundWidth,
+            height: backgroundHeight,
+        },
+        style: { fills: [backgroundColor], borders: [] },
+
+        name: "Background",
+    });
+
+    mySquare.points.forEach((point) => (point.cornerRadius = backgroundCornerRadius));
+    mySquare.sketchObject.setFixedRadius(backgroundCornerRadius);
+
+    console.log(mySquare);
 }
 
 // ******************************************************************* //

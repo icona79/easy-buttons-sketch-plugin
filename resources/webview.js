@@ -20,24 +20,28 @@ const stringOnly = /^[A-Za-z0-9]+$/;
 var buttonWidthID = document.getElementById("buttonWidth");
 var buttonHeightID = document.getElementById("buttonHeight");
 var cornerRadiusID = document.getElementById("cornerRadius");
-var cornerRadiusValueID = document.getElementById("cornerRadius");
+var cornerRadiusValueID = document.getElementById("cornerRadiusValue");
+var backgroundColorValueID = document.getElementById("backgroundColorValue");
 
 document.getElementById("parametersSubmit").addEventListener("click", () => {
     var buttonWidthValue = buttonWidthID.value;
     var buttonHeightValue = buttonHeightID.value;
     var cornerRadiusSelection = cornerRadiusID.value;
-    var cornerRadiusValue = 1;
+    var cornerRadiusValue = 0;
     if (cornerRadiusSelection === "3") {
         cornerRadiusValue = cornerRadiusValueID.value;
     } else if (cornerRadiusSelection === "2") {
         cornerRadiusValue = buttonHeightID.value / 2;
     }
 
+    var backgroundColorValue = backgroundColorValueID.value;
+
     var parameters = {
-        buttonWidth: buttonWidthValue,
-        buttonHeight: buttonHeightValue,
+        buttonWidthValue: buttonWidthValue,
+        buttonHeightValue: buttonHeightValue,
         cornerRadiusSelection: cornerRadiusSelection,
         cornerRadiusValue: cornerRadiusValue,
+        backgroundColorValue: backgroundColorValue,
     };
 
     window.postMessage('nativeLog', parameters);
