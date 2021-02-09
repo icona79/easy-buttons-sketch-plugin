@@ -12,5 +12,8 @@ npm-debug.log
 # WebStorm
 .idea
 
+# Visual Studio Code
+.vscode/
+
 # sketch
 # sketch-assets
