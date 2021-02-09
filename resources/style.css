@@ -8,7 +8,7 @@
 
 /* Force a light theme here */
 
-
+x
 /* @media screen and (prefers-color-scheme: light) {
      :root {
         --title-color: #ffffff;
@@ -39,7 +39,6 @@ html {
     /* Force the default cursor, even on text */
     cursor: default;
     padding: 8px;
-    font: 100% system-ui;
 }
 
 *,
@@ -54,8 +53,45 @@ html {
     user-select: none;
 }
 
-form>div {
-    margin: 24px auto;
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-size: 1rem;
+    background: #FFFFFF;
+    border: 0 solid rgba(0, 0, 0, 0.15);
+    box-shadow: 0 7px 25px 0 rgba(0, 0, 0, 0.20);
+    border-radius: 12px;
+}
+
+header {
+    padding: 40px 40px 28px 40px;
+    width: 100%
+}
+
+h1 {
+    font-size: 1.625rem;
+    font-weight: 500;
+}
+
+footer {
+    position: fixed;
+    z-index: 10;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-top: 28px;
+    padding: 20px;
+    background-color: #F9F9F9;
+    inset-inline-end: 0;
+}
+
+#container {
+    margin: 0px 40px;
+}
+
+#container>div {
+    margin-bottom: 14px;
 }
 
 input,
@@ -63,4 +99,15 @@ textarea,
 select {
     -webkit-user-select: auto;
     user-select: auto;
+}
+
+button.primary {
+    height: 48px;
+    color: #ffffff;
+    background-color: #FA6400;
+    min-width: 120px;
+    border: none;
+    border-radius: 4px;
+    padding: 0 22px;
+    text-align: center;
 }

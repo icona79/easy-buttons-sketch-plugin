@@ -47,15 +47,6 @@ document.getElementById("parametersSubmit").addEventListener("click", () => {
     window.postMessage('nativeLog', parameters);
 })
 
-// call the webview from the plugin
-// import { f1 } from "../src/my-command.js";
-// f1();
-// console.log("here");
-// document.getElementById("pluginName").innerHTML = title;
-
-// import { hello } from './../src/my-command.js';
-// alert(hello());
-
 // ************************************************** //
 // Expose the value input for corner radius if needed //
 // ************************************************** //

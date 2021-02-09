@@ -40,8 +40,8 @@ export default function() {
     /* This is the Webview size */
     const options = {
         identifier: webviewIdentifier,
-        width: 400,
-        height: 400,
+        width: 520,
+        height: 540,
         show: false,
     };
 
@@ -71,8 +71,6 @@ export default function() {
         var buttonCornerRadius = parameters.cornerRadiusValue;
 
         setSymbolsInPage();
-
-        // console.log("X: " + xPos);
 
         // Create the Artboard which will be the Symbol
         buttonArtboard = new artboard({
@@ -177,7 +175,6 @@ function createText(selectedLayer, padding, backgroundColor) {
 
     buttonText.frame.x = textX;
     buttonText.frame.y = textY;
-    buttonText.parent = textParent;
     buttonText.style.fontSize = textFontSize;
     buttonText.style.textColor = textColor;
     buttonText.style.lineHeight = textLineHeight;
@@ -245,7 +242,7 @@ function colorContrast(color) {
         return "#000000";
     } else {
         if (0.2 * cB + 0.8 * dB > 0.2 * cN + 0.8 * dN) {
-            return "#FFFFFF";
+            return "#ffffff";
         } else {
             return "#000000";
         }
