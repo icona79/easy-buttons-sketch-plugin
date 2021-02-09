@@ -1,21 +1,111 @@
 :root {
     color-scheme: light dark;
     /* --title-color: -apple-system-control-accent;
-    --subhead-color: green;
-    --link-color: blue; */
+    /* View Size */
+    --width: 400px;
+    --height: 336px;
+    /* Design Tokens */
+    --color-white: #ffffff;
+    --color-grey-lightest: #f9f9f9;
+    --color-grey-lighter: #ededed;
+    --color-grey-light: #d4d4d4;
+    --color-grey: #bfbfbf;
+    --color-grey-darker: #4c4c4c;
+    --color-black: #000000;
+    --color-primary: #FA6400;
+    --color-primary-dark: #ffffff;
+    --color-primary-light: #ffffff;
+    --color-primary-lighter: #ffffff;
+    --color-primary-lightest: #ffffff;
+    --color-status-danger: #ff0000;
+    --color-status-warning: #ff0000;
+    --color-status-success: #ff0000;
+    --color-trasparency-black-10: rgba(0, 0, 0, 0.1);
+    --color-trasparency-black-24: rgba(0, 0, 0, 0.24);
+    --color-trasparency-white-10: rgba(255, 255, 255, 0.1);
+    --color-trasparency-white-24: rgba(255, 255, 255, 0.24);
+    --color-gradient-primary: linear-gradient(180deg, rgba(255, 255, 255, 0.50) 0%, rgba(255, 255, 255, 0.20) 100%);
+    --opacity-30: 0.3;
+    --opacity-50: 0.5;
+    --opacity-75: 0.75;
+    --opacity-85: 0.85;
+    /* Space */
+    --space-xxx-small: 2px;
+    --space-xx-small: 4px;
+    --space-x-small: 8px;
+    --space-small: 12px;
+    --space-medium: 16px;
+    --space-large: 20px;
+    --space-x-large: 28px;
+    --space-xx-large: 36px;
+    --space-xxx-large: 48px;
+    --space-xxxx-large: 72px;
+    /* Sizes */
+    --size-xx-small: 10px;
+    --size-x-small: 16px;
+    --size-small: 20px;
+    --size-medium: 24px;
+    --size-large: 30px;
+    --size-x-large: 36px;
+    --size-xx-large: 48px;
+    --size-xxx-large: 72px;
+    --size-layout-max-width: 100%;
+    --size-header: var(--size-xxx-large);
+    --size-footer: var(--size-xx-large);
+    --border-width-default: 0.5px;
+    --border-width-selected: 1px;
+    /* Texts */
+    --font-weight-regular: 400;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    --font-size-small: 0.875rem;
+    --font-size-medium: 1rem;
+    --font-size-large: 1.182rem;
+    --font-size-xlarge: 1.636rem;
+    --text-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    --text-font-body-size: 1rem;
+    --text-font-body-color: var(--color-black);
+    --text-font-body-weight: 400;
+    --text-font-h1-size: 1.182rem;
+    --text-font-h1-color: var(--color-grey-darker);
+    --text-font-h1-weight: 600;
+    --text-font-label-size: 1rem;
+    --text-font-label-color: var(--color-grey-darker);
+    --text-font-label-weight: 400;
+    /* Border Radius */
+    --border-radius-sharp: 0;
+    --border-radius-xsmall: 4px;
+    --border-radius-small: 8px;
+    --border-radius-medium: 12px;
+    --border-radius-large: 20px;
+    --border-radius-xlarge: 24px;
+    --border-radius-circle: 50%;
+    /* Box Shadow */
+    --shadow-none: 0;
+    --shadow-small: 2px;
+    --shadow-medium: 4px;
+    --shadow-large: 7px;
+    --shadow-blur-none: 0;
+    --shadow-blur-xsmall: 1px;
+    --shadow-blur-small: 10px;
+    --shadow-blur-medium: 16px;
+    --shadow-blur-large: 25px;
+    --shadow-tooltip: ;
 }
 
 
 /* Force a light theme here */
 
-x
-/* @media screen and (prefers-color-scheme: light) {
+@media screen and (prefers-color-scheme: light) {
      :root {
-        --title-color: #ffffff;
-        --subhead-color: #80ff80;
-        --link-color: #93d5ff;
+        /* View */
+        --view-background-color: var(--color-white);
+        --view-border-color: var(--color-grey-light);
+        --view-shadow-color: var(--color-trasparency-black-10);
+        --view-border-radius: var(--border-radius-medium);
+        --view-border-width: var(--border-width-default);
     }
-} */
+}
 
 
 /* Force a dark theme here */
@@ -23,9 +113,9 @@ x
 
 /* @media screen and (prefers-color-scheme: dark) {
      :root {
-        --title-color: #ffffff;
-        --subhead-color: #80ff80;
-        --link-color: #93d5ff;
+        --view-background-color: var(--color-grey-darker);
+        --view-border-color: var(--color-grey-light);
+        --view-shadow-color: var(--color-trasparency-white-10);
     }
 } */
 
@@ -38,7 +128,7 @@ html {
     overflow: hidden;
     /* Force the default cursor, even on text */
     cursor: default;
-    padding: 8px;
+    font-size: 11px;
 }
 
 *,
@@ -47,47 +137,62 @@ html {
     box-sizing: inherit;
     margin: 0;
     padding: 0;
-    position: relative;
+    /* position: relative; */
     /* Prevent the content from being selectionable */
     -webkit-user-select: none;
     user-select: none;
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-    font-size: 1rem;
-    background: #FFFFFF;
-    border: 0 solid rgba(0, 0, 0, 0.15);
-    box-shadow: 0 7px 25px 0 rgba(0, 0, 0, 0.20);
-    border-radius: 12px;
+    width: var(--width);
+    height: var(--height);
+    display: flex;
+    flex-direction: column;
+    font-family: var(--text-font-family);
+    font-size: var(--text-font-body-size);
+    color: var(--text-font-body-color);
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: default;
+}
+
+.view {
+    width: var(--size-layout-max-width);
+    height: auto;
+    background-color: var(--view-background-color);
 }
 
 header {
-    padding: 40px 40px 28px 40px;
-    width: 100%
+    height: var(--size-header);
+    width: var(--size-layout-max-width);
+    padding: 0 var(--space-xx-large);
+    display: flex;
+    align-items: center;
+    justify-content: left;
 }
 
 h1 {
-    font-size: 1.625rem;
-    font-weight: 500;
+    color: var(--text-font-h1-color);
+    font-size: var(--text-font-h1-size);
+    font-weight: var(--text-font-h1-weight);
 }
 
 footer {
-    position: fixed;
-    z-index: 10;
-    bottom: 0;
-    width: 100%;
+    width: var(--size-layout-max-width);
+    height: 48px;
+    padding-right: var(--space-large);
     display: flex;
     flex-direction: row;
+    align-items: center;
     justify-content: flex-end;
-    margin-top: 28px;
-    padding: 20px;
-    background-color: #F9F9F9;
+    background-color: var(--color-grey-lightest);
     inset-inline-end: 0;
 }
 
 #container {
-    margin: 0px 40px;
+    margin: 0px var(--space-xxx-large);
 }
 
 #container>div {
@@ -101,13 +206,76 @@ select {
     user-select: auto;
 }
 
-button.primary {
-    height: 48px;
-    color: #ffffff;
-    background-color: #FA6400;
-    min-width: 120px;
+input::placeholder {
+    color: var(--color-grey-light);
+}
+
+button.primary,
+button.buttonGroup {
+    height: var(--size-small);
+    padding: 0 var(--size-xx-small);
+    box-shadow: var(--shadow-none) var(--shadow-none) var(--shadow-blur-xsmall) var(--color-primary-dark);
+    border-radius: var(--border-radius-xsmall);
+    min-width: 96px;
     border: none;
-    border-radius: 4px;
-    padding: 0 22px;
     text-align: center;
+    cursor: pointer;
+}
+
+button.primary {
+    color: var(--color-white);
+    background: var(--color-primary);
+    background-image: var(--color-gradient-primary);
+}
+
+button.primary:active {
+    background-image: none;
+}
+
+
+/* .buttonGroup button {
+    background-color: var(--color-grey);
+    border: 1px solid green;
+    border-radius: var(--border-radius-xsmall);
+    padding: 10px 24px;
+    cursor: pointer;
+} */
+
+.buttonsGroup {
+    margin: 0 1.5px;
+    background: var(--color-grey-lighter);
+    border-radius: var(--border-radius-xsmall);
+}
+
+button.buttonGroup {
+    margin: 0 -1px;
+    color: var(--color-grey-darker);
+    background: var(--color-grey-lightest);
+    /* min-width: calc((var(--width) - var(--space-xxx-large)*2) / 3); */
+    min-width: 100px;
+}
+
+button.buttonGroup:not(:first-child) {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+button.buttonGroup:not(:last-child) {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+
+/* button.buttonGroup:not(:first-child):not(:last-child) {
+    border-left: var(--border-width-default) solid var(--color-grey-lighter);
+} */
+
+button.buttonGroup:hover {
+    background-color: var(--color-grey-lighter);
+}
+
+button.buttonGroup:active,
+button.buttonGroup:focus {
+    color: var(--color-white);
+    background-color: var(--color-primary);
 }

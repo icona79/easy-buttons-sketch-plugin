@@ -40,8 +40,8 @@ export default function() {
     /* This is the Webview size */
     const options = {
         identifier: webviewIdentifier,
-        width: 520,
-        height: 540,
+        width: 400,
+        height: 336,
         show: false,
     };
 
