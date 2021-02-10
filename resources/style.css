@@ -1,10 +1,10 @@
 :root {
     color-scheme: light dark;
-    /* --title-color: -apple-system-control-accent;
     /* View Size */
     --width: 400px;
     --height: 336px;
     /* Design Tokens */
+    --color-accent: -apple-system-control-accent;
     --color-white: #ffffff;
     --color-grey-lightest: #f9f9f9;
     --color-grey-lighter: #ededed;
@@ -36,7 +36,7 @@
     --space-small: 12px;
     --space-medium: 16px;
     --space-large: 20px;
-    --space-x-large: 28px;
+    --space-x-large: 24px;
     --space-xx-large: 36px;
     --space-xxx-large: 48px;
     --space-xxxx-large: 72px;
@@ -67,7 +67,6 @@
     --text-font-body-color: var(--color-black);
     --text-font-body-weight: 400;
     --text-font-h1-size: 1.182rem;
-    --text-font-h1-color: var(--color-grey-darker);
     --text-font-h1-weight: 600;
     --text-font-label-size: 1rem;
     --text-font-label-color: var(--color-grey-darker);
@@ -98,26 +97,43 @@
 
 @media screen and (prefers-color-scheme: light) {
      :root {
-        /* View */
         --view-background-color: var(--color-white);
-        --view-border-color: var(--color-grey-light);
-        --view-shadow-color: var(--color-trasparency-black-10);
-        --view-border-radius: var(--border-radius-medium);
-        --view-border-width: var(--border-width-default);
+        --footer-background-color: var(--color-grey-lightest);
+        --buttongroup-background-color: var(--color-grey-lighter);
+        --buttongroup-box-shadow: var(--shadow-none) var(--shadow-none) var(--shadow-blur-xsmall) var(--color-primary-dark);
+        /* --buttongroup-border: 0.5px solid var(--color-grey-lighter); */
+        --buttongroup-border: none;
+        --buttongroup-color: var(--color-grey-darker);
+        --buttongroup-background-image: none;
+        --buttongroup-button-background-default: none;
+        --buttongroup-button-background-active: var(--color-white);
+        --buttongroup-button-color-active: inherit;
+        --buttongroup-input-border: 0.5px solid transparent;
+        --header-color: var(--color-grey-darker);
+        --label-color: var(--color-grey-darker);
     }
 }
 
 
 /* Force a dark theme here */
 
-
-/* @media screen and (prefers-color-scheme: dark) {
+@media screen and (prefers-color-scheme: dark) {
      :root {
-        --view-background-color: var(--color-grey-darker);
-        --view-border-color: var(--color-grey-light);
-        --view-shadow-color: var(--color-trasparency-white-10);
+        --view-background-color: inherit;
+        --footer-background-color: var(--color-grey-darker);
+        --buttongroup-background-color: var(--color-grey-darker);
+        --buttongroup-box-shadow: none;
+        --buttongroup-border: 0;
+        --buttongroup-color: var(--color-grey-lightest);
+        --buttongroup-background-image: var(--color-gradient-primary);
+        --buttongroup-button-background-default: none;
+        --buttongroup-button-background-active: var(--color-grey-light);
+        --buttongroup-button-color-active: var(--color-grey-darker);
+        --buttongroup-input-border: 0.5px solid transparent;
+        --header-color: var(--color-grey-lightest);
+        --label-color: var(--color-grey-lightest);
     }
-} */
+}
 
 
 /* some default styles to make the view more native like */
@@ -167,14 +183,14 @@ body {
 header {
     height: var(--size-header);
     width: var(--size-layout-max-width);
-    padding: 0 var(--space-xx-large);
+    padding: 0 var(--space-xxx-large);
     display: flex;
     align-items: center;
     justify-content: left;
 }
 
 h1 {
-    color: var(--text-font-h1-color);
+    color: var(--header-color);
     font-size: var(--text-font-h1-size);
     font-weight: var(--text-font-h1-weight);
 }
@@ -187,16 +203,59 @@ footer {
     flex-direction: row;
     align-items: center;
     justify-content: flex-end;
-    background-color: var(--color-grey-lightest);
+    background-color: var(--footer-background-color);
     inset-inline-end: 0;
 }
 
 #container {
-    margin: 0px var(--space-xxx-large);
+    margin: var(--space-xxx-large) var(--space-xxx-large) 0;
 }
 
 #container>div {
-    margin-bottom: 14px;
+    padding-bottom: var(--space-x-large);
+}
+
+#container>div:first-child {
+    padding-top: var(--space-x-medium);
+}
+
+.table {
+    /* a table */
+    display: table;
+    height: 100%;
+    width: var(--size-layout-max-width);
+    border-collapse: collapse;
+}
+
+.table>div {
+    display: table-row;
+    border-bottom: var(--space-x-large) solid transparent;
+    /* min-height: calc(var(--size-small)+ var(--space-x-large)); */
+}
+
+.table>div>div {
+    display: table-cell;
+    text-align: left;
+    vertical-align: top;
+    /* height: calc(var(--size-small) + var(--space-x-large)); */
+}
+
+.table>div>.cell-label {
+    text-align: left;
+    vertical-align: middle;
+    width: 50px;
+    min-width: 50px;
+}
+
+.table>div>.cell-data {
+    text-align: right;
+    width: 86px;
+}
+
+.table>div>.cell-space {
+    width: 32px;
+    max-width: 32px;
+    min-width: 32px;
 }
 
 input,
@@ -204,6 +263,17 @@ textarea,
 select {
     -webkit-user-select: auto;
     user-select: auto;
+    font-size: var(--font-size-medium);
+}
+
+input,
+select {
+    width: 86px;
+    height: var(--size-small);
+}
+
+label {
+    color: var(--buttongroup-color);
 }
 
 input::placeholder {
@@ -211,10 +281,10 @@ input::placeholder {
 }
 
 button.primary,
-button.buttonGroup {
+.buttonTypeGroup label {
     height: var(--size-small);
     padding: 0 var(--size-xx-small);
-    box-shadow: var(--shadow-none) var(--shadow-none) var(--shadow-blur-xsmall) var(--color-primary-dark);
+    box-shadow: var(--buttongroup-box-shadow);
     border-radius: var(--border-radius-xsmall);
     min-width: 96px;
     border: none;
@@ -225,57 +295,77 @@ button.buttonGroup {
 button.primary {
     color: var(--color-white);
     background: var(--color-primary);
-    background-image: var(--color-gradient-primary);
+    font-weight: var(--font-weight-semibold);
+    /* background-image: var(--color-gradient-primary); */
 }
 
 button.primary:active {
     background-image: none;
 }
 
-
-/* .buttonGroup button {
-    background-color: var(--color-grey);
-    border: 1px solid green;
+.buttonTypeGroup {
+    list-style-type: none;
+    height: var(--size-small);
+    box-sizing: border-box;
+    margin: var(--space-x-small) 1.5px 0;
+    background: var(--buttongroup-background-color);
     border-radius: var(--border-radius-xsmall);
-    padding: 10px 24px;
-    cursor: pointer;
-} */
-
-.buttonsGroup {
-    margin: 0 1.5px;
-    background: var(--color-grey-lighter);
-    border-radius: var(--border-radius-xsmall);
+    box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.0625);
 }
 
-button.buttonGroup {
-    margin: 0 -1px;
-    color: var(--color-grey-darker);
-    background: var(--color-grey-lightest);
-    /* min-width: calc((var(--width) - var(--space-xxx-large)*2) / 3); */
+.buttonTypeGroup li {
+    border-collapse: separate;
+    float: left;
+    position: relative;
+    margin-top: -0.5px;
+    height: var(--size-small);
+    padding: 0 var(--size-xx-small);
+    box-shadow: var(--buttongroup-box-shadow);
+    border-radius: var(--border-radius-xsmall);
     min-width: 100px;
+    text-align: center;
+    font-size: var(--font-size-large);
+    color: var(--buttongroup-color);
+    border: var(--buttongroup-border);
 }
 
-button.buttonGroup:not(:first-child) {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
+.buttonTypeGroup label,
+.buttonTypeGroup input {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: var(--size-small);
 }
 
-button.buttonGroup:not(:last-child) {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
+.buttonTypeGroup input[type="radio"] {
+    opacity: 0.011;
+    z-index: 100;
+    width: 0.1px;
+    height: 0.1px;
 }
 
-
-/* button.buttonGroup:not(:first-child):not(:last-child) {
-    border-left: var(--border-width-default) solid var(--color-grey-lighter);
-} */
-
-button.buttonGroup:hover {
-    background-color: var(--color-grey-lighter);
+.buttonTypeGroup input[type="radio"]+label {
+    background-color: var(--buttongroup-button-background-default);
+    border: var(--buttongroup-input-border);
 }
 
-button.buttonGroup:active,
-button.buttonGroup:focus {
-    color: var(--color-white);
-    background-color: var(--color-primary);
+.buttonTypeGroup input[type="radio"]:checked+label {
+    background-color: var(--buttongroup-button-background-active);
+    border: 0.5px solid var(--color-grey-light);
+    color: var(--buttongroup-button-color-active);
+}
+
+.buttonTypeGroup label:hover,
+.buttonTypeGroup input[type="radio"]:hover+label {
+    background-color: var(--buttongroup-button-background-active);
+    color: var(--buttongroup-button-color-active);
+}
+
+.label--tabGroups {
+    font-size: var(--font-size-medium);
+    font-weight: var(--text-font-h1-weight);
+    color: var(--label-color);
 }

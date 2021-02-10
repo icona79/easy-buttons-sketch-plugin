@@ -11,42 +11,71 @@
 
 <body>
     <div class="view">
-        <header>
+        <!-- <header>
             <h1>Simple buttons</h1>
             <hr />
-        </header>
+        </header> -->
         <div id="container">
             <div>
-                <label for="buttonType">Button type</label>
-                <div class="buttonsGroup" id="buttonType">
-                    <button class="buttonGroup">Text</button>
-                    <button class="buttonGroup">Icon & Text</button>
-                    <button class="buttonGroup">Icon</button>
+                <label class="label--tabGroups" for="buttonTypeGroup">Button type</label>
+                <ul class="buttonTypeGroup" name="buttonTypeGroup" id="buttonTypeGroup">
+                    <li>
+                        <input type="radio" id="buttonType1" name="buttonType" value="1" checked />
+                        <label for="buttonType1">Text</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="buttonType2" name="buttonType" value="2" />
+                        <label for="buttonType2">Icon & Text</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="buttonType3" name="buttonType" value="3" />
+                        <label for="buttonType3">Icon</label>
+                    </li>
+                </ul>
+            </div>
+            <div class="table">
+                <div class="row">
+                    <div class="cell cell-label">
+                        <label for="buttonWidth">Padding</label>
+                    </div>
+                    <div class="cell cell-data">
+                        <input type="number" id="buttonWidth" name="buttonWidth" min=0 max=99 pattern="/^\d+$/" placeholder="16">
+                    </div>
+                    <div class="cell cell-space"></div>
+                    <div class="cell cell-label">
+                        <label for="buttonHeight">Height</label>
+                    </div>
+                    <div class="cell cell-data">
+                        <input type="number" id="buttonHeight" name="buttonHeight" min=0 max=999 pattern="/^\d+$/" placeholder="40">
+                    </div>
                 </div>
-            </div>
-            <div>
-                <label for="buttonWidth">Horizontal Padding: </label>
-                <input type="number" id="buttonWidth" name="buttonWidth" min=0 max=99 pattern="/^\d+$/" placeholder="16">
-            </div>
-            <div>
-                <label for="buttonHeight">Button Height: </label>
-                <input type="number" id="buttonHeight" name="buttonHeight" min=0 max=999 pattern="/^\d+$/" placeholder="40">
-            </div>
-            <div>
-                <label for="cornerRadius">Corners: </label>
-                <select id="cornerRadius" name="cornerRadius">
-                <option value="1">Squared</option>
-                <option value="2">Circled</option>
-                <option value="3">Specific value</option>
-            </select>
-            </div>
-            <div>
-                <label for="cornerRadiusValue">Corner radius: </label>
-                <input type="number" id="cornerRadiusValue" name="cornerRadiusValue" pattern="/^\d+$/" placeholder="4" disabled>
-            </div>
-            <div>
-                <label for="backgroundColorValue">Background color HEX: </label>
-                <input type="text" id="backgroundColorValue" name="backgroundColorValue" maxlength="6" pattern="[0-9a-f]{6}" placeholder="ffffff">
+                <div class="row">
+                    <div class="cell cell-label">
+                        <label for="cornerRadius">Corners</label>
+                    </div>
+                    <div class="cell cell-data">
+                        <select id="cornerRadius" name="cornerRadius">
+                            <option value="1">Squared</option>
+                            <option value="2">Circled</option>
+                            <option value="3">Specific value</option>
+                        </select>
+                    </div>
+                    <div class="cell cell-space"></div>
+                    <div class="cell cell-label">
+                        <label for="cornerRadiusValue">Radius</label>
+                    </div>
+                    <div class="cell cell-data">
+                        <input type="number" id="cornerRadiusValue" name="cornerRadiusValue" pattern="/^\d+$/" placeholder="4" disabled>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="cell-label">
+                        <label for="backgroundColorValue">Color</label>
+                    </div>
+                    <div class="cell cell-data">
+                        <input type="text" id="backgroundColorValue" name="backgroundColorValue" maxlength="6" pattern="[0-9a-f]{6}" placeholder="ffffff">
+                    </div>
+                </div>
             </div>
         </div>
         <footer>
