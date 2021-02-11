@@ -33,18 +33,29 @@ document.getElementById("parametersSubmit").addEventListener("click", () => {
         }
     }
 
-    var buttonPaddingHorizontalValue = buttonPaddingHorizontalID.value;
-    var buttonHeightValue = buttonHeightID.value;
+    var buttonPaddingHorizontalValue = 16;
+    if (buttonPaddingHorizontalID.value != "") {
+        buttonPaddingHorizontalValue = buttonPaddingHorizontalID.value;
+    }
+    var buttonHeightValue = 40;
+    if (buttonHeightID.value != "") {
+        buttonHeightValue = buttonHeightID.value;
+    }
     var cornerRadiusSelection = cornerRadiusID.value;
     var cornerRadiusValue = 0;
     if (cornerRadiusSelection === "3") {
-        cornerRadiusValue = cornerRadiusValueID.value;
+        if (cornerRadiusValueID.value != "") {
+            cornerRadiusValue = cornerRadiusValueID.value;
+        } else {
+            cornerRadiusValue = 4;
+        }
     } else if (cornerRadiusSelection === "2") {
         cornerRadiusValue = buttonHeightID.value / 2;
     }
-
-    var backgroundColorValue = backgroundColorValueID.value;
-
+    var backgroundColorValue = "ffffff"
+    if (backgroundColorValueID.value != "") {
+        backgroundColorValue = backgroundColorValueID.value;
+    }
     var parameters = {
         buttonType: buttonType,
         buttonPaddingHorizontalValue: buttonPaddingHorizontalValue,

@@ -21,6 +21,11 @@ var artboard = sketch.Artboard;
 
 var buttonName = "Buttons/Button";
 var buttonArtboard;
+var buttonWidth;
+var buttonPaddingHorizontalValue = 16;
+var buttonHeightValue = 40;
+var buttonBackgroundColorValue = "FFFFFF";
+var buttonCornerRadius = 0;
 var buttonText;
 var buttonBackground;
 var textWidth;
@@ -65,10 +70,10 @@ export default function() {
 
         console.log('Configuration: ', parameters);
 
-        var buttonPaddingHorizontalValue = parameters.buttonPaddingHorizontalValue;
-        var buttonHeightValue = parameters.buttonHeightValue;
-        var buttonBackgroundColorValue = parameters.backgroundColorValue;
-        var buttonCornerRadius = parameters.cornerRadiusValue;
+        buttonPaddingHorizontalValue = parameters.buttonPaddingHorizontalValue;
+        buttonHeightValue = parameters.buttonHeightValue;
+        buttonBackgroundColorValue = parameters.backgroundColorValue;
+        buttonCornerRadius = parameters.cornerRadiusValue;
 
         setSymbolsInPage();
 
@@ -88,7 +93,7 @@ export default function() {
 
         console.log(buttonText);
 
-        var buttonWidth = buttonText.frame.width + (2 * buttonPaddingHorizontalValue);
+        buttonWidth = buttonText.frame.width + (2 * buttonPaddingHorizontalValue);
 
         buttonArtboard.frame.width = buttonWidth;
         let buttonTextHeight = buttonText.frame.height
@@ -165,8 +170,8 @@ function createText(selectedLayer, padding, backgroundColor) {
     let textAlignment = "left";
     let textFontFamily = "Open Sans";
     let textFontWeight = 5;
-    let textValue = "Hello!";
-    let textName = "Text Layer";
+    let textValue = "Button Text";
+    let textName = "Button Text";
 
     buttonText = new Text({
         parent: textParent,
