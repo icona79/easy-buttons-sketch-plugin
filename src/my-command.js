@@ -41,7 +41,7 @@ export default function() {
     const options = {
         identifier: webviewIdentifier,
         width: 400,
-        height: 320,
+        height: 296,
         show: false,
     };
 

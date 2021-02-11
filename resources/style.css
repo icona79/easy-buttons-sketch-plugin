@@ -2,7 +2,7 @@
     color-scheme: light dark;
     /* View Size */
     --width: 400px;
-    --height: 324px;
+    --height: 300px;
     /* Design Tokens */
     --color-accent: -apple-system-control-accent;
     --color-white: #ffffff;
@@ -223,7 +223,7 @@ footer {
 }
 
 #container {
-    margin: var(--space-xxx-large) var(--space-xxx-large) 0;
+    margin: var(--space-x-large) var(--space-xxx-large) 0;
 }
 
 #container>div {
