@@ -20,7 +20,7 @@
                 <label class="label--tabGroups" for="buttonTypeGroup">Button type</label>
                 <ul class="buttonTypeGroup" name="buttonTypeGroup" id="buttonTypeGroup">
                     <li>
-                        <input type="radio" id="buttonType1" name="buttonType" value="1" checked />
+                        <input type="radio" id="buttonType1" name="buttonType" value="1" checked /></span>
                         <label for="buttonType1">Text</label>
                     </li>
                     <li>
@@ -38,15 +38,15 @@
                     <div class="cell cell-label">
                         <label for="buttonWidth">Padding</label>
                     </div>
-                    <div class="cell cell-data">
-                        <input type="number" id="buttonWidth" name="buttonWidth" min=0 max=99 pattern="/^\d+$/" placeholder="16">
+                    <div class="cell cell-data cell-data-px">
+                        <input type="number" id="buttonWidth" name="buttonWidth" min=0 max=99 pattern="/^\d+$/" placeholder="16" /><span></span>
                     </div>
                     <div class="cell cell-space"></div>
                     <div class="cell cell-label">
                         <label for="buttonHeight">Height</label>
                     </div>
-                    <div class="cell cell-data">
-                        <input type="number" id="buttonHeight" name="buttonHeight" min=0 max=999 pattern="/^\d+$/" placeholder="40">
+                    <div class="cell cell-data cell-data-px">
+                        <input type="number" id="buttonHeight" name="buttonHeight" min=0 max=999 pattern="/^\d+$/" placeholder="40" />
                     </div>
                 </div>
                 <div class="row">
@@ -64,19 +64,20 @@
                     <div class="cell cell-label">
                         <label for="cornerRadiusValue">Radius</label>
                     </div>
-                    <div class="cell cell-data">
-                        <input type="number" id="cornerRadiusValue" name="cornerRadiusValue" pattern="/^\d+$/" placeholder="4" disabled>
+                    <div class="cell cell-data cell-data-px">
+                        <input type="number" id="cornerRadiusValue" name="cornerRadiusValue" pattern="/^\d+$/" placeholder="4" disabled />
                     </div>
                 </div>
                 <div class="row">
                     <div class="cell-label">
                         <label for="backgroundColorValue">Color</label>
                     </div>
-                    <div class="cell cell-data">
-                        <input type="text" id="backgroundColorValue" name="backgroundColorValue" maxlength="6" pattern="[0-9a-f]{6}" placeholder="ffffff">
+                    <div class="cell cell-data cell-data-hex">
+                        <input type="text" id="backgroundColorValue" name="backgroundColorValue" maxlength="6" pattern="[0-9a-f]{6}" placeholder="ffffff" />
                     </div>
                 </div>
             </div>
+
         </div>
         <footer>
             <div class="footer-background">

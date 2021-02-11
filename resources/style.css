@@ -2,7 +2,7 @@
     color-scheme: light dark;
     /* View Size */
     --width: 400px;
-    --height: 336px;
+    --height: 324px;
     /* Design Tokens */
     --color-accent: -apple-system-control-accent;
     --color-white: #ffffff;
@@ -10,6 +10,7 @@
     --color-grey-lighter: #ededed;
     --color-grey-light: #d4d4d4;
     --color-grey: #bfbfbf;
+    --color-grey-dark: #707070;
     --color-grey-darker: #4c4c4c;
     --color-black: #000000;
     --color-primary: #FA6400;
@@ -111,6 +112,7 @@
         --buttongroup-input-border: 0.5px solid transparent;
         --header-color: var(--color-grey-darker);
         --label-color: var(--color-grey-darker);
+        --placeholder-color: var(--color-grey);
     }
 }
 
@@ -132,6 +134,7 @@
         --buttongroup-input-border: 0.5px solid transparent;
         --header-color: var(--color-grey-lightest);
         --label-color: var(--color-grey-lightest);
+        --placeholder-color: var(--color-grey);
     }
 }
 
@@ -269,6 +272,7 @@ select {
 input,
 select {
     width: 86px;
+    padding-left: var(--space-xx-small);
     height: var(--size-small);
 }
 
@@ -277,7 +281,55 @@ label {
 }
 
 input::placeholder {
-    color: var(--color-grey-light);
+    color: var(--placeholder-color);
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+input[type=text],
+input[type=number] {
+    /* border-radius: var(--border-radius-xsmall); */
+}
+
+input:disabled {
+    background-color: var(--color-grey-lighter);
+}
+
+.cell-data {
+    display: block;
+    position: relative;
+    font-size: var(--font-size-small);
+}
+
+.cell-data::before {
+    content: "";
+    position: absolute;
+    top: 5px;
+    width: 10px;
+    z-index: 1;
+    color: var(--buttongroup-color);
+}
+
+.cell-data-px::before {
+    right: 10px;
+    content: "px";
+}
+
+.cell-data-hex::before {
+    left: 5px;
+    content: "HEX";
+}
+
+.cell-data-hex>input {
+    padding-left: 30px;
 }
 
 button.primary,
