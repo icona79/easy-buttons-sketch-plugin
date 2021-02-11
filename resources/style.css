@@ -112,7 +112,13 @@
         --buttongroup-input-border: 0.5px solid transparent;
         --header-color: var(--color-grey-darker);
         --label-color: var(--color-grey-darker);
+        --input-color: var(--color-grey-darker);
+        --input-background-color: var(--color-white);
+        --select-background-gradient: linear-gradient(to bottom, var(--color-white) 0%, var(--color-black) 100%);
         --placeholder-color: var(--color-grey);
+        --input-color-disabled: var(--color-grey-light);
+        --input-background-color-disabled: var(--color-grey-lighter);
+        --select-border-color: var(--color-grey);
     }
 }
 
@@ -134,7 +140,13 @@
         --buttongroup-input-border: 0.5px solid transparent;
         --header-color: var(--color-grey-lightest);
         --label-color: var(--color-grey-lightest);
-        --placeholder-color: var(--color-grey);
+        --input-color: var(--color-grey-lightest);
+        --input-background-color: var(--color-grey-darker);
+        --select-background-gradient: linear-gradient(to bottom, var(--color-black) 0%, var(--color-white) 100%);
+        --placeholder-color: var(--color-grey-dark);
+        --input-color-disabled: var(--color-grey-dark);
+        --input-background-color-disabled: var(--color-darker);
+        --select-border-color: var(--color-grey-darker);
     }
 }
 
@@ -263,9 +275,11 @@ footer {
 
 input,
 textarea,
-select {
+select,
+button {
     -webkit-user-select: auto;
     user-select: auto;
+    font-family: var(--text-font-family);
     font-size: var(--font-size-medium);
 }
 
@@ -274,6 +288,25 @@ select {
     width: 86px;
     padding-left: var(--space-xx-small);
     height: var(--size-small);
+}
+
+input,
+input:matches([type="password"], [type="search"]) {
+    -webkit-appearance: textfield;
+    color: text;
+    /* background-color: -webkit-control-background; */
+    background-color: var(--input-background-color);
+    box-sizing: border-box;
+    border: 1px solid var(--select-border-color);
+    box-shadow: 0 1px 0 1px rgba(0, 0, 0, .04);
+    border-radius: var(--border-radius-xsmall);
+    padding-left: var(--space-xx-small);
+    -webkit-rtl-ordering: logical;
+    -webkit-user-select: text;
+    cursor: auto;
+    border-image-source: none;
+    border-image-slice: none;
+    color: text;
 }
 
 label {
@@ -300,7 +333,8 @@ input[type=number] {
 }
 
 input:disabled {
-    background-color: var(--color-grey-lighter);
+    color: var(--input-color-disabled);
+    background-color: var(--input-background-color-disabled);
 }
 
 .cell-data {
@@ -332,6 +366,45 @@ input:disabled {
     padding-left: 30px;
 }
 
+.select-css {
+    -webkit-user-select: auto;
+    user-select: auto;
+    color: var(--input-color);
+    font-size: var(--font-size-medium);
+    width: 86px;
+    max-width: 86px;
+    height: var(--size-small);
+    display: block;
+    line-height: 1.3;
+    /* padding: .6em 1.4em .5em .8em; */
+    padding-left: var(--space-xx-small);
+    box-sizing: border-box;
+    border: 1px solid var(--select-border-color);
+    box-shadow: 0 1px 0 1px rgba(0, 0, 0, .04);
+    border-radius: var(--border-radius-xsmall);
+    background-color: var(--input-background-color);
+}
+
+.select-css::-ms-expand {
+    display: none;
+}
+
+.select-css:hover {
+    border-color: var(--color-grey-dark);
+}
+
+.select-css:focus {
+    border-color: var(--color-grey);
+    /* box-shadow: 0 0 1px 3px rgba(59, 153, 252, .7); */
+    box-shadow: 0 0 0 3px -moz-mac-focusring;
+    color: var(--input-color);
+    outline: none;
+}
+
+.select-css option {
+    font-weight: normal;
+}
+
 button.primary,
 .buttonTypeGroup label {
     height: var(--size-small);
@@ -348,6 +421,7 @@ button.primary {
     color: var(--color-white);
     background: var(--color-primary);
     font-weight: var(--font-weight-semibold);
+    line-height: var(--size-small);
     /* background-image: var(--color-gradient-primary); */
 }
 
