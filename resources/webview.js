@@ -8,7 +8,6 @@ document.addEventListener('contextmenu', (e) => {
 //   window.postMessage('nativeLog', 'Called from the webview')
 // })
 
-// ************************************************** //
 // Validate the input fields                          //
 // ************************************************** //
 const numbersOnly = /^\d+$/;
@@ -24,6 +23,13 @@ var buttonHeightID = document.getElementById("buttonHeight");
 var cornerRadiusID = document.getElementById("cornerRadius");
 var cornerRadiusValueID = document.getElementById("cornerRadiusValue");
 var backgroundColorValueID = document.getElementById("backgroundColorValue");
+
+document.addEventListener("keyup", function(event) {
+    if (event.keyCode === 13) {
+        document.getElementById("parametersSubmit").click();
+    }
+});
+
 
 document.getElementById("parametersSubmit").addEventListener("click", () => {
     var buttonTypeRadios = document.getElementsByName("buttonType");
