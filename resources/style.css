@@ -102,7 +102,6 @@
         --footer-background-color: var(--color-grey-lightest);
         --buttongroup-background-color: var(--color-grey-lighter);
         --buttongroup-box-shadow: var(--shadow-none) var(--shadow-none) var(--shadow-blur-xsmall) var(--color-primary-dark);
-        /* --buttongroup-border: 0.5px solid var(--color-grey-lighter); */
         --buttongroup-border: none;
         --buttongroup-color: var(--color-grey-darker);
         --buttongroup-background-image: none;
@@ -325,11 +324,6 @@ input::-webkit-inner-spin-button {
 
 input[type=number] {
     -moz-appearance: textfield;
-}
-
-input[type=text],
-input[type=number] {
-    /* border-radius: var(--border-radius-xsmall); */
 }
 
 input:disabled {

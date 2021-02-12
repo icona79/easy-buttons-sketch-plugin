@@ -19,7 +19,11 @@ var artboard = sketch.Artboard;
 // var libraries = sketch.getLibraries();
 // var symbolReferences;
 
-var buttonName = "Buttons/Button";
+// ********************************** //
+// Button references variables        //
+// Edit here the default name         //
+// ********************************** //
+var buttonName = 'Buttons/Button-default';
 var buttonArtboard;
 var buttonWidth;
 var buttonPaddingHorizontalValue = 16;
@@ -32,6 +36,23 @@ var textWidth;
 var xPosition = 0;
 var yPosition = 0;
 
+// ********************************** //
+// Button states management variables //
+//                                    //
+// ********************************** //
+const divider = "-";
+var states = [];
+
+states.push(divider + "default");
+states.push(divider + "hover");
+states.push(divider + "pressed");
+states.push(divider + "tab");
+states.push(divider + "disabled");
+
+// ********************************** //
+// Helper variables                   //
+//                                    //
+// ********************************** //
 var xPos = 0;
 var yPos = 0;
 
@@ -40,9 +61,12 @@ var existingSymbols = 0;
 const buttonSymbolsPage = "Buttons";
 var page = selectPage(findOrCreatePage(document, buttonSymbolsPage));
 
-
+// ********************************** //
+// Plugin code                        //
+//                                    //
+// ********************************** //
 export default function() {
-    /* This is the Webview size */
+    /* Create the webview with the sizes */
     const options = {
         identifier: webviewIdentifier,
         width: 400,
@@ -59,16 +83,11 @@ export default function() {
 
     const webContents = browserWindow.webContents;
 
-    // print a message when the page loads
-
-    // webContents.on("did-finish-load", () => {
-    //     UI.message("UI loaded!");
-    // });
 
     // add a handler for a call from web content's javascript
     webContents.on("nativeLog", parameters => {
 
-        console.log('Configuration: ', parameters);
+        // console.log('Configuration: ', parameters);
 
         buttonPaddingHorizontalValue = parameters.buttonPaddingHorizontalValue;
         buttonHeightValue = parameters.buttonHeightValue;
@@ -90,8 +109,6 @@ export default function() {
         });
 
         createText(buttonArtboard, buttonPaddingHorizontalValue, buttonBackgroundColorValue);
-
-        console.log(buttonText);
 
         buttonWidth = buttonText.frame.width + (2 * buttonPaddingHorizontalValue);
 
@@ -118,10 +135,35 @@ export default function() {
         // set Smart Layout
         setSmartLayout(mainSymbol, "horizontallyCenter");
 
-        // console.log(mainSymbol);
+        mainSymbol.selected = true;
 
-        document.centerOnLayer(mainSymbol);
-        doc.setZoomValue(75 / 100);
+        console.log(mainSymbol);
+
+        let symbol = mainSymbol;
+        let symbolCurrentName = symbol.name;
+        let symbolCurrentX = symbol.frame.x;
+        let symbolCurrentWidth = symbol.frame.width;
+
+        let symbolBaseName = symbolCurrentName;
+        if (symbolCurrentName.includes(states[0])) {
+            symbolBaseName = symbolCurrentName.replace(states[0], "");
+        }
+
+        /* Create the states variants */
+        for (let s = 1; s < states.length; ++s) {
+
+            let newState = symbol.duplicate();
+
+            newState.name = symbolBaseName + states[s];
+
+            newState.frame.x = symbolCurrentX + symbolCurrentWidth + 40;
+            symbolCurrentX = newState.frame.x;
+
+            newState.index = symbol.index - s + 1;
+
+            document.centerOnLayer(mainSymbol);
+            doc.setZoomValue(75 / 100);
+        }
 
 
         browserWindow.close();
