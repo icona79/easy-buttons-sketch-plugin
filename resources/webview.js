@@ -86,3 +86,14 @@ cornerRadiusID.addEventListener("change", function() {
             .getElementById("cornerRadiusValue").disabled = true;
     }
 });
+
+// Function to populate the Styles dropdown
+window.fillStylesDropdown = function (stylesArray) {
+    console.log(stylesArray);
+    stylesArray.forEach((style) => {
+        console.log(style.name);
+        console.log(style.id);
+    });
+    // I will return a message that I'll log on the plugin's side, but you can send back anything you want
+    return "Styles loaded successfully";
+};
