@@ -358,7 +358,7 @@ input:disabled {
 
 button.primary,
 button.secondary,
-.buttonTypeGroup label {
+.buttonGroup label {
     height: var(--size-small);
     padding: 0 var(--size-xx-small);
     box-shadow: var(--buttongroup-box-shadow);
@@ -381,7 +381,7 @@ button.primary:active {
     background-image: none;
 }
 
-.buttonTypeGroup {
+.buttonGroup {
     list-style-type: none;
     height: var(--size-small);
     box-sizing: border-box;
@@ -391,7 +391,7 @@ button.primary:active {
     box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.0625);
 }
 
-.buttonTypeGroup li {
+.buttonGroup li {
     border-collapse: separate;
     float: left;
     position: relative;
@@ -419,8 +419,8 @@ button.primary:active {
     border: var(--buttongroup-input-border);
 }
 
-.buttonTypeGroup label,
-.buttonTypeGroup input {
+.buttonGroup label,
+.buttonGroup input {
     display: block;
     position: absolute;
     top: 0;
@@ -430,26 +430,26 @@ button.primary:active {
     height: var(--size-small);
 }
 
-.buttonTypeGroup input[type="radio"] {
+.buttonGroup input[type="radio"] {
     opacity: 0.011;
     z-index: 100;
     width: 0.1px;
     height: 0.1px;
 }
 
-.buttonTypeGroup input[type="radio"]+label {
+.buttonGroup input[type="radio"]+label {
     background-color: var(--buttongroup-button-background-default);
     border: var(--buttongroup-input-border);
 }
 
-.buttonTypeGroup input[type="radio"]:checked+label {
+.buttonGroup input[type="radio"]:checked+label {
     background-color: var(--buttongroup-button-background-active);
     border: 0.5px solid var(--color-grey-light);
     color: var(--buttongroup-button-color-active);
 }
 
-.buttonTypeGroup label:hover,
-.buttonTypeGroup input[type="radio"]:hover+label {
+.buttonGroup label:hover,
+.buttonGroup input[type="radio"]:hover+label {
     background-color: var(--buttongroup-button-background-active);
     color: var(--buttongroup-button-color-active);
 }
