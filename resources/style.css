@@ -194,21 +194,6 @@ body {
     background-color: var(--view-background-color);
 }
 
-header {
-    height: var(--size-header);
-    width: var(--size-layout-max-width);
-    padding: 0 var(--space-xxx-large);
-    display: flex;
-    align-items: center;
-    justify-content: left;
-}
-
-h1 {
-    color: var(--header-color);
-    font-size: var(--text-font-h1-size);
-    font-weight: var(--text-font-h1-weight);
-}
-
 footer {
     width: var(--size-layout-max-width);
     height: 48px;
@@ -221,52 +206,24 @@ footer {
     inset-inline-end: 0;
 }
 
-#container {
+table {
     margin: var(--space-x-large) var(--space-xxx-large) 0;
 }
 
-#container>div {
-    padding-bottom: var(--space-x-large);
-}
-
-#container>div:first-child {
-    padding-top: var(--space-x-medium);
-}
-
-.table {
-    /* a table */
-    display: table;
-    height: 100%;
-    width: var(--size-layout-max-width);
-    border-collapse: collapse;
-}
-
-.table>div {
-    display: table-row;
-    border-bottom: var(--space-x-large) solid transparent;
-    /* min-height: calc(var(--size-small)+ var(--space-x-large)); */
-}
-
-.table>div>div {
-    display: table-cell;
-    text-align: left;
-    vertical-align: top;
-    /* height: calc(var(--size-small) + var(--space-x-large)); */
-}
-
-.table>div>.cell-label {
+.cell-label {
     text-align: left;
     vertical-align: middle;
     width: 50px;
     min-width: 50px;
+    color: var(--buttongroup-color);
 }
 
-.table>div>.cell-data {
+.cell-data {
     text-align: right;
     width: 86px;
 }
 
-.table>div>.cell-space {
+.cell-space {
     width: 32px;
     max-width: 32px;
     min-width: 32px;
@@ -400,6 +357,7 @@ input:disabled {
 }
 
 button.primary,
+button.secondary,
 .buttonTypeGroup label {
     height: var(--size-small);
     padding: 0 var(--size-xx-small);
@@ -444,9 +402,21 @@ button.primary:active {
     border-radius: var(--border-radius-xsmall);
     min-width: 100px;
     text-align: center;
-    font-size: var(--font-size-large);
+    font-size: var(--font-size-medium);
     color: var(--buttongroup-color);
     border: var(--buttongroup-border);
+}
+
+.btn-group {
+    height: var(--size-small);
+    box-shadow: var(--buttongroup-box-shadow);
+    border-radius: var(--border-radius-xsmall);
+    margin-bottom: var(--space-x-large);
+    min-width: 100px;
+    font-size: var(--font-size-medium);
+    color: var(--buttongroup-color);
+    background-color: var(--buttongroup-button-background-default);
+    border: var(--buttongroup-input-border);
 }
 
 .buttonTypeGroup label,
@@ -488,4 +458,6 @@ button.primary:active {
     font-size: var(--font-size-medium);
     font-weight: var(--text-font-h1-weight);
     color: var(--label-color);
+    display: block;
+    margin-bottom: var(--space-x-small)
 }
