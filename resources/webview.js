@@ -88,12 +88,23 @@ cornerRadiusID.addEventListener("change", function() {
 });
 
 // Function to populate the Styles dropdown
-window.fillStylesDropdown = function (stylesArray) {
+window.fillStylesDropdown = function(stylesArray) {
     console.log(stylesArray);
-    stylesArray.forEach((style) => {
-        console.log(style.name);
-        console.log(style.id);
-    });
+    // stylesArray.forEach((style) => {
+    //     console.log(style.name);
+    //     console.log(style.id);
+    // });
+    let select = document.getElementById("backgroundStyleValue");
+    let option;
+
+    for (let i = 0; i < stylesArray.length; i += 1) {
+        option = document.createElement("option");
+        option.setAttribute("value", stylesArray[i].id);
+        option.appendChild(document.createTextNode(stylesArray[i].name));
+        select.appendChild(option);
+        console.log(option);
+    }
+
     // I will return a message that I'll log on the plugin's side, but you can send back anything you want
     return "Styles loaded successfully";
 };
