@@ -10,6 +10,7 @@ const webviewIdentifier = "prettybuttons.webview";
 var sketch = require("sketch");
 var SmartLayout = require("sketch").SmartLayout;
 var Text = require("sketch/dom").Text;
+var SharedStyle = require("sketch/dom").SharedStyle;
 
 // Document variables
 var doc = context.document;
@@ -31,6 +32,13 @@ var buttonHeightValue = 40;
 var buttonBackgroundColorValue = "FFFFFF";
 var buttonCornerRadius = 0;
 var buttonText;
+var layerStyles = sketch.getSelectedDocument().sharedLayerStyles;
+var textStyles = sketch.getSelectedDocument().sharedTextStyles;
+var arrayLayerStyleIDs = layerStyles.map((sharedstyle) => sharedstyle["id"]);
+var arrayTextStyleIDs = textStyles.map((sharedstyle) => sharedstyle["id"]);
+var buttonStyle = 0;
+var buttonBackgroundStyleID;
+var buttonTextStyleID;
 var buttonBackground;
 var textWidth;
 var xPosition = 0;
@@ -79,12 +87,12 @@ export default function() {
     // only show the window when the page has loaded to avoid a white flash
     browserWindow.once("ready-to-show", () => {
         // Send the list of Text Styles to the plugin webview
-        let layerStyles = sketch.getSelectedDocument().sharedLayerStyles;
-        // console.log(layerStyles);
         let stylesString = JSON.stringify(layerStyles);
-
+        let textString = JSON.stringify(textStyles);
         browserWindow.webContents
-            .executeJavaScript(`fillLayerStylesDropdown(${stylesString})`)
+            .executeJavaScript(
+                `fillLayerStylesDropdown(${stylesString}),fillTextStylesDropdown(${textString})`
+            )
             .then((result) => {
                 console.log(result);
                 // Once we're processing the styles on the webview, we can show it
@@ -98,12 +106,16 @@ export default function() {
     // add a handler for a call from web content's javascript
     webContents.on("nativeLog", parameters => {
 
-        // console.log('Configuration: ', parameters);
+        console.log('Configuration: ', parameters);
 
         buttonPaddingHorizontalValue = parameters.buttonPaddingHorizontalValue;
         buttonHeightValue = parameters.buttonHeightValue;
-        buttonBackgroundColorValue = parameters.backgroundColorValue;
         buttonCornerRadius = parameters.cornerRadiusValue;
+        // styles
+        buttonStyle = parameters.buttonStyle;
+        buttonBackgroundStyleID = parameters.backgroundStyle;
+        buttonTextStyleID = parameters.textStyle;
+        buttonBackgroundColorValue = parameters.backgroundColorValue;
 
         setSymbolsInPage();
 
@@ -128,15 +140,27 @@ export default function() {
         let textYposition = Math.floor((buttonHeightValue - buttonTextHeight) / 2);
         buttonText.frame.y = textYposition
 
-        background(
-            buttonArtboard,
-            xPosition,
-            yPosition,
-            buttonWidth,
-            buttonHeightValue,
-            buttonBackgroundColorValue,
-            buttonCornerRadius
-        );
+        if (buttonStyle === 0) {
+            backgroundWithStyle(
+                buttonArtboard,
+                xPosition,
+                yPosition,
+                buttonWidth,
+                buttonHeightValue,
+                buttonBackgroundStyleID,
+                buttonCornerRadius
+            );
+        } else {
+            backgroundNoStyle(
+                buttonArtboard,
+                xPosition,
+                yPosition,
+                buttonWidth,
+                buttonHeightValue,
+                buttonBackgroundColorValue,
+                buttonCornerRadius
+            );
+        };
 
         buttonBackground.moveToBack();
 
@@ -186,7 +210,7 @@ export default function() {
 // ******************************************************************* //
 // Items management support functions                                  //
 // ******************************************************************* //
-function background(selectedLayer, x, y, width, height, color, cornerRadius) {
+function backgroundNoStyle(selectedLayer, x, y, width, height, color, cornerRadius) {
     let xPosition = x;
     let yPosition = y;
     let backgroundWidth = width;
@@ -209,8 +233,42 @@ function background(selectedLayer, x, y, width, height, color, cornerRadius) {
 
     buttonBackground.points.forEach((point) => (point.cornerRadius = backgroundCornerRadius));
     buttonBackground.sketchObject.setFixedRadius(backgroundCornerRadius);
-
     //console.log(background);
+}
+
+function backgroundWithStyle(selectedLayer, x, y, width, height, styleID, cornerRadius) {
+    console.log("h");
+    let xPosition = x;
+    let yPosition = y;
+    let backgroundWidth = width;
+    let backgroundHeight = height;
+    let backgroundColor = "#ffffff";
+    let backgroundStyleID = styleID;
+    let backgroundCornerRadius = cornerRadius;
+
+    let index = arrayLayerStyleIDs.indexOf(backgroundStyleID);
+
+    console.log(backgroundStyleID);
+
+    let ShapePath = sketch.ShapePath;
+    buttonBackground = new ShapePath({
+        parent: selectedLayer,
+        frame: {
+            x: xPosition,
+            y: yPosition,
+            width: backgroundWidth,
+            height: backgroundHeight,
+        },
+        style: { fills: [backgroundColor], borders: [] },
+        name: "Background",
+    });
+
+    buttonBackground.points.forEach((point) => (point.cornerRadius = backgroundCornerRadius));
+    buttonBackground.sketchObject.setFixedRadius(backgroundCornerRadius);
+    buttonBackground.sharedStyleId = backgroundStyleID;
+    buttonBackground.style = layerStyles[index].style;
+
+    console.log(buttonBackground);
 }
 
 function createText(selectedLayer, padding, backgroundColor) {

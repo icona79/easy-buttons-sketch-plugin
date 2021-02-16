@@ -88,14 +88,17 @@ document.getElementById("parametersSubmit").addEventListener("click", () => {
             buttonStyle = i;
         }
     }
-    if (buttonStyle === 0) {
-        var backgroundStyle = backgroundStyleID.value;
-        var textStyle = ""; //textStyleID.value;
-    } else {
-        var backgroundColorValue = "ffffff";
-        if (backgroundColorValueID.value != "") {
-            backgroundColorValue = backgroundColorValueID.value;
-        }
+    var backgroundStyle = "";
+    if (backgroundStyleID.value != "") {
+        backgroundStyle = backgroundStyleID.value;
+    }
+    var textStyle = "";
+    if (textStyleID.value != "") {
+        textStyle = textStyleID.value;
+    }
+    var backgroundColorValue = "ffffff";
+    if (backgroundColorValueID.value != "") {
+        backgroundColorValue = backgroundColorValueID.value;
     }
 
     var parameters = {
@@ -105,6 +108,7 @@ document.getElementById("parametersSubmit").addEventListener("click", () => {
         buttonHeightValue: buttonHeightValue,
         cornerRadiusSelection: cornerRadiusSelection,
         cornerRadiusValue: cornerRadiusValue,
+        buttonStyle: buttonStyle,
         backgroundStyle: backgroundStyle,
         textStyle: textStyle,
         backgroundColorValue: backgroundColorValue,
@@ -172,6 +176,27 @@ window.fillLayerStylesDropdown = function(stylesArray) {
     //     console.log(style.id);
     // });
     let select = document.getElementById("backgroundStyleValue");
+    let option;
+
+    for (let i = 0; i < stylesArray.length; i += 1) {
+        option = document.createElement("option");
+        option.setAttribute("value", stylesArray[i].id);
+        option.appendChild(document.createTextNode(stylesArray[i].name));
+        select.appendChild(option);
+        console.log(option);
+    }
+
+    // I will return a message that I'll log on the plugin's side, but you can send back anything you want
+    return "Styles loaded successfully";
+};
+
+window.fillTextStylesDropdown = function(stylesArray) {
+    console.log(stylesArray);
+    // stylesArray.forEach((style) => {
+    //     console.log(style.name);
+    //     console.log(style.id);
+    // });
+    let select = document.getElementById("textStyleValue");
     let option;
 
     for (let i = 0; i < stylesArray.length; i += 1) {
