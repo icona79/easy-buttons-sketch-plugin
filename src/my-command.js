@@ -79,15 +79,12 @@ export default function() {
     // only show the window when the page has loaded to avoid a white flash
     browserWindow.once("ready-to-show", () => {
         // Send the list of Text Styles to the plugin webview
-        let styles = sketch.getSelectedDocument().sharedLayerStyles;
-        console.log(styles);
-        // we can only send strings to the webview, so let's turn our styles into a JSON string:
-        let stylesString = JSON.stringify(styles);
-        // console.log("plugin");
-        // console.log(stylesString);
+        let layerStyles = sketch.getSelectedDocument().sharedLayerStyles;
+        // console.log(layerStyles);
+        let stylesString = JSON.stringify(layerStyles);
 
         browserWindow.webContents
-            .executeJavaScript(`fillStylesDropdown(${stylesString})`)
+            .executeJavaScript(`fillLayerStylesDropdown(${stylesString})`)
             .then((result) => {
                 console.log(result);
                 // Once we're processing the styles on the webview, we can show it

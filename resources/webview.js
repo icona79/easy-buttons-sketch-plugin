@@ -165,7 +165,7 @@ if (document.querySelector('input[name="buttonStyle"]')) {
 }
 
 // Function to populate the Styles dropdown
-window.fillStylesDropdown = function(stylesArray) {
+window.fillLayerStylesDropdown = function(stylesArray) {
     console.log(stylesArray);
     // stylesArray.forEach((style) => {
     //     console.log(style.name);
