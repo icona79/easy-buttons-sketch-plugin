@@ -43,10 +43,10 @@
                 <tr class="tr-labeled">
                     <td colspan="5">
                         <div>
-                            <label class="label--tabGroups" for="buttonTypeGroup">Layout</label>
+                            <label class="label--tabGroups" for="buttonLayoutGroup">Layout</label>
                         </div>
                         <div>
-                            <ul class="buttonGroup buttonGroup-2" name="buttonTypeGroup" id="buttonStyleGroup">
+                            <ul class="buttonGroup buttonGroup-2" name="buttonLayoutGroup" id="buttonLayoutGroup">
                                 <li>
                                     <input type="radio" id="buttonLayout1" name="buttonLayout" value="1" checked /></span>
                                     <label class="button secondary button-first" for="buttonLayout1">Smart Layout</label>
@@ -60,8 +60,11 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="cell cell-label">
+                    <td id="smartLayout" class="cell cell-label">
                         <label for="buttonWidth">Padding</label>
+                    </td>
+                    <td id="fixedLayout" class="cell cell-label" hidden>
+                        <label for="buttonWidth">Width</label>
                     </td>
                     <td class="cell cell-data cell-data-right">
                         <input type="number" id="buttonWidth" name="buttonWidth" min=0 max=99 pattern="/^\d+$/" placeholder="16" /><span></span>
@@ -100,10 +103,10 @@
                 <tr class="tr-labeled">
                     <td colspan="5">
                         <div>
-                            <label class="label--tabGroups" for="buttonTypeGroup">Style</label>
+                            <label class="label--tabGroups" for="buttonStyleGroup">Style</label>
                         </div>
                         <div>
-                            <ul class="buttonGroup buttonGroup-2" name="buttonTypeGroup" id="buttonStyleGroup">
+                            <ul class="buttonGroup buttonGroup-2" name="buttonStyleGroup" id="buttonStyleGroup">
                                 <li>
                                     <input type="radio" id="buttonStyle1" name="buttonStyle" value="1" checked /></span>
                                     <label class="button secondary button-first" for="buttonStyle1">Existing Styles</label>
@@ -116,20 +119,37 @@
                         </div>
                     </td>
                 </tr>
-                <tr>
-                    <td class="cell-label">
-                        <label for="backgroundColorValue">Color</label>
-                    </td>
-                    <td class="cell cell-data cell-data-left">
-                        <input type="text" id="backgroundColorValue" name="backgroundColorValue" maxlength="6" pattern="[0-9a-f]{6}" placeholder="ffffff" />
-                    </td>
-                    <td class="cell cell-space"></td>
-                    <td class="cell cell-label">Background
+                <tr id="existingStyles">
+                    <td class="cell cell-label">
+                        <label for="backgroundStyleValue">Background</label>
                     </td>
                     <td class="cell cell-data">
                         <select id="backgroundStyleValue" name="backgroundStyleValue" class="select-css">
                             
                         </select>
+                    </td>
+                    <td class="cell cell-space"></td>
+                    <td class="cell cell-label">
+                        <label for="textStyleValue">Text</label>
+                    </td>
+                    <td class="cell cell-data">
+                        <select id="textStyleValue" name="textStyleValue" class="select-css">
+                            
+                        </select>
+                    </td>
+                </tr>
+                <tr id="newStyles" hidden>
+                    <td class="cell cell-label">
+                        <label for="backgroundColorValue">Background</label>
+                    </td>
+                    <td class="cell cell-data">
+                        <select id="backgroundColorValue" name="backgroundColorValue" class="select-css">
+                            
+                        </select>
+                    </td>
+                    <td class="cell cell-space"></td>
+                    <td class="cell cell-label" colspan="2">
+                        <label for="createNewStyles">Create new styles</label>
                     </td>
                 </tr>
             </tbody>
