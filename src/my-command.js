@@ -70,7 +70,7 @@ export default function() {
     const options = {
         identifier: webviewIdentifier,
         width: 400,
-        height: 296,
+        height: 494,
         show: false,
     };
 

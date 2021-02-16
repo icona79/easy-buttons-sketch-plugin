@@ -2,7 +2,7 @@
     color-scheme: light dark;
     /* View Size */
     --width: 400px;
-    --height: 300px;
+    --height: 466px;
     /* Design Tokens */
     --color-accent: -apple-system-control-accent;
     --color-white: #ffffff;
@@ -210,6 +210,34 @@ table {
     margin: var(--space-x-large) var(--space-xxx-large) 0;
 }
 
+td {
+    height: var(--size-xx-large);
+    vertical-align: middle;
+}
+
+tr.tr-labeled>td {
+    height: var(--size-xxx-large);
+}
+
+tr.tr-labeled>td>div {
+    min-height: var(--size-small);
+}
+
+tr.hr>td {
+    border-bottom: 1px solid var(--footer-background-color);
+    height: 8px;
+}
+
+
+/* .tr-labeled>td>div:first-child {
+    margin-top: var(--space-large);
+} */
+
+td>input,
+td>select {
+    margin-top: var(--space-medium);
+}
+
 .cell-label {
     text-align: left;
     vertical-align: middle;
@@ -221,12 +249,39 @@ table {
 .cell-data {
     text-align: right;
     width: 86px;
+    display: inline-block;
+    position: relative;
+    font-size: var(--font-size-small);
 }
 
 .cell-space {
     width: 32px;
     max-width: 32px;
     min-width: 32px;
+}
+
+.cell-data::before {
+    content: "";
+    font-size: var(--font-size-small);
+    position: absolute;
+    top: 20px;
+    width: 10px;
+    z-index: 1;
+    color: var(--buttongroup-color);
+}
+
+.cell-data-right::before {
+    right: 10px;
+    content: "px";
+}
+
+.cell-data-left::before {
+    left: 5px;
+    content: "HEX";
+}
+
+.cell-data-left>input {
+    padding-left: 30px;
 }
 
 input,
@@ -288,35 +343,6 @@ input:disabled {
     background-color: var(--input-background-color-disabled);
 }
 
-.cell-data {
-    display: block;
-    position: relative;
-    font-size: var(--font-size-small);
-}
-
-.cell-data::before {
-    content: "";
-    position: absolute;
-    top: 5px;
-    width: 10px;
-    z-index: 1;
-    color: var(--buttongroup-color);
-}
-
-.cell-data-px::before {
-    right: 10px;
-    content: "px";
-}
-
-.cell-data-hex::before {
-    left: 5px;
-    content: "HEX";
-}
-
-.cell-data-hex>input {
-    padding-left: 30px;
-}
-
 .select-css {
     -webkit-user-select: auto;
     user-select: auto;
@@ -357,8 +383,7 @@ input:disabled {
 }
 
 button.primary,
-button.secondary,
-.buttonGroup label {
+.button.secondary {
     height: var(--size-small);
     padding: 0 var(--size-xx-small);
     box-shadow: var(--buttongroup-box-shadow);
@@ -393,30 +418,35 @@ button.primary:active {
 
 .buttonGroup li {
     border-collapse: separate;
-    float: left;
+    display: inline-block;
     position: relative;
     margin-top: -0.5px;
+    margin-left: -2px;
     height: var(--size-small);
     padding: 0 var(--size-xx-small);
-    box-shadow: var(--buttongroup-box-shadow);
-    border-radius: var(--border-radius-xsmall);
-    min-width: 100px;
+    width: 107px;
     text-align: center;
     font-size: var(--font-size-medium);
     color: var(--buttongroup-color);
-    border: var(--buttongroup-border);
 }
 
-.btn-group {
-    height: var(--size-small);
-    box-shadow: var(--buttongroup-box-shadow);
-    border-radius: var(--border-radius-xsmall);
-    margin-bottom: var(--space-x-large);
-    min-width: 100px;
-    font-size: var(--font-size-medium);
-    color: var(--buttongroup-color);
-    background-color: var(--buttongroup-button-background-default);
-    border: var(--buttongroup-input-border);
+.buttonGroup-2 {
+    width: 214px;
+}
+
+.buttonGroup>li>.button.secondary {
+    padding: 2px var(--size-xx-small) 0;
+    border-radius: 0;
+}
+
+.buttonGroup>li>.button.secondary.button-first {
+    border-top-left-radius: var(--border-radius-xsmall);
+    border-bottom-left-radius: var(--border-radius-xsmall);
+}
+
+.buttonGroup>li>.button.secondary.button-last {
+    border-top-right-radius: var(--border-radius-xsmall);
+    border-bottom-right-radius: var(--border-radius-xsmall);
 }
 
 .buttonGroup label,

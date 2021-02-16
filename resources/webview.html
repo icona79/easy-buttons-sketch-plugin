@@ -13,54 +13,64 @@
         <table>
             <tbody>
                 <!-- Type -->
-                <tr>
+                <tr class="tr-labeled">
                     <td colspan="5">
-                        <label class="label--tabGroups" for="buttonTypeGroup">Button type</label>
-                        <ul class="buttonGroup" name="buttonTypeGroup" id="buttonTypeGroup">
-                            <li>
-                                <input type="radio" id="buttonType1" name="buttonType" value="1" checked /></span>
-                                <label for="buttonType1">Text</label>
-                            </li>
-                            <li>
-                                <input type="radio" id="buttonType2" name="buttonType" value="2" />
-                                <label for="buttonType2">Icon & Text</label>
-                            </li>
-                            <li>
-                                <input type="radio" id="buttonType3" name="buttonType" value="3" />
-                                <label for="buttonType3">Icon</label>
-                            </li>
-                        </ul>
+                        <div>
+                            <label class="label--tabGroups" for="buttonTypeGroup">Type</label>
+                        </div>
+                        <div>
+                            <ul class="buttonGroup buttonGroup-3" name="buttonTypeGroup" id="buttonTypeGroup">
+                                <li>
+                                    <input type="radio" id="buttonType1" name="buttonType" value="1" checked /></span>
+                                    <label class="button secondary button-first" for="buttonType1">Text</label>
+                                </li>
+                                <li>
+                                    <input type="radio" id="buttonType2" name="buttonType" value="2" />
+                                    <label class="button secondary" for="buttonType2">Icon & Text</label>
+                                </li>
+                                <li>
+                                    <input type="radio" id="buttonType3" name="buttonType" value="3" />
+                                    <label class="button secondary button-last" for="buttonType3">Icon</label>
+                                </li>
+                            </ul>
+                        </div>
                     </td>
                 </tr>
-                <!-- Styles -->
-                <tr>
+                <tr class="hr">
+                    <td colspan="5"></td>
+                </tr>
+                <!-- Layout -->
+                <tr class="tr-labeled">
                     <td colspan="5">
-                        <label class="label--tabGroups" for="buttonTypeGroup">Button type</label>
-                        <ul class="buttonGroup" name="buttonTypeGroup" id="buttonStyleGroup">
-                            <li>
-                                <input type="radio" id="buttonStyle1" name="buttonStyle" value="1" checked /></span>
-                                <label for="buttonStyle1">Smart Layout</label>
-                            </li>
-                            <li>
-                                <input type="radio" id="buttonStyle2" name="buttonStyle" value="2" />
-                                <label for="buttonStyle2">Fixed</label>
-                            </li>
-
-                        </ul>
+                        <div>
+                            <label class="label--tabGroups" for="buttonTypeGroup">Layout</label>
+                        </div>
+                        <div>
+                            <ul class="buttonGroup buttonGroup-2" name="buttonTypeGroup" id="buttonStyleGroup">
+                                <li>
+                                    <input type="radio" id="buttonLayout1" name="buttonLayout" value="1" checked /></span>
+                                    <label class="button secondary button-first" for="buttonLayout1">Smart Layout</label>
+                                </li>
+                                <li>
+                                    <input type="radio" id="buttonLayout2" name="buttonLayout" value="2" />
+                                    <label class="button secondary button-last" for="buttonLayout2">Fixed</label>
+                                </li>
+                            </ul>
+                        </div>
                     </td>
                 </tr>
                 <tr>
                     <td class="cell cell-label">
                         <label for="buttonWidth">Padding</label>
                     </td>
-                    <td class="cell cell-data cell-data-px">
+                    <td class="cell cell-data cell-data-right">
                         <input type="number" id="buttonWidth" name="buttonWidth" min=0 max=99 pattern="/^\d+$/" placeholder="16" /><span></span>
                     </td>
                     <td class="cell cell-space"></td>
                     <td class="cell cell-label">
                         <label for="buttonHeight">Height</label>
                     </td>
-                    <td class="cell cell-data cell-data-px">
+                    <td class="cell cell-data cell-data-right">
                         <input type="number" id="buttonHeight" name="buttonHeight" min=0 max=999 pattern="/^\d+$/" placeholder="40" />
                     </td>
                 </tr>
@@ -79,15 +89,38 @@
                     <td class="cell cell-label">
                         <label for="cornerRadiusValue">Radius</label>
                     </td>
-                    <td class="cell cell-data cell-data-px">
+                    <td class="cell cell-data cell-data-right">
                         <input type="number" id="cornerRadiusValue" name="cornerRadiusValue" pattern="/^\d+$/" placeholder="4" disabled />
+                    </td>
+                </tr>
+                <!-- Styles -->
+                <tr class="hr">
+                    <td colspan="5"></td>
+                </tr>
+                <tr class="tr-labeled">
+                    <td colspan="5">
+                        <div>
+                            <label class="label--tabGroups" for="buttonTypeGroup">Style</label>
+                        </div>
+                        <div>
+                            <ul class="buttonGroup buttonGroup-2" name="buttonTypeGroup" id="buttonStyleGroup">
+                                <li>
+                                    <input type="radio" id="buttonStyle1" name="buttonStyle" value="1" checked /></span>
+                                    <label class="button secondary button-first" for="buttonStyle1">Existing Styles</label>
+                                </li>
+                                <li>
+                                    <input type="radio" id="buttonStyle2" name="buttonStyle" value="2" />
+                                    <label class="button secondary button-last" for="buttonStyle2">New Styles</label>
+                                </li>
+                            </ul>
+                        </div>
                     </td>
                 </tr>
                 <tr>
                     <td class="cell-label">
                         <label for="backgroundColorValue">Color</label>
                     </td>
-                    <td class="cell cell-data cell-data-hex">
+                    <td class="cell cell-data cell-data-left">
                         <input type="text" id="backgroundColorValue" name="backgroundColorValue" maxlength="6" pattern="[0-9a-f]{6}" placeholder="ffffff" />
                     </td>
                     <td class="cell cell-space"></td>
