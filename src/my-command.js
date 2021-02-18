@@ -10,6 +10,7 @@ const webviewIdentifier = "prettybuttons.webview";
 var sketch = require("sketch");
 var SmartLayout = require("sketch").SmartLayout;
 var Text = require("sketch/dom").Text;
+var SharedStyle = require("sketch/dom").SharedStyle;
 
 // Document variables
 var doc = context.document;
@@ -27,14 +28,25 @@ var buttonName = 'Buttons/Button-default';
 var buttonArtboard;
 var buttonWidth;
 var buttonPaddingHorizontalValue = 16;
+var buttonWidthValue = 128;
 var buttonHeightValue = 40;
 var buttonBackgroundColorValue = "FFFFFF";
 var buttonCornerRadius = 0;
 var buttonText;
+var layerStyles = sketch.getSelectedDocument().sharedLayerStyles;
+var textStyles = sketch.getSelectedDocument().sharedTextStyles;
+var arrayLayerStyleIDs = layerStyles.map((sharedstyle) => sharedstyle["id"]);
+var arrayTextStyleIDs = textStyles.map((sharedstyle) => sharedstyle["id"]);
+var buttonStyle = 0;
+var buttonLayout = 0;
+var buttonBackgroundStyleID;
+var buttonTextStyleID;
 var buttonBackground;
 var textWidth;
 var xPosition = 0;
 var yPosition = 0;
+
+
 
 // ********************************** //
 // Button states management variables //
@@ -70,7 +82,7 @@ export default function() {
     const options = {
         identifier: webviewIdentifier,
         width: 400,
-        height: 296,
+        height: 494,
         show: false,
     };
 
@@ -79,14 +91,13 @@ export default function() {
     // only show the window when the page has loaded to avoid a white flash
     browserWindow.once("ready-to-show", () => {
         // Send the list of Text Styles to the plugin webview
-        let styles = sketch.getSelectedDocument().sharedLayerStyles;
-        // we can only send strings to the webview, so let's turn our styles into a JSON string:
-        let stylesString = JSON.stringify(styles);
-
+        let stylesString = JSON.stringify(layerStyles);
+        let textString = JSON.stringify(textStyles);
         browserWindow.webContents
-            .executeJavaScript(`fillStylesDropdown(${stylesString})`)
+            .executeJavaScript(
+                `fillLayerStylesDropdown(${stylesString}),fillTextStylesDropdown(${textString})`
+            )
             .then((result) => {
-                console.log(result);
                 // Once we're processing the styles on the webview, we can show it
                 browserWindow.show();
             });
@@ -97,17 +108,22 @@ export default function() {
 
     // add a handler for a call from web content's javascript
     webContents.on("nativeLog", parameters => {
-
-        // console.log('Configuration: ', parameters);
-
+        // console.log("Configuration: ", parameters);
+        /* layout */
+        buttonLayout = parameters.buttonLayout;
         buttonPaddingHorizontalValue = parameters.buttonPaddingHorizontalValue;
+        buttonWidthValue = parameters.buttonPaddingHorizontalValue;
         buttonHeightValue = parameters.buttonHeightValue;
-        buttonBackgroundColorValue = parameters.backgroundColorValue;
         buttonCornerRadius = parameters.cornerRadiusValue;
+        /* styles */
+        buttonStyle = parameters.buttonStyle;
+        buttonBackgroundStyleID = parameters.backgroundStyle;
+        buttonTextStyleID = parameters.textStyle;
+        buttonBackgroundColorValue = parameters.backgroundColorValue;
 
         setSymbolsInPage();
 
-        // Create the Artboard which will be the Symbol
+        /* Create the Artboard which will be the Symbol */
         buttonArtboard = new artboard({
             name: buttonName,
             parent: page,
@@ -119,37 +135,78 @@ export default function() {
             },
         });
 
-        createText(buttonArtboard, buttonPaddingHorizontalValue, buttonBackgroundColorValue);
+        /* text management */
+        if (buttonStyle === 0) {
+            createTextWithStyle(
+                buttonArtboard,
+                buttonPaddingHorizontalValue,
+                buttonTextStyleID
+            );
+        } else {
+            createTextNoStyle(
+                buttonArtboard,
+                buttonPaddingHorizontalValue,
+                buttonBackgroundColorValue
+            );
+        }
 
-        buttonWidth = buttonText.frame.width + (2 * buttonPaddingHorizontalValue);
-
-        buttonArtboard.frame.width = buttonWidth;
-        let buttonTextHeight = buttonText.frame.height
+        let buttonTextHeight = buttonText.frame.height;
         let textYposition = Math.floor((buttonHeightValue - buttonTextHeight) / 2);
-        buttonText.frame.y = textYposition
+        buttonText.frame.y = textYposition;
 
-        background(
-            buttonArtboard,
-            xPosition,
-            yPosition,
-            buttonWidth,
-            buttonHeightValue,
-            buttonBackgroundColorValue,
-            buttonCornerRadius
-        );
+        /* automatic padding if Layout with Smart Layout */
+        /* or fized size for the Artboard and center position for the text */
+        if (buttonLayout === 0) {
+            // console.log("button size based on Smart Layout");
+            buttonWidth = buttonText.frame.width + 2 * buttonPaddingHorizontalValue;
+            buttonText.frame.x = buttonPaddingHorizontalValue;
+        } else {
+            // console.log("button size based on Fixed Layout");
+            buttonWidth = buttonWidthValue;
+            console.log(buttonWidth);
+            buttonText.frame.x = Math.floor((buttonWidthValue - buttonText.frame.width) / 2);
+        }
+        buttonArtboard.frame.width = buttonWidth;
+        setPinningOptions(buttonText, true, true, true, true, false, true);
+
+        /* background management */
+        if (buttonStyle === 0) {
+            backgroundWithStyle(
+                buttonArtboard,
+                xPosition,
+                yPosition,
+                buttonWidth,
+                buttonHeightValue,
+                buttonBackgroundStyleID,
+                buttonCornerRadius
+            );
+        } else {
+            backgroundNoStyle(
+                buttonArtboard,
+                xPosition,
+                yPosition,
+                buttonWidth,
+                buttonHeightValue,
+                buttonBackgroundColorValue,
+                buttonCornerRadius
+            );
+        }
 
         buttonBackground.moveToBack();
 
-        // Create the Symbol
+        /* create the Symbol */
         var mainSymbol = SymbolMaster.fromArtboard(buttonArtboard);
 
-        // set Smart Layout
-        setSmartLayout(mainSymbol, "horizontallyCenter");
+        /* set Smart Layout */
+        if (buttonLayout === 0) {
+            setSmartLayout(mainSymbol, "horizontallyCenter");
+        }
 
         mainSymbol.selected = true;
 
-        console.log(mainSymbol);
+        // console.log(mainSymbol);
 
+        /*  create states */
         let symbol = mainSymbol;
         let symbolCurrentName = symbol.name;
         let symbolCurrentX = symbol.frame.x;
@@ -162,7 +219,6 @@ export default function() {
 
         /* Create the states variants */
         for (let s = 1; s < states.length; ++s) {
-
             let newState = symbol.duplicate();
 
             newState.name = symbolBaseName + states[s];
@@ -171,11 +227,10 @@ export default function() {
             symbolCurrentX = newState.frame.x;
 
             newState.index = symbol.index - s + 1;
-
-            document.centerOnLayer(mainSymbol);
-            doc.setZoomValue(75 / 100);
         }
 
+        document.centerOnLayer(mainSymbol);
+        doc.setZoomValue(75 / 100);
 
         browserWindow.close();
     });
@@ -186,7 +241,9 @@ export default function() {
 // ******************************************************************* //
 // Items management support functions                                  //
 // ******************************************************************* //
-function background(selectedLayer, x, y, width, height, color, cornerRadius) {
+
+/* Manage the background */
+function backgroundNoStyle(selectedLayer, x, y, width, height, color, cornerRadius) {
     let xPosition = x;
     let yPosition = y;
     let backgroundWidth = width;
@@ -209,11 +266,40 @@ function background(selectedLayer, x, y, width, height, color, cornerRadius) {
 
     buttonBackground.points.forEach((point) => (point.cornerRadius = backgroundCornerRadius));
     buttonBackground.sketchObject.setFixedRadius(backgroundCornerRadius);
-
-    //console.log(background);
 }
 
-function createText(selectedLayer, padding, backgroundColor) {
+function backgroundWithStyle(selectedLayer, x, y, width, height, styleID, cornerRadius) {
+    let xPosition = x;
+    let yPosition = y;
+    let backgroundWidth = width;
+    let backgroundHeight = height;
+    let backgroundColor = "#ffffff";
+    let backgroundStyleID = styleID;
+    let backgroundCornerRadius = cornerRadius;
+
+    let index = arrayLayerStyleIDs.indexOf(backgroundStyleID);
+
+    let ShapePath = sketch.ShapePath;
+    buttonBackground = new ShapePath({
+        parent: selectedLayer,
+        frame: {
+            x: xPosition,
+            y: yPosition,
+            width: backgroundWidth,
+            height: backgroundHeight,
+        },
+        style: { fills: [backgroundColor], borders: [] },
+        name: "Background",
+    });
+
+    buttonBackground.points.forEach((point) => (point.cornerRadius = backgroundCornerRadius));
+    buttonBackground.sketchObject.setFixedRadius(backgroundCornerRadius);
+    buttonBackground.sharedStyleId = backgroundStyleID;
+    buttonBackground.style = layerStyles[index].style;
+}
+
+/* Manage the text */
+function createTextNoStyle(selectedLayer, padding, backgroundColor) {
     let textX = padding;
     let textY = 10;
     let textParent = selectedLayer;
@@ -243,14 +329,36 @@ function createText(selectedLayer, padding, backgroundColor) {
     buttonText.name = textName;
 }
 
-function setPinningOptions() {
-    layer.hasFixedLeft = true;
-    layer.hasFixedRight = false;
-    layer.hasFixedTop = false;
-    layer.hasFixedBottom = false;
+function createTextWithStyle(selectedLayer, padding, styleID) {
+    let textX = padding;
+    let textY = 10;
+    let textParent = selectedLayer;
+    let textStyleID = styleID
+    let textValue = "Button Text";
+    let textName = "Button Text";
 
-    layer.hasFixedWidth = true;
-    layer.hasFixedHeight = true;
+    let index = arrayTextStyleIDs.indexOf(textStyleID);
+
+    buttonText = new Text({
+        parent: textParent,
+        text: textValue,
+    });
+
+    buttonText.frame.x = textX;
+    buttonText.frame.y = textY;
+    buttonText.sharedStyleId = textStyleID;
+    buttonText.style = textStyles[index].style;
+    buttonText.name = textName;
+}
+
+/* Smart Layout and Pinning Options */
+function setPinningOptions(item, fixedLeft, fixedRight, fixedTop, fixedBottom, fixedWidth, fixedHeight) {
+    item.hasFixedLeft = fixedLeft;
+    item.hasFixedRight = fixedRight;
+    item.hasFixedTop = fixedTop;
+    item.hasFixedBottom = fixedBottom;
+    item.hasFixedWidth = fixedWidth;
+    item.hasFixedHeight = fixedHeight;
 }
 
 function setSmartLayout(item, type) {
@@ -268,6 +376,43 @@ function setSmartLayout(item, type) {
             return item.smartLayout = SmartLayout.VerticallyCenter;
         case "BottomToTop":
             return item.smartLayout = SmartLayout.BottomToTop;
+    }
+}
+
+// ******************************************************************* //
+// Set the new symbols position in page                                //
+// (also the Y position for the next runs of the plugin)               //
+// ******************************************************************* //
+
+function setSymbolsInPage() {
+    symbolsCounter();
+
+    if (existingSymbols > 0) {
+        let lastSymbol = page.layers.slice(-1)[0];
+
+        let lastSymbolY = lastSymbol.frame.y
+        let lastSymbolH = lastSymbol.frame.width;
+        let lastSymbolX = lastSymbol.frame.x;
+        let lastSymbolW = lastSymbol.frame.width;
+        // symbols name should not count all the generates button type states
+        // count the first created button as variant 01
+        let symbolTypeCount = (existingSymbols / states.length) + 1;
+        // console.log(lastSymbol.name);
+
+        xPos = 0;
+        yPos = lastSymbolY + lastSymbolH + 40;
+
+        let symbolStatus = states[0];
+        console.log(symbolStatus);
+        let symbolName = buttonName.replace(symbolStatus, "");
+        console.log(symbolName);
+        let symbolIndex = symbolTypeCount.toLocaleString("en", {
+            minimumIntegerDigits: 2,
+            minimumFractionDigits: 0,
+            useGrouping: false,
+        });
+        //buttonName = symbolName + symbolTypeCount.toString() + symbolStatus;
+        buttonName = symbolName + symbolIndex + symbolStatus;
     }
 }
 
@@ -351,27 +496,6 @@ function findOrCreateSymbolPage(document) {
 function selectPage(page) {
     page.selected = true;
     return page;
-}
-
-function setSymbolsInPage() {
-    symbolsCounter();
-
-    if (existingSymbols > 0) {
-        var lastSymbol = page.layers.slice(-1)[0];
-
-        // console.log(lastSymbol.name);
-
-        var lastSymbolX = lastSymbol.frame.x;
-        var lastSymbolW = lastSymbol.frame.width;
-        // var lastSymbolY = lastSymbol.frame.y;
-        // var lastSymbolH = lastSymbol.frame.height;
-
-        xPos = lastSymbolX + lastSymbolW + 100;
-        //yPos = lastSymbolY + 100;
-
-        //console.log("Counter: " + existingSymbols);
-        buttonName = buttonName + existingSymbols.toString();
-    }
 }
 
 function symbolsCounter() {
