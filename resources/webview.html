@@ -21,16 +21,18 @@
                         <div>
                             <ul class="buttonGroup buttonGroup-3" name="buttonTypeGroup" id="buttonTypeGroup">
                                 <li>
-                                    <input type="radio" id="buttonType1" name="buttonType" value="1" checked /></span>
+                                    <input type="radio" id="buttonType1" name="buttonType" value="1" checked disabled />
                                     <label class="button secondary button-first" for="buttonType1">Text</label>
                                 </li>
                                 <li>
                                     <input type="radio" id="buttonType2" name="buttonType" value="2" />
-                                    <label class="button secondary" for="buttonType2">Icon & Text</label>
+                                    <!-- <label class="button secondary" for="buttonType2">Icon & Text</label> -->
+                                    <label class="button secondary">Icon & Text</label>
                                 </li>
                                 <li>
                                     <input type="radio" id="buttonType3" name="buttonType" value="3" />
-                                    <label class="button secondary button-last" for="buttonType3">Icon</label>
+                                    <!-- <label class="button secondary button-last" for="buttonType3">Icon</label> -->
+                                    <label class="button secondary button-last">Icon</label>
                                 </li>
                             </ul>
                         </div>
@@ -67,7 +69,7 @@
                         <label for="buttonWidth">Width</label>
                     </td>
                     <td class="cell cell-data cell-data-right">
-                        <input type="number" id="buttonWidth" name="buttonWidth" min=0 max=99 pattern="/^\d+$/" placeholder="16" /><span></span>
+                        <input type="number" id="buttonWidth" name="buttonWidth" min=0 max=99 pattern="/^\d+$/" placeholder="16" />
                     </td>
                     <td class="cell cell-space"></td>
                     <td class="cell cell-label">
@@ -108,8 +110,8 @@
                         <div>
                             <ul class="buttonGroup buttonGroup-2" name="buttonStyleGroup" id="buttonStyleGroup">
                                 <li>
-                                    <input type="radio" id="buttonStyle1" name="buttonStyle" value="1" checked /></span>
-                                    <label class="button secondary button-first" for="buttonStyle1">Existing Styles</label>
+                                    <input type="radio" id="buttonStyle1" name="buttonStyle" value="1" checked />
+                                    <label class="button secondary button-first" for="buttonStyle1" id="existingStylesLabel">Existing Styles</label>
                                 </li>
                                 <li>
                                     <input type="radio" id="buttonStyle2" name="buttonStyle" value="2" />
@@ -143,11 +145,12 @@
                         <label for="backgroundColorValue">Background</label>
                     </td>
                     <td class="cell cell-data cell-data-left">
-                        <input type="text" id="backgroundColorValue" name="backgroundColorValue" maxlength="6" pattern="[0-9a-f]{6}" placeholder="ffffff" />
+                        <input type="text" id="backgroundColorValue" name="backgroundColorValue" maxlength="6" pattern="[0-9a-f]{6}" placeholder="fa6400" />
                     </td>
                     <td class="cell cell-space"></td>
                     <td class="cell cell-label" colspan="2">
-                        <label for="createNewStyles">Create new styles</label>
+                        <!-- <label style="display: inline" for="createNewStyles">Create new styles</label>
+                        <input type="checkbox" id="createNewStyle" name="createNewStyle" disabled /> -->
                     </td>
                 </tr>
             </tbody>

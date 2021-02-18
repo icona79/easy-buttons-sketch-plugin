@@ -338,6 +338,10 @@ input[type=number] {
     -moz-appearance: textfield;
 }
 
+input[type=checkbox] {
+    height: var(--size-small);
+}
+
 input:disabled {
     color: var(--input-color-disabled);
     background-color: var(--input-background-color-disabled);

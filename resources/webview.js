@@ -96,7 +96,7 @@ document.getElementById("parametersSubmit").addEventListener("click", () => {
     if (textStyleID.value != "") {
         textStyle = textStyleID.value;
     }
-    var backgroundColorValue = "ffffff";
+    var backgroundColorValue = "fa6400";
     if (backgroundColorValueID.value != "") {
         backgroundColorValue = backgroundColorValueID.value;
     }
@@ -142,9 +142,11 @@ if (document.querySelector('input[name="buttonLayout"]')) {
             if (item === "1") {
                 document.getElementById("smartLayout").hidden = false;
                 document.getElementById("fixedLayout").hidden = true;
+                document.getElementsByName("buttonWidth")[0].placeholder = "16";
             } else {
                 document.getElementById("smartLayout").hidden = true;
                 document.getElementById("fixedLayout").hidden = false;
+                document.getElementsByName("buttonWidth")[0].placeholder = "200";
             }
         });
     });
@@ -158,9 +160,11 @@ if (document.querySelector('input[name="buttonStyle"]')) {
         elem.addEventListener("change", function(event) {
             var item = event.target.value;
             if (item === "1") {
+                // Use existing Styles
                 document.getElementById("existingStyles").hidden = false;
                 document.getElementById("newStyles").hidden = true;
             } else {
+                // Create new colors
                 document.getElementById("existingStyles").hidden = true;
                 document.getElementById("newStyles").hidden = false;
             }
@@ -170,11 +174,6 @@ if (document.querySelector('input[name="buttonStyle"]')) {
 
 // Function to populate the Styles dropdown
 window.fillLayerStylesDropdown = function(stylesArray) {
-    console.log(stylesArray);
-    // stylesArray.forEach((style) => {
-    //     console.log(style.name);
-    //     console.log(style.id);
-    // });
     let select = document.getElementById("backgroundStyleValue");
     let option;
 
@@ -184,6 +183,17 @@ window.fillLayerStylesDropdown = function(stylesArray) {
         option.appendChild(document.createTextNode(stylesArray[i].name));
         select.appendChild(option);
         console.log(option);
+    }
+
+    // Disable the existing styles options if no styles are available
+    if (stylesArray.length === 0) {
+        document.getElementById("existingStyles").hidden = true;
+        document.getElementById("newStyles").hidden = false;
+        document.getElementById("newStyles").hidden = false;
+        document.getElementById("buttonStyle1").checked = false;
+        document.getElementById("buttonStyle2").checked = true;
+        document.getElementById("existingStylesLabel").removeAttribute("for");
+
     }
 
     // I will return a message that I'll log on the plugin's side, but you can send back anything you want
