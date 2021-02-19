@@ -11,6 +11,8 @@ var sketch = require("sketch");
 var SmartLayout = require("sketch").SmartLayout;
 var Text = require("sketch/dom").Text;
 var SharedStyle = require("sketch/dom").SharedStyle;
+var HotSpot = require("sketch/dom").HotSpot;
+var Flow = require("sketch/dom").Flow;
 
 // Document variables
 var doc = context.document;
@@ -45,6 +47,7 @@ var buttonLayout = 0;
 var buttonBackgroundStyleID;
 var buttonTextStyleID;
 var buttonBackground;
+var hotspot;
 var textWidth;
 var xPosition = 0;
 var yPosition = 0;
@@ -218,6 +221,47 @@ export default function() {
 
         buttonBackground.moveToBack();
 
+        /* create an hotspot */
+        // console.log("step01");
+        // let ShapePath = sketch.ShapePath;
+        // let temporaryLayer = new ShapePath({
+        //     parent: buttonArtboard,
+        //     frame: {
+        //         x: 0,
+        //         y: 0,
+        //         width: buttonWidth,
+        //         height: buttonHeightValue,
+        //     },
+        //     style: { fills: [], borders: [] },
+        //     name: "Prototype",
+        //     flow: {
+        //             target: buttonArtboard,
+        //             animationType: Flow.AnimationType.slideFromLeft,
+        //         },
+        // });
+
+        try {
+            let HotSpot = sketch.HotSpot;
+            hotspot = new HotSpot({
+                parent: buttonArtboard,
+                name: "Prototype",
+                frame: {
+                    x: 0,
+                    y: 0,
+                    width: buttonWidth,
+                    height: buttonHeightValue,
+                },
+                flow: {
+                    target: Flow.BackTarget,
+                    animationType: Flow.AnimationType.none,
+                },
+            });
+        } catch (err) {
+            console.log(err);
+        }
+
+        hotspot.moveToBack();
+
         /* create the Symbol */
         var mainSymbol = SymbolMaster.fromArtboard(buttonArtboard);
 
@@ -367,6 +411,8 @@ function setPinningOptions(item, fixedLeft, fixedRight, fixedTop, fixedBottom, f
     item.hasFixedBottom = fixedBottom;
     item.hasFixedWidth = fixedWidth;
     item.hasFixedHeight = fixedHeight;
+
+    // console.log(item);
 }
 
 function setSmartLayout(item, type) {
