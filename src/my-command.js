@@ -399,7 +399,10 @@ function getNamedChildLayer(parent_layer, name) {
     return new_layer;
 }
 
-// Styles functions //
+// ******************************************************************* //
+// General Styles management functions                                 //
+// ******************************************************************* //
+
 function getStyleNameFromID(id) {
     let styleName = "";
     for (let i = 0; i < arrayLayerStyleNames.length; i++) {
@@ -429,6 +432,7 @@ function getStyleIDFromPartialName(name) {
     }
     return styleID;
 }
+
 // ******************************************************************* //
 // Set the new symbols position in page                                //
 // (also the Y position for the next runs of the plugin)               //
