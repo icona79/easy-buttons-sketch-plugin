@@ -36,7 +36,10 @@ var buttonText;
 var layerStyles = sketch.getSelectedDocument().sharedLayerStyles;
 var textStyles = sketch.getSelectedDocument().sharedTextStyles;
 var arrayLayerStyleIDs = layerStyles.map((sharedstyle) => sharedstyle["id"]);
+var arrayLayerStyleNames = layerStyles.map((sharedstyle) => sharedstyle["name"]);
 var arrayTextStyleIDs = textStyles.map((sharedstyle) => sharedstyle["id"]);
+var stylesString = JSON.stringify(layerStyles);
+var textString = JSON.stringify(textStyles);
 var buttonStyle = 0;
 var buttonLayout = 0;
 var buttonBackgroundStyleID;
@@ -46,7 +49,8 @@ var textWidth;
 var xPosition = 0;
 var yPosition = 0;
 
-
+var buttonTextName = "Button Text";
+var buttonBackgroundName = "Background";
 
 // ********************************** //
 // Button states management variables //
@@ -54,12 +58,29 @@ var yPosition = 0;
 // ********************************** //
 const divider = "-";
 var states = [];
+var layerStatesStyles = [];
 
 states.push(divider + "default");
 states.push(divider + "hover");
 states.push(divider + "pressed");
 states.push(divider + "tab");
 states.push(divider + "disabled");
+
+// console.log(layerStyles);
+// console.log(arrayLayerStyleIDs);
+// console.log(arrayLayerStyleNames);
+
+if (arrayLayerStyleIDs.length > 0) {
+    for (let lsi = 0; lsi < layerStyles.length; lsi++) {
+        let styleName = arrayLayerStyleNames[lsi];
+        let styleID = arrayLayerStyleIDs[lsi];
+        for (let i = 0; i < states.length; i++) {
+            if (styleName.includes(states[i])) {
+                layerStatesStyles.push([styleID, styleName]);
+            }
+        }
+    }
+}
 
 // ********************************** //
 // Helper variables                   //
@@ -91,8 +112,7 @@ export default function() {
     // only show the window when the page has loaded to avoid a white flash
     browserWindow.once("ready-to-show", () => {
         // Send the list of Text Styles to the plugin webview
-        let stylesString = JSON.stringify(layerStyles);
-        let textString = JSON.stringify(textStyles);
+
         browserWindow.webContents
             .executeJavaScript(
                 `fillLayerStylesDropdown(${stylesString}),fillTextStylesDropdown(${textString})`
@@ -163,7 +183,6 @@ export default function() {
         } else {
             // console.log("button size based on Fixed Layout");
             buttonWidth = buttonWidthValue;
-            console.log(buttonWidth);
             buttonText.frame.x = Math.floor((buttonWidthValue - buttonText.frame.width) / 2);
         }
         buttonArtboard.frame.width = buttonWidth;
@@ -216,18 +235,46 @@ export default function() {
         if (symbolCurrentName.includes(states[0])) {
             symbolBaseName = symbolCurrentName.replace(states[0], "");
         }
-
+        document.selectedLayers = [];
         /* Create the states variants */
-        for (let s = 1; s < states.length; ++s) {
-            let newState = symbol.duplicate();
+        for (let s = 1; s < states.length; s++) {
+            let newStatusSuffix = states[s]
 
-            newState.name = symbolBaseName + states[s];
+            let newState = symbol.duplicate();
+            let newStateName = symbolBaseName + newStatusSuffix;
+            newState.name = newStateName;
 
             newState.frame.x = symbolCurrentX + symbolCurrentWidth + 40;
             symbolCurrentX = newState.frame.x;
 
+            const internalBackground = getNamedChildLayer(newState, buttonBackgroundName);
+
+            internalBackground.selected = true;
+
+            let layerStatesStylesLength = layerStatesStyles.length;
+
+            if (layerStatesStylesLength > 0) {
+                const currentBackgroundStyleName = getStyleNameFromID(internalBackground.sharedStyleId);
+                const currentBackgroundStyleFolders = currentBackgroundStyleName.split("/")[0];
+                const currentBackgroundStyleType = currentBackgroundStyleName.split("/").pop().replace(states[0], newStatusSuffix);
+
+                let newBackgroundStyleName =
+                    currentBackgroundStyleFolders +
+                    "/" +
+                    currentBackgroundStyleType;
+
+                let newLayerStyleID = getStyleIDFromName(newBackgroundStyleName);
+                if (newLayerStyleID !== "") {
+                    let localIndex = arrayLayerStyleIDs.indexOf(newLayerStyleID);
+                    internalBackground.sharedStyleId = newLayerStyleID;
+                    internalBackground.style = layerStyles[localIndex].style;
+                };
+            };
+
             newState.index = symbol.index - s + 1;
-        }
+
+            document.selectedLayers = [];
+        };
 
         document.centerOnLayer(mainSymbol);
         doc.setZoomValue(75 / 100);
@@ -261,7 +308,7 @@ function backgroundNoStyle(selectedLayer, x, y, width, height, color, cornerRadi
             height: backgroundHeight,
         },
         style: { fills: [backgroundColor], borders: [] },
-        name: "Background",
+        name: buttonBackgroundName,
     });
 
     buttonBackground.points.forEach((point) => (point.cornerRadius = backgroundCornerRadius));
@@ -289,7 +336,7 @@ function backgroundWithStyle(selectedLayer, x, y, width, height, styleID, corner
             height: backgroundHeight,
         },
         style: { fills: [backgroundColor], borders: [] },
-        name: "Background",
+        name: buttonBackgroundName,
     });
 
     buttonBackground.points.forEach((point) => (point.cornerRadius = backgroundCornerRadius));
@@ -309,8 +356,8 @@ function createTextNoStyle(selectedLayer, padding, backgroundColor) {
     let textAlignment = "left";
     let textFontFamily = "Open Sans";
     let textFontWeight = 5;
-    let textValue = "Button Text";
-    let textName = "Button Text";
+    let textValue = buttonTextName;
+    let textName = buttonTextName;
 
     buttonText = new Text({
         parent: textParent,
@@ -334,8 +381,8 @@ function createTextWithStyle(selectedLayer, padding, styleID) {
     let textY = 10;
     let textParent = selectedLayer;
     let textStyleID = styleID
-    let textValue = "Button Text";
-    let textName = "Button Text";
+    let textValue = buttonTextName;
+    let textName = buttonTextName;
 
     let index = arrayTextStyleIDs.indexOf(textStyleID);
 
@@ -379,6 +426,48 @@ function setSmartLayout(item, type) {
     }
 }
 
+function getNamedChildLayer(parent_layer, name) {
+    let new_layer = null;
+
+    parent_layer.layers.forEach(function(item) {
+        if (item.name === name) {
+            new_layer = item
+        }
+    });
+
+    return new_layer;
+}
+
+// Styles functions //
+function getStyleNameFromID(id) {
+    let styleName = "";
+    for (let i = 0; i < arrayLayerStyleNames.length; i++) {
+        if (arrayLayerStyleIDs[i] === id) {
+            styleName = arrayLayerStyleNames[i];
+        }
+    }
+    return styleName;
+}
+
+function getStyleIDFromName(name) {
+    let styleID = ""
+    for (let i = 0; i < arrayLayerStyleIDs.length; i++) {
+        if (arrayLayerStyleNames[i] === name) {
+            styleID = arrayLayerStyleIDs[i];
+        }
+    }
+    return styleID;
+}
+
+function getStyleIDFromPartialName(name) {
+    let styleID = "";
+    for (let i = 0; i < arrayLayerStyleIDs.length; i++) {
+        if (arrayLayerStyleNames[i].includes(name)) {
+            styleID = arrayLayerStyleIDs[i];
+        }
+    }
+    return styleID;
+}
 // ******************************************************************* //
 // Set the new symbols position in page                                //
 // (also the Y position for the next runs of the plugin)               //
@@ -403,9 +492,9 @@ function setSymbolsInPage() {
         yPos = lastSymbolY + lastSymbolH + 40;
 
         let symbolStatus = states[0];
-        console.log(symbolStatus);
+        // console.log(symbolStatus);
         let symbolName = buttonName.replace(symbolStatus, "");
-        console.log(symbolName);
+        // console.log(symbolName);
         let symbolIndex = symbolTypeCount.toLocaleString("en", {
             minimumIntegerDigits: 2,
             minimumFractionDigits: 0,
