@@ -128,7 +128,7 @@ export default function() {
 
     // add a handler for a call from web content's javascript
     webContents.on("nativeLog", parameters => {
-        console.log("Configuration: ", parameters);
+        // console.log("Configuration: ", parameters);
         /* layout */
         buttonLayout = parameters.buttonLayout;
         buttonPaddingHorizontalValue = parameters.buttonPaddingHorizontalValue;
