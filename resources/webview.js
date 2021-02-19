@@ -55,7 +55,7 @@ document.getElementById("parametersSubmit").addEventListener("click", () => {
             buttonLayout = i;
         }
     }
-
+    // button Width or Paddding (based on Layout type)
     if (buttonLayout === 0) {
         var buttonPaddingHorizontalValue = 16;
     } else {
@@ -64,11 +64,12 @@ document.getElementById("parametersSubmit").addEventListener("click", () => {
     if (buttonPaddingHorizontalID.value != "") {
         buttonPaddingHorizontalValue = buttonPaddingHorizontalID.value;
     }
-
+    // button Height
     var buttonHeightValue = 40;
     if (buttonHeightID.value != "") {
         buttonHeightValue = buttonHeightID.value;
     }
+    // border Radius
     var cornerRadiusSelection = cornerRadiusID.value;
     var cornerRadiusValue = 0;
     if (cornerRadiusSelection === "3") {
@@ -88,14 +89,17 @@ document.getElementById("parametersSubmit").addEventListener("click", () => {
             buttonStyle = i;
         }
     }
+    // Background style
     var backgroundStyle = "";
     if (backgroundStyleID.value != "") {
         backgroundStyle = backgroundStyleID.value;
     }
+    // Text style
     var textStyle = "";
     if (textStyleID.value != "") {
         textStyle = textStyleID.value;
     }
+    // Background color
     var backgroundColorValue = "fa6400";
     if (backgroundColorValueID.value != "") {
         backgroundColorValue = backgroundColorValueID.value;

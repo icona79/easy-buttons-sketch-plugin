@@ -171,19 +171,24 @@ export default function() {
         }
 
         let buttonTextHeight = buttonText.frame.height;
-        let textYposition = Math.floor((buttonHeightValue - buttonTextHeight) / 2);
+        let textYposition = Math.floor(
+            (buttonHeightValue - buttonTextHeight) / 2
+        );
         buttonText.frame.y = textYposition;
 
         /* automatic padding if Layout with Smart Layout */
         /* or fized size for the Artboard and center position for the text */
         if (buttonLayout === 0) {
             // console.log("button size based on Smart Layout");
-            buttonWidth = buttonText.frame.width + 2 * buttonPaddingHorizontalValue;
+            buttonWidth =
+                buttonText.frame.width + 2 * buttonPaddingHorizontalValue;
             buttonText.frame.x = buttonPaddingHorizontalValue;
         } else {
             // console.log("button size based on Fixed Layout");
             buttonWidth = buttonWidthValue;
-            buttonText.frame.x = Math.floor((buttonWidthValue - buttonText.frame.width) / 2);
+            buttonText.frame.x = Math.floor(
+                (buttonWidthValue - buttonText.frame.width) / 2
+            );
         }
         buttonArtboard.frame.width = buttonWidth;
         setPinningOptions(buttonText, true, true, true, true, false, true);
@@ -225,56 +230,11 @@ export default function() {
 
         // console.log(mainSymbol);
 
-        /*  create states */
-        let symbol = mainSymbol;
-        let symbolCurrentName = symbol.name;
-        let symbolCurrentX = symbol.frame.x;
-        let symbolCurrentWidth = symbol.frame.width;
-
-        let symbolBaseName = symbolCurrentName;
-        if (symbolCurrentName.includes(states[0])) {
-            symbolBaseName = symbolCurrentName.replace(states[0], "");
-        }
+        /* Unselect any previously selected item in the canvas */
         document.selectedLayers = [];
+
         /* Create the states variants */
-        for (let s = 1; s < states.length; s++) {
-            let newStatusSuffix = states[s]
-
-            let newState = symbol.duplicate();
-            let newStateName = symbolBaseName + newStatusSuffix;
-            newState.name = newStateName;
-
-            newState.frame.x = symbolCurrentX + symbolCurrentWidth + 40;
-            symbolCurrentX = newState.frame.x;
-
-            const internalBackground = getNamedChildLayer(newState, buttonBackgroundName);
-
-            internalBackground.selected = true;
-
-            let layerStatesStylesLength = layerStatesStyles.length;
-
-            if (layerStatesStylesLength > 0) {
-                const currentBackgroundStyleName = getStyleNameFromID(internalBackground.sharedStyleId);
-                const currentBackgroundStyleFolders = currentBackgroundStyleName.split("/")[0];
-                const currentBackgroundStyleType = currentBackgroundStyleName.split("/").pop().replace(states[0], newStatusSuffix);
-
-                let newBackgroundStyleName =
-                    currentBackgroundStyleFolders +
-                    "/" +
-                    currentBackgroundStyleType;
-
-                let newLayerStyleID = getStyleIDFromName(newBackgroundStyleName);
-                if (newLayerStyleID !== "") {
-                    let localIndex = arrayLayerStyleIDs.indexOf(newLayerStyleID);
-                    internalBackground.sharedStyleId = newLayerStyleID;
-                    internalBackground.style = layerStyles[localIndex].style;
-                };
-            };
-
-            newState.index = symbol.index - s + 1;
-
-            document.selectedLayers = [];
-        };
+        CreateSymbolVariants(mainSymbol);
 
         document.centerOnLayer(mainSymbol);
         doc.setZoomValue(75 / 100);
@@ -505,6 +465,56 @@ function setSymbolsInPage() {
         buttonName = symbolName + symbolIndex + symbolStatus;
     }
 }
+
+function CreateSymbolVariants(mainSymbol) {
+    let symbol = mainSymbol;
+    let symbolCurrentName = symbol.name;
+    let symbolCurrentX = symbol.frame.x;
+    let symbolCurrentWidth = symbol.frame.width;
+
+    for (let s = 1; s < states.length; s++) {
+        let symbolBaseName = symbolCurrentName;
+        if (symbolCurrentName.includes(states[0])) {
+            symbolBaseName = symbolCurrentName.replace(states[0], "");
+        }
+
+        let newStatusSuffix = states[s];
+
+        let newState = symbol.duplicate();
+        let newStateName = symbolBaseName + newStatusSuffix;
+        newState.name = newStateName;
+
+        newState.frame.x = symbolCurrentX + symbolCurrentWidth + 40;
+        symbolCurrentX = newState.frame.x;
+
+        let internalBackground = getNamedChildLayer(newState, buttonBackgroundName);
+
+        internalBackground.selected = true;
+
+        let layerStatesStylesLength = layerStatesStyles.length;
+
+        if (layerStatesStylesLength > 0) {
+            let currentBackgroundStyleName = getStyleNameFromID(
+                internalBackground.sharedStyleId
+            );
+            let currentBackgroundStyleFolders = currentBackgroundStyleName.split("/")[0];
+            let currentBackgroundStyleType = currentBackgroundStyleName.split("/").pop().replace(states[0], newStatusSuffix);
+
+            let newBackgroundStyleName = currentBackgroundStyleFolders + "/" + currentBackgroundStyleType;
+
+            let newLayerStyleID = getStyleIDFromName(newBackgroundStyleName);
+            if (newLayerStyleID !== "") {
+                let localIndex = arrayLayerStyleIDs.indexOf(newLayerStyleID);
+                internalBackground.sharedStyleId = newLayerStyleID;
+                internalBackground.style = layerStyles[localIndex].style;
+            }
+        }
+
+        newState.index = symbol.index - s + 1;
+
+        document.selectedLayers = [];
+    }
+};
 
 // ******************************************************************* //
 // Color management support functions                                  //
