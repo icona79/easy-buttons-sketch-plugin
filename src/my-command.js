@@ -128,7 +128,7 @@ export default function() {
 
     // add a handler for a call from web content's javascript
     webContents.on("nativeLog", parameters => {
-        // console.log("Configuration: ", parameters);
+        console.log("Configuration: ", parameters);
         /* layout */
         buttonLayout = parameters.buttonLayout;
         buttonPaddingHorizontalValue = parameters.buttonPaddingHorizontalValue;
@@ -339,10 +339,11 @@ function backgroundWithStyle(selectedLayer, x, y, width, height, styleID, corner
         name: buttonBackgroundName,
     });
 
-    buttonBackground.points.forEach((point) => (point.cornerRadius = backgroundCornerRadius));
-    buttonBackground.sketchObject.setFixedRadius(backgroundCornerRadius);
     buttonBackground.sharedStyleId = backgroundStyleID;
     buttonBackground.style = layerStyles[index].style;
+    buttonBackground.points.forEach((point) => (point.cornerRadius = backgroundCornerRadius));
+    buttonBackground.sketchObject.setFixedRadius(backgroundCornerRadius);
+
 }
 
 /* Manage the text */

@@ -78,7 +78,7 @@ document.getElementById("parametersSubmit").addEventListener("click", () => {
             cornerRadiusValue = 4;
         }
     } else if (cornerRadiusSelection === "2") {
-        cornerRadiusValue = buttonHeightID.value / 2;
+        cornerRadiusValue = buttonHeightValue / 2;
     }
 
     // Button Style
