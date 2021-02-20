@@ -48,6 +48,7 @@ var buttonBackgroundStyleID;
 var buttonTextStyleID;
 var buttonBackground;
 var hotspot;
+var overrideOptionsToLock = ["textStyle", "layerStyle"];
 var textWidth;
 var xPosition = 0;
 var yPosition = 0;
@@ -233,12 +234,14 @@ export default function() {
             }
 
             /* Manage overrides */
-            for (let no = 0; no < mainSymbol.overrides.length; no++) {
-                let property = mainSymbol.overrides[no].property;
-                if (property === "textStyle" || property === "layerStyle") {
-                    mainSymbol.overrides[no].editable = false;
-                }
-            };
+            lockSymbolOverrides(mainSymbol, overrideOptionsToLock);
+
+            // for (let no = 0; no < mainSymbol.overrides.length; no++) {
+            //     let property = mainSymbol.overrides[no].property;
+            //     if (property === "textStyle" || property === "layerStyle") {
+            //         mainSymbol.overrides[no].editable = false;
+            //     }
+            // };
 
             mainSymbol.selected = true;
 
@@ -432,6 +435,17 @@ function setSmartLayout(item, type) {
             return item.smartLayout = SmartLayout.VerticallyCenter;
         case "BottomToTop":
             return item.smartLayout = SmartLayout.BottomToTop;
+    }
+}
+
+function lockSymbolOverrides(item, options) {
+    for (let index = 0; index < item.overrides.length; index++) {
+        let property = item.overrides[index].property;
+        for (let optionsIndex = 0; optionsIndex < options.length; optionsIndex++) {
+            if (property === options[optionsIndex]) {
+                item.overrides[index].editable = false;
+            }
+        }
     }
 }
 
