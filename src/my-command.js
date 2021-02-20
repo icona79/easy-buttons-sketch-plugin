@@ -128,119 +128,101 @@ export default function() {
 
     const webContents = browserWindow.webContents;
 
+    try {
+        // add a handler for a call from web content's javascript
+        webContents.on("nativeLog", (parameters) => {
+            // console.log("Configuration: ", parameters);
+            /* layout */
+            buttonLayout = parameters.buttonLayout;
+            buttonPaddingHorizontalValue = parameters.buttonPaddingHorizontalValue;
 
-    // add a handler for a call from web content's javascript
-    webContents.on("nativeLog", parameters => {
-        // console.log("Configuration: ", parameters);
-        /* layout */
-        buttonLayout = parameters.buttonLayout;
-        buttonPaddingHorizontalValue = parameters.buttonPaddingHorizontalValue;
-        buttonWidthValue = parameters.buttonPaddingHorizontalValue;
-        buttonHeightValue = parameters.buttonHeightValue;
-        buttonCornerRadius = parameters.cornerRadiusValue;
-        /* styles */
-        buttonStyle = parameters.buttonStyle;
-        buttonBackgroundStyleID = parameters.backgroundStyle;
-        buttonTextStyleID = parameters.textStyle;
-        buttonBackgroundColorValue = parameters.backgroundColorValue;
+            buttonWidthValue = parameters.buttonPaddingHorizontalValue;
+            buttonHeightValue = parameters.buttonHeightValue;
+            buttonCornerRadius = parameters.cornerRadiusValue;
+            /* styles */
+            buttonStyle = parameters.buttonStyle;
+            buttonBackgroundStyleID = parameters.backgroundStyle;
+            buttonTextStyleID = parameters.textStyle;
+            buttonBackgroundColorValue = parameters.backgroundColorValue;
 
-        setSymbolsInPage();
+            setSymbolsInPage();
 
-        /* Create the Artboard which will be the Symbol */
-        buttonArtboard = new artboard({
-            name: buttonName,
-            parent: page,
-            frame: {
-                x: xPos,
-                y: yPos,
-                width: 200,
-                height: buttonHeightValue,
-            },
-        });
+            /* Create the Artboard which will be the Symbol */
+            buttonArtboard = new artboard({
+                name: buttonName,
+                parent: page,
+                frame: {
+                    x: xPos,
+                    y: yPos,
+                    width: 200,
+                    height: buttonHeightValue,
+                },
+            });
 
-        /* text management */
-        if (buttonStyle === 0) {
-            createTextWithStyle(
-                buttonArtboard,
-                buttonPaddingHorizontalValue,
-                buttonTextStyleID
+            /* text management */
+            if (buttonStyle === 0) {
+                createTextWithStyle(
+                    buttonArtboard,
+                    buttonPaddingHorizontalValue,
+                    buttonTextStyleID
+                );
+            } else {
+                createTextNoStyle(
+                    buttonArtboard,
+                    buttonPaddingHorizontalValue,
+                    buttonBackgroundColorValue
+                );
+            }
+
+            let buttonTextHeight = buttonText.frame.height;
+            let textYposition = Math.floor(
+                (buttonHeightValue - buttonTextHeight) / 2
             );
-        } else {
-            createTextNoStyle(
-                buttonArtboard,
-                buttonPaddingHorizontalValue,
-                buttonBackgroundColorValue
-            );
-        }
+            buttonText.frame.y = textYposition;
 
-        let buttonTextHeight = buttonText.frame.height;
-        let textYposition = Math.floor(
-            (buttonHeightValue - buttonTextHeight) / 2
-        );
-        buttonText.frame.y = textYposition;
+            /* automatic padding if Layout with Smart Layout */
+            /* or fized size for the Artboard and center position for the text */
+            if (buttonLayout === 0) {
+                // console.log("button size based on Smart Layout");
+                buttonWidth =
+                    buttonText.frame.width + 2 * buttonPaddingHorizontalValue;
+                buttonText.frame.x = buttonPaddingHorizontalValue;
+            } else {
+                // console.log("button size based on Fixed Layout");
+                buttonWidth = buttonWidthValue;
+                buttonText.frame.x = Math.floor(
+                    (buttonWidthValue - buttonText.frame.width) / 2
+                );
+            }
+            buttonArtboard.frame.width = buttonWidth;
+            setPinningOptions(buttonText, true, true, true, true, false, true);
 
-        /* automatic padding if Layout with Smart Layout */
-        /* or fized size for the Artboard and center position for the text */
-        if (buttonLayout === 0) {
-            // console.log("button size based on Smart Layout");
-            buttonWidth =
-                buttonText.frame.width + 2 * buttonPaddingHorizontalValue;
-            buttonText.frame.x = buttonPaddingHorizontalValue;
-        } else {
-            // console.log("button size based on Fixed Layout");
-            buttonWidth = buttonWidthValue;
-            buttonText.frame.x = Math.floor(
-                (buttonWidthValue - buttonText.frame.width) / 2
-            );
-        }
-        buttonArtboard.frame.width = buttonWidth;
-        setPinningOptions(buttonText, true, true, true, true, false, true);
+            /* background management */
+            if (buttonStyle === 0) {
+                backgroundWithStyle(
+                    buttonArtboard,
+                    xPosition,
+                    yPosition,
+                    buttonWidth,
+                    buttonHeightValue,
+                    buttonBackgroundStyleID,
+                    buttonCornerRadius
+                );
+            } else {
+                backgroundNoStyle(
+                    buttonArtboard,
+                    xPosition,
+                    yPosition,
+                    buttonWidth,
+                    buttonHeightValue,
+                    buttonBackgroundColorValue,
+                    buttonCornerRadius
+                );
+            }
 
-        /* background management */
-        if (buttonStyle === 0) {
-            backgroundWithStyle(
-                buttonArtboard,
-                xPosition,
-                yPosition,
-                buttonWidth,
-                buttonHeightValue,
-                buttonBackgroundStyleID,
-                buttonCornerRadius
-            );
-        } else {
-            backgroundNoStyle(
-                buttonArtboard,
-                xPosition,
-                yPosition,
-                buttonWidth,
-                buttonHeightValue,
-                buttonBackgroundColorValue,
-                buttonCornerRadius
-            );
-        }
+            buttonBackground.moveToBack();
 
-        buttonBackground.moveToBack();
-
-        /* create an hotspot */
-        // console.log("step01");
-        // let ShapePath = sketch.ShapePath;
-        // let temporaryLayer = new ShapePath({
-        //     parent: buttonArtboard,
-        //     frame: {
-        //         x: 0,
-        //         y: 0,
-        //         width: buttonWidth,
-        //         height: buttonHeightValue,
-        //     },
-        //     style: { fills: [], borders: [] },
-        //     name: "Prototype",
-        //     flow: {
-        //             target: buttonArtboard,
-        //             animationType: Flow.AnimationType.slideFromLeft,
-        //         },
-        // });
-
-        try {
+            /* create an hotspot */
             let HotSpot = sketch.HotSpot;
             hotspot = new HotSpot({
                 parent: buttonArtboard,
@@ -256,37 +238,41 @@ export default function() {
                     animationType: Flow.AnimationType.none,
                 },
             });
-        } catch (err) {
-            console.log(err);
-        }
 
-        hotspot.moveToBack();
+            delete hotspot.flow.target;
+            hotspot.flow.targetId = "";
 
-        /* create the Symbol */
-        var mainSymbol = SymbolMaster.fromArtboard(buttonArtboard);
+            hotspot.moveToBack();
 
-        /* set Smart Layout */
-        if (buttonLayout === 0) {
-            setSmartLayout(mainSymbol, "horizontallyCenter");
-        }
+            /* create the Symbol */
+            var mainSymbol = SymbolMaster.fromArtboard(buttonArtboard);
 
-        mainSymbol.selected = true;
+            /* set Smart Layout */
+            if (buttonLayout === 0) {
+                setSmartLayout(mainSymbol, "horizontallyCenter");
+            }
 
-        // console.log(mainSymbol);
+            mainSymbol.selected = true;
 
-        /* Unselect any previously selected item in the canvas */
-        document.selectedLayers = [];
+            // console.log(mainSymbol);
 
-        /* Create the states variants */
-        CreateSymbolVariants(mainSymbol);
+            /* Unselect any previously selected item in the canvas */
+            document.selectedLayers = [];
 
-        document.centerOnLayer(mainSymbol);
-        doc.setZoomValue(75 / 100);
+            /* Create the states variants */
+            CreateSymbolVariants(mainSymbol);
 
-        browserWindow.close();
-    });
+            document.centerOnLayer(mainSymbol);
+            doc.setZoomValue(75 / 100);
+
+            browserWindow.close();
+        });
+    } catch (err) {
+        console.log(err);
+    }
 
     browserWindow.loadURL(require("../resources/webview.html"));
+
 }
 
 // ******************************************************************* //
