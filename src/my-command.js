@@ -134,7 +134,8 @@ export default function() {
             // console.log("Configuration: ", parameters);
             /* layout */
             buttonLayout = parameters.buttonLayout;
-            buttonPaddingHorizontalValue = parameters.buttonPaddingHorizontalValue;
+            buttonPaddingHorizontalValue =
+                parameters.buttonPaddingHorizontalValue;
 
             buttonWidthValue = parameters.buttonPaddingHorizontalValue;
             buttonHeightValue = parameters.buttonHeightValue;
@@ -250,6 +251,19 @@ export default function() {
             /* set Smart Layout */
             if (buttonLayout === 0) {
                 setSmartLayout(mainSymbol, "horizontallyCenter");
+            }
+
+            /* Manage overrides */
+            console.log(mainSymbol.overrides);
+            try {
+                for (let no = 0; no < mainSymbol.overrides.length; no++) {
+                    let property = mainSymbol.overrides[no].property;
+                    if (property === "textStyle" || property === "layerStyle") {
+                        mainSymbol.overrides[no].editable = false;
+                    }
+                };
+            } catch (err1) {
+                console.log(err1);
             }
 
             mainSymbol.selected = true;
