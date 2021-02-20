@@ -221,31 +221,10 @@ export default function() {
                 );
             }
 
-            buttonBackground.moveToBack();
-
             /* create an hotspot */
-            let HotSpot = sketch.HotSpot;
-            hotspot = new HotSpot({
-                parent: buttonArtboard,
-                name: "Prototype",
-                frame: {
-                    x: 0,
-                    y: 0,
-                    width: buttonWidth,
-                    height: buttonHeightValue,
-                },
-                flow: {
-                    target: Flow.BackTarget,
-                    animationType: Flow.AnimationType.none,
-                },
-            });
+            createHotspot(buttonArtboard, buttonWidth, buttonHeightValue, "Prototype");
 
-            delete hotspot.flow.target;
-            hotspot.flow.targetId = "";
-
-            hotspot.moveToBack();
-
-            /* create the Symbol */
+            /* generate the symbol */
             var mainSymbol = SymbolMaster.fromArtboard(buttonArtboard);
 
             /* set Smart Layout */
@@ -254,17 +233,12 @@ export default function() {
             }
 
             /* Manage overrides */
-            console.log(mainSymbol.overrides);
-            try {
-                for (let no = 0; no < mainSymbol.overrides.length; no++) {
-                    let property = mainSymbol.overrides[no].property;
-                    if (property === "textStyle" || property === "layerStyle") {
-                        mainSymbol.overrides[no].editable = false;
-                    }
-                };
-            } catch (err1) {
-                console.log(err1);
-            }
+            for (let no = 0; no < mainSymbol.overrides.length; no++) {
+                let property = mainSymbol.overrides[no].property;
+                if (property === "textStyle" || property === "layerStyle") {
+                    mainSymbol.overrides[no].editable = false;
+                }
+            };
 
             mainSymbol.selected = true;
 
@@ -288,6 +262,8 @@ export default function() {
     browserWindow.loadURL(require("../resources/webview.html"));
 
 }
+
+
 
 // ******************************************************************* //
 // Items management support functions                                  //
@@ -317,6 +293,8 @@ function backgroundNoStyle(selectedLayer, x, y, width, height, color, cornerRadi
 
     buttonBackground.points.forEach((point) => (point.cornerRadius = backgroundCornerRadius));
     buttonBackground.sketchObject.setFixedRadius(backgroundCornerRadius);
+
+    buttonBackground.moveToBack();
 }
 
 function backgroundWithStyle(selectedLayer, x, y, width, height, styleID, cornerRadius) {
@@ -348,6 +326,7 @@ function backgroundWithStyle(selectedLayer, x, y, width, height, styleID, corner
     buttonBackground.points.forEach((point) => (point.cornerRadius = backgroundCornerRadius));
     buttonBackground.sketchObject.setFixedRadius(backgroundCornerRadius);
 
+    buttonBackground.moveToBack();
 }
 
 /* Manage the text */
@@ -401,6 +380,29 @@ function createTextWithStyle(selectedLayer, padding, styleID) {
     buttonText.sharedStyleId = textStyleID;
     buttonText.style = textStyles[index].style;
     buttonText.name = textName;
+}
+
+function createHotspot(selectedLayer, width, height, name) {
+    let HotSpot = sketch.HotSpot;
+    hotspot = new HotSpot({
+        parent: selectedLayer,
+        name: name,
+        frame: {
+            x: 0,
+            y: 0,
+            width: width,
+            height: height,
+        },
+        flow: {
+            target: Flow.BackTarget,
+            animationType: Flow.AnimationType.none,
+        },
+    });
+
+    delete hotspot.flow.target;
+    hotspot.flow.targetId = "";
+
+    hotspot.moveToBack();
 }
 
 /* Smart Layout and Pinning Options */
