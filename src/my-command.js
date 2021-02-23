@@ -451,35 +451,39 @@ function backgroundWithStyle(
 
 /* Manage the text */
 function createTextNoStyle(parentLayer, padding, backgroundColor) {
-    let textX = padding;
-    let textY = 10;
-    let textParent = parentLayer;
-    let textFontSize = 16;
-    let textColor = colorContrast(backgroundColor);
-    let textLineHeight = 24;
-    let textAlignment = "left";
-    let textFontFamily = "Open Sans";
-    let textFontWeight = 5;
-    let textValue = buttonTextName;
-    let textName = buttonTextName;
+    try {
+        let textX = padding;
+        let textY = 10;
+        let textParent = parentLayer;
+        let textFontSize = 16;
+        let textColor = colorContrast(backgroundColor);
+        let textLineHeight = 24;
+        let textAlignment = "left";
+        let textFontFamily = "Open Sans";
+        let textFontWeight = 5;
+        let textValue = buttonTextName;
+        let textName = buttonTextName;
 
-    newText = new Text({
-        parent: textParent,
-        text: textValue,
-    });
+        let newText = new Text({
+            parent: textParent,
+            text: textValue,
+        });
 
-    newText.frame.x = textX;
-    newText.frame.y = textY;
-    newText.style.fontSize = textFontSize;
-    newText.style.textColor = textColor;
-    newText.style.lineHeight = textLineHeight;
-    newText.style.alignment = textAlignment;
-    newText.style.fontFamily = textFontFamily;
-    newText.style.fontWeight = textFontWeight;
+        newText.frame.x = textX;
+        newText.frame.y = textY;
+        newText.style.fontSize = textFontSize;
+        newText.style.textColor = textColor;
+        newText.style.lineHeight = textLineHeight;
+        newText.style.alignment = textAlignment;
+        newText.style.fontFamily = textFontFamily;
+        newText.style.fontWeight = textFontWeight;
 
-    newText.name = textName;
+        newText.name = textName;
 
-    return newText;
+        return newText;
+    } catch (textNoStyleErr) {
+        console.log(textNoStyleErr);
+    }
 }
 
 function createTextWithStyle(parentLayer, padding, styleID) {
