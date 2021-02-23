@@ -198,13 +198,13 @@ export default function() {
             if (buttonType === 1 || buttonType === 2) {
                 if (buttonHeightValue <= 32) {
                     iconSize = 16;
-                    iconPaddingH = 4;
+                    iconPaddingH = 8;
                 } else if (buttonHeightValue < 56) {
                     iconSize = 24;
-                    iconPaddingH = 8;
+                    iconPaddingH = 16;
                 } else if (buttonHeightValue >= 56) {
                     iconSize = 32;
-                    iconPaddingH = 16;
+                    iconPaddingH = 24;
                 }
                 iconPaddingV = (buttonHeightValue - iconSize) / 2;
 
@@ -228,35 +228,72 @@ export default function() {
             /* automatic padding if Layout with Smart Layout */
             /* or fized size for the Artboard and center position for the text */
             var iconSpace = iconSize + iconPaddingH;
-            if (buttonLayout === 0) {
-                // console.log("button size based on Smart Layout");
-                buttonWidth =
-                    buttonText.frame.width +
-                    2 * buttonPaddingHorizontalValue +
-                    iconSpace;
-                buttonText.frame.x = buttonPaddingHorizontalValue + iconSpace;
+            if (buttonType === 0 || buttonType === 1) {
+                if (buttonLayout === 0) {
+                    // console.log("button size based on Smart Layout");
+                    buttonWidth =
+                        buttonText.frame.width +
+                        2 * buttonPaddingHorizontalValue +
+                        iconSpace;
+                    buttonText.frame.x =
+                        buttonPaddingHorizontalValue + iconSpace;
+                } else {
+                    // console.log("button size based on Fixed Layout");
+                    buttonWidth = buttonWidthValue;
+                    buttonText.frame.x = Math.floor(
+                        (buttonWidthValue -
+                            iconSpace -
+                            buttonText.frame.width) /
+                        2
+                    );
+                }
             } else {
-                // console.log("button size based on Fixed Layout");
-                buttonWidth = buttonWidthValue;
-                buttonText.frame.x = Math.floor(
-                    (buttonWidthValue - iconSpace - buttonText.frame.width) / 2
-                );
+                // Button icon only
+                buttonWidth = iconSize + iconPaddingH * 2;
             }
             buttonArtboard.frame.width = buttonWidth;
 
-            if (buttonIcon != null) {
+            if (buttonType === 0) {
+                buttonContent = createGroup(
+                    buttonArtboard, [buttonText],
+                    "Content"
+                );
+            } else if (buttonType === 1) {
                 buttonContent = createGroup(
                     buttonArtboard, [buttonIcon, buttonText],
                     "Content"
                 );
             } else {
                 buttonContent = createGroup(
-                    buttonArtboard, [buttonText],
+                    buttonArtboard, [buttonIcon],
                     "Content"
                 );
             }
 
             buttonContent.adjustToFit();
+
+            // TODO: make the Icon a Symbol or a Symbol Instance
+            // if (buttonType === 1 || buttonType === 2) {
+            // var symbolsPage = Page.getSymbolsPage(document);
+            // if (symbolsPage != null) {
+            //     var symbolsPageLayers = symbolsPage.layers;
+            //     console.log(symbolsPageLayers);
+            //     for (let symbolsIndex = 0; symbolsIndex < symbolsPageLayers.length; symbolsIndex++) {
+            //         if ()
+            //     }
+            // }
+            // if () {
+
+            // } else {
+            // document.selectedLayers = [];
+
+            // buttonIcon.selected = true;
+
+            // let symbolIcon = createSymbolFromLayer(buttonIcon);
+
+            // document.selectedLayers = [];
+            // }
+            // }
 
             /* set the content group contraint option */
             setResizingConstraint(
@@ -533,6 +570,28 @@ function createGroup(parentLayer, children, name) {
         return newGroup;
     } catch (errGroup) {
         console.log(errGroup);
+    }
+}
+
+function createSymbolFromLayer(item) {
+    try {
+        let iconName = item.name;
+        let selectedLayersObject = document.selectedLayers;
+        let selectedLayersArray = selectedLayersObject.layers;
+
+        let interalLayersArray = selectedLayersArray.map(
+            (layer) => layer.sketchObject
+        );
+
+        let msLayerArray = MSLayerArray.arrayWithLayers(interalLayersArray);
+        console.log(msLayerArray);
+        MSSymbolCreator.createSymbolFromLayers_withName_onSymbolsPage(
+            msLayerArray,
+            iconName,
+            true
+        );
+    } catch (errIconSymbol) {
+        console.log(errIconSymbol);
     }
 }
 
@@ -861,9 +920,3 @@ export function onShutdown() {
         existingWebview.close();
     }
 }
-
-// function pinninOptions () {
-//     let options = new Object();
-//     let value = 0;
-
-// }
