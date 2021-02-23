@@ -373,7 +373,7 @@ export default function() {
 
 /* Manage the background */
 function backgroundNoStyle(
-    selectedLayer,
+    parentLayer,
     x,
     y,
     width,
@@ -390,7 +390,7 @@ function backgroundNoStyle(
     let backgroundCornerRadius = cornerRadius;
 
     buttonBackground = createShapePath(
-        selectedLayer,
+        parentLayer,
         xPosition,
         yPosition,
         backgroundWidth,
@@ -409,7 +409,7 @@ function backgroundNoStyle(
 }
 
 function backgroundWithStyle(
-    selectedLayer,
+    parentLayer,
     x,
     y,
     width,
@@ -429,7 +429,7 @@ function backgroundWithStyle(
     let index = arrayLayerStyleIDs.indexOf(backgroundStyleID);
 
     buttonBackground = createShapePath(
-        selectedLayer,
+        parentLayer,
         xPosition,
         yPosition,
         backgroundWidth,
@@ -506,6 +506,10 @@ function createTextWithStyle(parentLayer, padding, styleID) {
     return newText;
 }
 
+// ******************************************************************* //
+// Handle function to manage Sketch items                              //
+// ******************************************************************* //
+
 function createHotspot(parentLayer, width, height, name) {
     try {
         let HotSpot = sketch.HotSpot;
@@ -570,28 +574,6 @@ function createGroup(parentLayer, children, name) {
         return newGroup;
     } catch (errGroup) {
         console.log(errGroup);
-    }
-}
-
-function createSymbolFromLayer(item) {
-    try {
-        let iconName = item.name;
-        let selectedLayersObject = document.selectedLayers;
-        let selectedLayersArray = selectedLayersObject.layers;
-
-        let interalLayersArray = selectedLayersArray.map(
-            (layer) => layer.sketchObject
-        );
-
-        let msLayerArray = MSLayerArray.arrayWithLayers(interalLayersArray);
-        console.log(msLayerArray);
-        MSSymbolCreator.createSymbolFromLayers_withName_onSymbolsPage(
-            msLayerArray,
-            iconName,
-            true
-        );
-    } catch (errIconSymbol) {
-        console.log(errIconSymbol);
     }
 }
 
@@ -663,29 +645,17 @@ function setSmartLayout(item, type) {
     }
 }
 
-function lockSymbolOverrides(item, options) {
-    for (let index = 0; index < item.overrides.length; index++) {
-        let property = item.overrides[index].property;
-        for (
-            let optionsIndex = 0; optionsIndex < options.length; optionsIndex++
-        ) {
-            if (property === options[optionsIndex]) {
-                item.overrides[index].editable = false;
-            }
-        }
-    }
-}
+/* Check child name */
+function getNamedChildLayer(parentLayer, name) {
+    let newLayer = null;
 
-function getNamedChildLayer(parent_layer, name) {
-    let new_layer = null;
-
-    parent_layer.layers.forEach(function(item) {
+    parentLayer.layers.forEach(function(item) {
         if (item.name === name) {
-            new_layer = item;
+            newLayer = item;
         }
     });
 
-    return new_layer;
+    return newLayer;
 }
 
 // ******************************************************************* //
@@ -723,10 +693,8 @@ function getStyleIDFromPartialName(name) {
 }
 
 // ******************************************************************* //
-// Set the new symbols position in page                                //
-// (also the Y position for the next runs of the plugin)               //
+// Symbols Management                                                  //
 // ******************************************************************* //
-
 function setSymbolsInPage() {
     symbolsCounter();
 
@@ -756,6 +724,28 @@ function setSymbolsInPage() {
         });
         //buttonName = symbolName + symbolTypeCount.toString() + symbolStatus;
         buttonName = symbolName + symbolIndex + symbolStatus;
+    }
+}
+
+function createSymbolFromLayer(item) {
+    try {
+        let iconName = item.name;
+        let selectedLayersObject = document.selectedLayers;
+        let selectedLayersArray = selectedLayersObject.layers;
+
+        let interalLayersArray = selectedLayersArray.map(
+            (layer) => layer.sketchObject
+        );
+
+        let msLayerArray = MSLayerArray.arrayWithLayers(interalLayersArray);
+        console.log(msLayerArray);
+        MSSymbolCreator.createSymbolFromLayers_withName_onSymbolsPage(
+            msLayerArray,
+            iconName,
+            true
+        );
+    } catch (errIconSymbol) {
+        console.log(errIconSymbol);
     }
 }
 
@@ -817,6 +807,19 @@ function CreateSymbolVariants(mainSymbol) {
         newState.index = symbol.index - s + 1;
 
         document.selectedLayers = [];
+    }
+}
+
+function lockSymbolOverrides(item, options) {
+    for (let index = 0; index < item.overrides.length; index++) {
+        let property = item.overrides[index].property;
+        for (
+            let optionsIndex = 0; optionsIndex < options.length; optionsIndex++
+        ) {
+            if (property === options[optionsIndex]) {
+                item.overrides[index].editable = false;
+            }
+        }
     }
 }
 

@@ -1,23 +1,22 @@
 {
-  "compatibleVersion": 3,
-  "bundleVersion": 1,
-  "commands": [
-    {
-      "name": "my-command",
-      "identifier": "prettybuttons.my-command-identifier",
-      "script": "./my-command.js",
-      "handlers": {
-        "run": "onRun",
-        "actions": {
-          "Shutdown": "onShutdown"
+    "compatibleVersion": 3,
+    "bundleVersion": 1,
+    "commands": [{
+        "name": "🎛 Easy Buttons",
+        "identifier": "prettybuttons.my-command-identifier",
+        "script": "./my-command.js",
+        "handlers": {
+            "run": "onRun",
+            "actions": {
+                "Shutdown": "onShutdown"
+            }
         }
-      }
-    }
-  ],
-  "menu": {
-    "title": "PrettyButtons",
-    "items": [
-      "prettybuttons.my-command-identifier"
-    ]
-  }
+    }],
+    "menu": {
+        "title": "Easy Buttons",
+        "items": ["prettybuttons.my-command-identifier"],
+        "isRoot": true
+    },
+    "icon": "icon.png",
+    "darkIcon": "easybutton_dark.png"
 }
