@@ -143,12 +143,15 @@ export default function() {
             buttonType = parameters.buttonType;
             /* layout */
             buttonLayout = parameters.buttonLayout;
-            buttonPaddingHorizontalValue =
-                parameters.buttonPaddingHorizontalValue;
+            buttonPaddingHorizontalValue = parseInt(
+                parameters.buttonPaddingHorizontalValue
+            );
 
-            buttonWidthValue = parameters.buttonPaddingHorizontalValue;
-            buttonHeightValue = parameters.buttonHeightValue;
-            buttonCornerRadius = parameters.cornerRadiusValue;
+            buttonWidthValue = parseInt(
+                parameters.buttonPaddingHorizontalValue
+            );
+            buttonHeightValue = parseInt(parameters.buttonHeightValue);
+            buttonCornerRadius = parseInt(parameters.cornerRadiusValue);
             /* styles */
             buttonStyle = parameters.buttonStyle;
             buttonBackgroundStyleID = parameters.backgroundStyle;
@@ -194,6 +197,7 @@ export default function() {
             let iconSize = 0;
             let iconPaddingH = 0; // Horizontal padding
             let iconPaddingV = 0; // Vertical padding
+            var iconSpace = 0;
 
             if (buttonType === 1 || buttonType === 2) {
                 if (buttonHeightValue <= 32) {
@@ -207,6 +211,7 @@ export default function() {
                     iconPaddingH = 24;
                 }
                 iconPaddingV = (buttonHeightValue - iconSize) / 2;
+                iconSpace = iconSize + iconPaddingH;
 
                 buttonIcon = createShapePath(
                     buttonArtboard,
@@ -227,14 +232,19 @@ export default function() {
 
             /* automatic padding if Layout with Smart Layout */
             /* or fized size for the Artboard and center position for the text */
-            var iconSpace = iconSize + iconPaddingH;
+
             if (buttonType === 0 || buttonType === 1) {
                 if (buttonLayout === 0) {
-                    // console.log("button size based on Smart Layout");
+                    //console.log("button size based on Smart Layout");
                     buttonWidth =
                         buttonText.frame.width +
                         2 * buttonPaddingHorizontalValue +
                         iconSpace;
+
+                    let leftSpace = buttonPaddingHorizontalValue + iconSpace;
+                    console.log("Padding left: " + leftSpace);
+                    // console.log("Padding: " + buttonPaddingHorizontalValue);
+                    // console.log("IconSpace: " + iconSpace);
                     buttonText.frame.x =
                         buttonPaddingHorizontalValue + iconSpace;
                 } else {
@@ -252,6 +262,8 @@ export default function() {
                 buttonWidth = iconSize + iconPaddingH * 2;
             }
             buttonArtboard.frame.width = buttonWidth;
+
+            console.log(buttonText.frame.x);
 
             if (buttonType === 0) {
                 buttonContent = createGroup(
