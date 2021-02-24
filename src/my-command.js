@@ -84,10 +84,6 @@ states.push(divider + "pressed");
 states.push(divider + "tab");
 states.push(divider + "disabled");
 
-// console.log(layerStyles);
-// console.log(arrayLayerStyleIDs);
-// console.log(arrayLayerStyleNames);
-
 if (arrayLayerStyleIDs.length > 0) {
     for (let lsi = 0; lsi < layerStyles.length; lsi++) {
         let styleName = arrayLayerStyleNames[lsi];
@@ -324,7 +320,7 @@ export default function() {
                     buttonText.frame.x =
                         buttonPaddingHorizontalValue + iconSpace;
                 } else {
-                    console.log("button size based on Fixed Layout");
+                    // console.log("button size based on Fixed Layout");
                     buttonWidth = buttonWidthValue;
                     buttonText.frame.x = Math.floor(
                         (buttonWidthValue -
@@ -866,7 +862,7 @@ function createSymbolFromLayer(item) {
         );
 
         let msLayerArray = MSLayerArray.arrayWithLayers(interalLayersArray);
-        console.log(msLayerArray);
+        // console.log(msLayerArray);
         MSSymbolCreator.createSymbolFromLayers_withName_onSymbolsPage(
             msLayerArray,
             iconName,
