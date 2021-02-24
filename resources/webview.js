@@ -18,8 +18,8 @@ document.addEventListener("keyup", function(event) {
 // ************************************************** //
 // Validate the input fields                          //
 // ************************************************** //
-const numbersOnly = "/^\d+$/";
-const decimalOnly = "/^\s*-?[1-9]\d*(\.\d{1,2})?\s*$/";
+const numbersOnly = "/^d+$/";
+const decimalOnly = "/^s*-?[1-9]d*(.d{1,2})?s*$/";
 const uppercaseOnly = "/^[A-Z]+$/";
 const lowercaseOnly = "/^[a-z]+$/";
 const stringOnly = "/^[A-Za-z0-9]+$/";
@@ -121,18 +121,16 @@ document.getElementById("parametersSubmit").addEventListener("click", () => {
     //console.log(parameters);
 
     window.postMessage("nativeLog", parameters);
-})
+});
 
 // ************************************************** //
 // Expose the value input for corner radius if needed //
 // ************************************************** //
 cornerRadiusID.addEventListener("change", function() {
     if (cornerRadiusID.value === "3") {
-        document
-            .getElementById("cornerRadiusValue").disabled = false;
+        document.getElementById("cornerRadiusValue").disabled = false;
     } else {
-        document
-            .getElementById("cornerRadiusValue").disabled = true;
+        document.getElementById("cornerRadiusValue").disabled = true;
     }
 });
 
@@ -150,7 +148,7 @@ if (document.querySelector('input[name="buttonLayout"]')) {
             } else {
                 document.getElementById("smartLayout").hidden = true;
                 document.getElementById("fixedLayout").hidden = false;
-                document.getElementsByName("buttonWidth")[0].placeholder = "200";
+                document.getElementsByName("buttonWidth")[0].placeholder = "96";
             }
         });
     });
@@ -197,7 +195,6 @@ window.fillLayerStylesDropdown = function(stylesArray) {
         document.getElementById("buttonStyle1").checked = false;
         document.getElementById("buttonStyle2").checked = true;
         document.getElementById("existingStylesLabel").removeAttribute("for");
-
     }
 
     // I will return a message that I'll log on the plugin's side, but you can send back anything you want
@@ -219,6 +216,15 @@ window.fillTextStylesDropdown = function(stylesArray) {
         option.appendChild(document.createTextNode(stylesArray[i].name));
         select.appendChild(option);
         console.log(option);
+    }
+
+    if (stylesArray.length === 0) {
+        document.getElementById("existingStyles").hidden = true;
+        document.getElementById("newStyles").hidden = false;
+        document.getElementById("newStyles").hidden = false;
+        document.getElementById("buttonStyle1").checked = false;
+        document.getElementById("buttonStyle2").checked = true;
+        document.getElementById("existingStylesLabel").removeAttribute("for");
     }
 
     // I will return a message that I'll log on the plugin's side, but you can send back anything you want
