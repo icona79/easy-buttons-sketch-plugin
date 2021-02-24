@@ -29,7 +29,7 @@ var artboard = sketch.Artboard;
 // ********************************** //
 var buttonName = "Buttons/Button-default";
 var buttonArtboard;
-var buttonWidth;
+var buttonWidth = 200;
 var buttonPaddingHorizontalValue = 16;
 var buttonWidthValue = 128;
 var buttonHeightValue = 40;
@@ -140,9 +140,9 @@ export default function() {
         webContents.on("nativeLog", (parameters) => {
             // console.log("Configuration: ", parameters);
             /* type */
-            buttonType = parameters.buttonType;
+            buttonType = parseInt(parameters.buttonType);
             /* layout */
-            buttonLayout = parameters.buttonLayout;
+            buttonLayout = parseInt(parameters.buttonLayout);
             buttonPaddingHorizontalValue = parseInt(
                 parameters.buttonPaddingHorizontalValue
             );
@@ -153,7 +153,7 @@ export default function() {
             buttonHeightValue = parseInt(parameters.buttonHeightValue);
             buttonCornerRadius = parseInt(parameters.cornerRadiusValue);
             /* styles */
-            buttonStyle = parameters.buttonStyle;
+            buttonStyle = parseInt(parameters.buttonStyle);
             buttonBackgroundStyleID = parameters.backgroundStyle;
             buttonTextStyleID = parameters.textStyle;
             buttonBackgroundColorValue = parameters.backgroundColorValue;
@@ -167,48 +167,61 @@ export default function() {
                 frame: {
                     x: xPos,
                     y: yPos,
-                    width: 200,
+                    width: buttonWidth,
                     height: buttonHeightValue,
                 },
             });
 
-            if (buttonType === 0 || buttonType === 1) {
-                /* text management */
-                if (buttonStyle === 0) {
-                    buttonText = createTextWithStyle(
-                        buttonArtboard,
-                        buttonPaddingHorizontalValue,
-                        buttonTextStyleID
+            let buttonTextHeight = 0;
+            let buttonTextYPosition = 0;
+            try {
+                if (buttonType === 0 || buttonType === 1) {
+                    /* text management */
+                    if (buttonStyle === 0) {
+                        buttonText = createTextWithStyle(
+                            buttonArtboard,
+                            buttonPaddingHorizontalValue,
+                            buttonTextStyleID
+                        );
+                    } else {
+                        buttonText = createTextNoStyle(
+                            buttonArtboard,
+                            buttonPaddingHorizontalValue,
+                            buttonBackgroundColorValue,
+                            "center"
+                        );
+                    }
+
+                    buttonTextHeight = buttonText.frame.height;
+                    buttonTextYPosition = Math.floor(
+                        (buttonHeightValue - buttonTextHeight) / 2
                     );
-                } else {
-                    buttonText = createTextNoStyle(
-                        buttonArtboard,
-                        buttonPaddingHorizontalValue,
-                        buttonBackgroundColorValue
-                    );
+                    buttonText.frame.y = buttonTextYPosition;
                 }
-                let buttonTextHeight = buttonText.frame.height;
-                let textYposition = Math.floor(
-                    (buttonHeightValue - buttonTextHeight) / 2
-                );
-                buttonText.frame.y = textYposition;
+            } catch (buttonTextErr) {
+                console.log(buttonTextErr);
             }
 
             let iconSize = 0;
             let iconPaddingH = 0; // Horizontal padding
             let iconPaddingV = 0; // Vertical padding
-            var iconSpace = 0;
+            var iconSpace = 0; // Horizontal Space occupied from the icon and its left padding (the right padding is part of the text)
 
             if (buttonType === 1 || buttonType === 2) {
-                if (buttonHeightValue <= 32) {
-                    iconSize = 16;
-                    iconPaddingH = 8;
-                } else if (buttonHeightValue < 56) {
-                    iconSize = 24;
-                    iconPaddingH = 16;
-                } else if (buttonHeightValue >= 56) {
-                    iconSize = 32;
-                    iconPaddingH = 24;
+                if (buttonType === 1) {
+                    iconSize = buttonTextHeight;
+                    iconPaddingH = buttonTextYPosition;
+                } else {
+                    if (buttonHeightValue <= 32) {
+                        iconSize = 16;
+                        iconPaddingH = 8;
+                    } else if (buttonHeightValue < 56) {
+                        iconSize = 24;
+                        iconPaddingH = 16;
+                    } else if (buttonHeightValue >= 56) {
+                        iconSize = 32;
+                        iconPaddingH = 24;
+                    }
                 }
                 iconPaddingV = (buttonHeightValue - iconSize) / 2;
                 iconSpace = iconSize + iconPaddingH;
@@ -242,7 +255,6 @@ export default function() {
                         iconSpace;
 
                     let leftSpace = buttonPaddingHorizontalValue + iconSpace;
-                    console.log("Padding left: " + leftSpace);
                     // console.log("Padding: " + buttonPaddingHorizontalValue);
                     // console.log("IconSpace: " + iconSpace);
                     buttonText.frame.x =
@@ -262,8 +274,6 @@ export default function() {
                 buttonWidth = iconSize + iconPaddingH * 2;
             }
             buttonArtboard.frame.width = buttonWidth;
-
-            console.log(buttonText.frame.x);
 
             if (buttonType === 0) {
                 buttonContent = createGroup(
@@ -462,7 +472,7 @@ function backgroundWithStyle(
 }
 
 /* Manage the text */
-function createTextNoStyle(parentLayer, padding, backgroundColor) {
+function createTextNoStyle(parentLayer, padding, backgroundColor, align) {
     try {
         let textX = padding;
         let textY = 10;
@@ -475,6 +485,7 @@ function createTextNoStyle(parentLayer, padding, backgroundColor) {
         let textFontWeight = 5;
         let textValue = buttonTextName;
         let textName = buttonTextName;
+        let textAlign = align;
 
         let newText = new Text({
             parent: textParent,
@@ -489,6 +500,7 @@ function createTextNoStyle(parentLayer, padding, backgroundColor) {
         newText.style.alignment = textAlignment;
         newText.style.fontFamily = textFontFamily;
         newText.style.fontWeight = textFontWeight;
+        newText.style.alignment = textAlign;
 
         newText.name = textName;
 
