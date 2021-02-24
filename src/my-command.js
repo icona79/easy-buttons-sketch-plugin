@@ -116,7 +116,7 @@ export default function() {
     const options = {
         identifier: webviewIdentifier,
         width: 400,
-        height: 494,
+        height: 533,
         show: false,
     };
 
@@ -893,6 +893,8 @@ function CreateSymbolVariants(mainSymbol) {
 
         newState.frame.x = symbolCurrentX + symbolCurrentWidth + 40;
         symbolCurrentX = newState.frame.x;
+
+        let internalText = getNamedChildLayer(newState, buttonTextName);
 
         let internalBackground = getNamedChildLayer(
             newState,

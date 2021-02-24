@@ -13,7 +13,7 @@
     --color-grey-dark: #707070;
     --color-grey-darker: #4c4c4c;
     --color-black: #000000;
-    --color-primary: #FA6400;
+    --color-primary: #fa6400;
     --color-primary-dark: #ffffff;
     --color-primary-light: #ffffff;
     --color-primary-lighter: #ffffff;
@@ -25,7 +25,7 @@
     --color-trasparency-black-24: rgba(0, 0, 0, 0.24);
     --color-trasparency-white-10: rgba(255, 255, 255, 0.1);
     --color-trasparency-white-24: rgba(255, 255, 255, 0.24);
-    --color-gradient-primary: linear-gradient(180deg, rgba(255, 255, 255, 0.50) 0%, rgba(255, 255, 255, 0.20) 100%);
+    --color-gradient-primary: linear-gradient( 180deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.2) 100%);
     --opacity-30: 0.3;
     --opacity-50: 0.5;
     --opacity-75: 0.75;
@@ -113,7 +113,7 @@
         --label-color: var(--color-grey-darker);
         --input-color: var(--color-grey-darker);
         --input-background-color: var(--color-white);
-        --select-background-gradient: linear-gradient(to bottom, var(--color-white) 0%, var(--color-black) 100%);
+        --select-background-gradient: linear-gradient( to bottom, var(--color-white) 0%, var(--color-black) 100%);
         --placeholder-color: var(--color-grey);
         --input-color-disabled: var(--color-grey-light);
         --input-background-color-disabled: var(--color-grey-lighter);
@@ -141,7 +141,7 @@
         --label-color: var(--color-grey-lightest);
         --input-color: var(--color-grey-lightest);
         --input-background-color: var(--color-grey-darker);
-        --select-background-gradient: linear-gradient(to bottom, var(--color-black) 0%, var(--color-white) 100%);
+        --select-background-gradient: linear-gradient( to bottom, var(--color-black) 0%, var(--color-white) 100%);
         --placeholder-color: var(--color-grey-dark);
         --input-color-disabled: var(--color-grey-dark);
         --input-background-color-disabled: var(--color-darker);
@@ -208,6 +208,10 @@ footer {
 
 table {
     margin: var(--space-x-large) var(--space-xxx-large) 0;
+}
+
+table>caption {
+    text-align: left;
 }
 
 td {
@@ -309,7 +313,7 @@ input:matches([type="password"], [type="search"]) {
     background-color: var(--input-background-color);
     box-sizing: border-box;
     border: 1px solid var(--select-border-color);
-    box-shadow: 0 1px 0 1px rgba(0, 0, 0, .04);
+    box-shadow: 0 1px 0 1px rgba(0, 0, 0, 0.04);
     border-radius: var(--border-radius-xsmall);
     padding-left: var(--space-xx-small);
     -webkit-rtl-ordering: logical;
@@ -334,11 +338,11 @@ input::-webkit-inner-spin-button {
     margin: 0;
 }
 
-input[type=number] {
+input[type="number"] {
     -moz-appearance: textfield;
 }
 
-input[type=checkbox] {
+input[type="checkbox"] {
     height: var(--size-small);
 }
 
@@ -361,7 +365,7 @@ input:disabled {
     padding-left: var(--space-xx-small);
     box-sizing: border-box;
     border: 1px solid var(--select-border-color);
-    box-shadow: 0 1px 0 1px rgba(0, 0, 0, .04);
+    box-shadow: 0 1px 0 1px rgba(0, 0, 0, 0.04);
     border-radius: var(--border-radius-xsmall);
     background-color: var(--input-background-color);
 }
@@ -493,5 +497,9 @@ button.primary:active {
     font-weight: var(--text-font-h1-weight);
     color: var(--label-color);
     display: block;
-    margin-bottom: var(--space-x-small)
+    margin-bottom: var(--space-x-small);
+}
+
+p.label--tabGroups {
+    margin: var(--space-x-large) var(--space-xxx-large) 0;
 }
