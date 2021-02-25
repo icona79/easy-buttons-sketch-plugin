@@ -141,9 +141,9 @@ export default function() {
 
     const webContents = browserWindow.webContents;
 
-    try {
-        // add a handler for a call from web content's javascript
-        webContents.on("nativeLog", (parameters) => {
+    // add a handler for a call from web content's javascript
+    webContents.on("nativeLog", (parameters) => {
+        try {
             // console.log("Configuration: ", parameters);
             /* type */
             buttonType = parseInt(parameters.buttonType);
@@ -449,10 +449,10 @@ export default function() {
             doc.setZoomValue(75 / 100);
 
             browserWindow.close();
-        });
-    } catch (err) {
-        console.log(err);
-    }
+        } catch (err) {
+            console.log(err);
+        }
+    });
 
     browserWindow.loadURL(require("../resources/webview.html"));
 }
