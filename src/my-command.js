@@ -18,7 +18,7 @@ var Flow = require("sketch/dom").Flow;
 // Document variables
 var doc = context.document;
 var document = sketch.getSelectedDocument();
-var artboard = sketch.Artboard;
+
 // var data = document.sketchObject.documentData();
 // var libraries = sketch.getLibraries();
 // var symbolReferences;
@@ -144,6 +144,9 @@ export default function() {
     // add a handler for a call from web content's javascript
     webContents.on("nativeLog", (parameters) => {
         try {
+            // ********************************** //
+            // Import Parameters from the Webview //
+            // ********************************** //
             // console.log("Configuration: ", parameters);
             /* type */
             buttonType = parseInt(parameters.buttonType);
@@ -165,6 +168,9 @@ export default function() {
             buttonTextStyleID = parameters.textStyle;
             buttonBackgroundColorValue = parameters.backgroundColorValue;
 
+            // ********************************** //
+            // Define the text and icon color     //
+            // ********************************** //
             // the Icon should follow the Text color
             let textStyleSelected = [];
             let frontColor = "";
@@ -175,19 +181,31 @@ export default function() {
                 frontColor = colorContrast(buttonBackgroundColorValue);
             }
 
+            /* Organize the button page */
             setSymbolsInPage();
 
+            // ********************************** //
+            // Button creation                    //
+            // ********************************** //
             /* Create the Artboard which will be the Symbol */
-            buttonArtboard = new artboard({
-                name: buttonName,
-                parent: page,
-                frame: {
-                    x: xPos,
-                    y: yPos,
-                    width: buttonWidth,
-                    height: buttonHeightValue,
-                },
-            });
+            buttonArtboard = createArtboard(
+                page,
+                xPos,
+                yPos,
+                buttonWidth,
+                buttonHeightValue,
+                buttonName
+            );
+            // buttonArtboard = new artboard({
+            //     name: buttonName,
+            //     parent: page,
+            //     frame: {
+            //         x: xPos,
+            //         y: yPos,
+            //         width: buttonWidth,
+            //         height: buttonHeightValue,
+            //     },
+            // });
 
             let buttonTextHeight = 0;
             let buttonTextYPosition = 0;
@@ -631,6 +649,22 @@ function createHotspot(parentLayer, width, height, name) {
     } catch (errHotspot) {
         console.log(errHotspot);
     }
+}
+
+function createArtboard(parentLayer, x, y, width, height, name) {
+    let Artboard = sketch.Artboard;
+    let artboard = new Artboard({
+        name: name,
+        parent: parentLayer,
+        frame: {
+            x: x,
+            y: y,
+            width: width,
+            height: height,
+        },
+    });
+
+    return artboard;
 }
 
 function createShapePath(
