@@ -38,8 +38,8 @@ var buttonCornerRadius = 0;
 var buttonIcon;
 var buttonText;
 var buttonContent;
-var layerStyles = sketch.getSelectedDocument().sharedLayerStyles;
-var textStyles = sketch.getSelectedDocument().sharedTextStyles;
+var layerStyles = document.sharedLayerStyles;
+var textStyles = document.sharedTextStyles;
 var arrayLayerStyleIDs = layerStyles.map((sharedstyle) => sharedstyle["id"]);
 var arrayLayerStyleNames = layerStyles.map(
     (sharedstyle) => sharedstyle["name"]
@@ -83,18 +83,6 @@ states.push(divider + "hover");
 states.push(divider + "pressed");
 states.push(divider + "tab");
 states.push(divider + "disabled");
-
-if (arrayLayerStyleIDs.length > 0) {
-    for (let lsi = 0; lsi < layerStyles.length; lsi++) {
-        let styleName = arrayLayerStyleNames[lsi];
-        let styleID = arrayLayerStyleIDs[lsi];
-        for (let i = 0; i < states.length; i++) {
-            if (styleName.includes(states[i])) {
-                layerStatesStyles.push([styleID, styleName]);
-            }
-        }
-    }
-}
 
 // ********************************** //
 // Helper variables                   //
@@ -171,11 +159,10 @@ export default function() {
             // ********************************** //
             // Define the text and icon color     //
             // ********************************** //
-            // the Icon should follow the Text color
             let textStyleSelected = [];
             let frontColor = "";
             if (buttonStyle === 0) {
-                textStyleSelected = getTextStylesStyleFromID(buttonTextStyleID);
+                textStyleSelected = getTextStyleNameFromID(buttonTextStyleID);
                 frontColor = textStyleSelected.textColor;
             } else {
                 frontColor = colorContrast(buttonBackgroundColorValue);
@@ -231,6 +218,8 @@ export default function() {
                         fontSize,
                         lineHeight
                     );
+
+                    createNewTextStyle(buttonText, buttonName, true, false);
                 }
 
                 buttonTextHeight = buttonText.frame.height;
@@ -422,7 +411,7 @@ export default function() {
                     buttonCornerRadius
                 );
 
-                createLayerStyle(buttonBackground, buttonName, true, true);
+                createNewLayerStyle(buttonBackground, buttonName, true, true);
             }
 
             /* Create the Button hotspot */
@@ -456,6 +445,8 @@ export default function() {
 
             /* Create the symbol's states variants */
             createSymbolVariants(sourceSymbol);
+
+            sourceSymbol.selected = true;
 
             document.centerOnLayer(sourceSymbol);
             doc.setZoomValue(75 / 100);
@@ -800,17 +791,7 @@ function getLayerStyleNameFromID(id) {
     return styleName;
 }
 
-function getLayerStylesStyleFromID(id) {
-    let styleStyle = "";
-    for (let i = 0; i < arrayLayerStyleStyles.length; i++) {
-        if (arrayLayerStyleIDs[i] === id) {
-            styleStyle = arrayLayerStyleNames[i];
-        }
-    }
-    return styleStyle;
-}
-
-function getTextStylesStyleFromID(id) {
+function getTextStyleNameFromID(id) {
     try {
         let textStyle = "";
         for (let i = 0; i < arrayTextStyleStyles.length; i++) {
@@ -824,7 +805,7 @@ function getTextStylesStyleFromID(id) {
     }
 }
 
-function getStyleIDFromName(name) {
+function getLayerStyleIDFromName(name) {
     let styleID = "";
     for (let i = 0; i < arrayLayerStyleIDs.length; i++) {
         if (arrayLayerStyleNames[i] === name) {
@@ -834,44 +815,82 @@ function getStyleIDFromName(name) {
     return styleID;
 }
 
-function getStyleIDFromPartialName(name) {
+function getTextStyleIDFromName(name) {
     let styleID = "";
-    for (let i = 0; i < arrayLayerStyleIDs.length; i++) {
-        if (arrayLayerStyleNames[i].includes(name)) {
-            styleID = arrayLayerStyleIDs[i];
+    for (let i = 0; i < arrayTextStyleIDs.length; i++) {
+        if (arrayTextStyleNames[i] === name) {
+            styleID = arrayTextStyleIDs[i];
         }
     }
     return styleID;
 }
 
-function createLayerStyle(item, styleName, apply = false, variants = false) {
+function createNewLayerStyle(item, styleName, apply = false, variants = false) {
     // let document = sketch.getSelectedDocument();
     try {
         if (arrayLayerStyleNames.indexOf(styleName) === -1) {
-            // let sharedStyle = document.sharedTextStyles.push({
-            //     name: styleName,
-            //     style: item.style,
-            // });
-            let sharedStyle = sketch["default"].SharedStyle.fromStyle({
+            let sharedStyle = layerStyles.push({
                 name: styleName,
                 style: item.style,
                 document: document,
             });
             updateLayerStyles();
             if (apply === true) {
-                let newLayerStyleID = sharedStyle.id;
+                let newLayerStyleID = getLayerStyleIDFromName(styleName);
                 let localIndex = arrayLayerStyleIDs.indexOf(newLayerStyleID);
                 item.sharedStyleId = newLayerStyleID;
                 item.style = layerStyles[localIndex].style;
             }
-            if (variants === true || states.length > 0) {
+            if (variants === true && states.length > 0) {
                 styleName = styleName.replace(states[0], "");
                 for (let vIndex = 1; vIndex < states.length; vIndex++) {
                     styleName =
                         styleName.replace(states[vIndex - 1], "") +
                         states[vIndex];
-                    console.log(styleName);
-                    let sharedStyle = sketch["default"].SharedStyle.fromStyle({
+                    sharedStyle = layerStyles.push({
+                        name: styleName,
+                        style: item.style,
+                        document: document,
+                    });
+                }
+            }
+            return sharedStyle;
+        } else {
+            if (apply === true) {
+                let newLayerStyleID = getLayerStyleIDFromName(styleName);
+                let localIndex = arrayLayerStyleIDs.indexOf(newLayerStyleID);
+                item.sharedStyleId = newLayerStyleID;
+                item.style = layerStyles[localIndex].style;
+            }
+        }
+    } catch (createLayerStyleErr) {
+        console.log(createLayerStyleErr);
+    }
+}
+
+function createNewTextStyle(item, styleName, apply = false, variants = false) {
+    // let document = sketch.getSelectedDocument();
+    try {
+        if (arrayTextStyleNames.indexOf(styleName) === -1) {
+            let sharedStyle = textStyles.push({
+                name: styleName,
+                style: item.style,
+                document: document,
+            });
+            updateTextStyles();
+            if (apply === true) {
+                let newTextStyleID = getTextStyleIDFromName(styleName);
+                let localIndex = arrayTextStyleIDs.indexOf(newTextStyleID);
+                item.sharedStyleId = newTextStyleID;
+                item.style = textStyles[localIndex].style;
+            }
+            if (variants === true && states.length > 0) {
+                styleName = styleName.replace(states[0], "");
+                for (let vIndex = 1; vIndex < states.length; vIndex++) {
+                    styleName =
+                        styleName.replace(states[vIndex - 1], "") +
+                        states[vIndex];
+                    sharedStyle = textStyles.push({
                         name: styleName,
                         style: item.style,
                         document: document,
@@ -879,25 +898,13 @@ function createLayerStyle(item, styleName, apply = false, variants = false) {
                 }
             }
             // return sharedStyle;
-        }
-    } catch (createLayerStyleErr) {
-        console.log(createLayerStyleErr);
-    }
-}
-
-function createTextStyle(layer, stylename) {
-    // let document = sketch.getSelectedDocument();
-    try {
-        if (arrayTextStyleNames.indexOf(layer.name) === -1) {
-            let sharedStyle = sketch["default"].SharedStyle.fromStyle({
-                name: stylename,
-                style: layer.style,
-                document: document,
-            });
-
-            // return sharedStyle;
         } else {
-            console.log("already existing");
+            if (apply === true) {
+                let newTextStyleID = getTextStyleIDFromName(styleName);
+                let localIndex = arrayTextStyleIDs.indexOf(newTextStyleID);
+                item.sharedStyleId = newTextStyleID;
+                item.style = textStyles[localIndex].style;
+            }
         }
     } catch (createTextStyleErr) {
         console.log(createTextStyleErr);
@@ -905,12 +912,21 @@ function createTextStyle(layer, stylename) {
 }
 
 function updateLayerStyles() {
-    layerStyles = sketch.getSelectedDocument().sharedLayerStyles;
+    layerStyles = document.sharedLayerStyles;
     arrayLayerStyleIDs = layerStyles.map((sharedstyle) => sharedstyle["id"]);
     arrayLayerStyleNames = layerStyles.map(
         (sharedstyle) => sharedstyle["name"]
     );
     arrayLayerStyleStyles = layerStyles.map(
+        (sharedstyle) => sharedstyle["style"]
+    );
+}
+
+function updateTextStyles() {
+    let textStyles = document.sharedTextStyles;
+    arrayTextStyleIDs = textStyles.map((sharedstyle) => sharedstyle["id"]);
+    arrayTextStyleNames = textStyles.map((sharedstyle) => sharedstyle["name"]);
+    arrayTextStyleStyles = textStyles.map(
         (sharedstyle) => sharedstyle["style"]
     );
 }
@@ -972,10 +988,24 @@ function createSymbolFromLayer(item) {
 }
 
 function createSymbolVariants(sourceSymbol) {
+    updateLayerStyles();
+
     let symbol = sourceSymbol;
     let symbolCurrentName = symbol.name;
     let symbolCurrentX = symbol.frame.x;
     let symbolCurrentWidth = symbol.frame.width;
+
+    if (arrayLayerStyleIDs.length > 0) {
+        for (let lsi = 0; lsi < layerStyles.length; lsi++) {
+            let styleName = arrayLayerStyleNames[lsi];
+            let styleID = arrayLayerStyleIDs[lsi];
+            for (let i = 0; i < states.length; i++) {
+                if (styleName.includes(states[i])) {
+                    layerStatesStyles.push([styleID, styleName]);
+                }
+            }
+        }
+    }
 
     for (let s = 1; s < states.length; s++) {
         let symbolBaseName = symbolCurrentName;
@@ -983,7 +1013,7 @@ function createSymbolVariants(sourceSymbol) {
             symbolBaseName = symbolCurrentName.replace(states[0], "");
         }
 
-        console.log(symbolBaseName);
+        // console.log(symbolBaseName);
 
         let newStatusSuffix = states[s];
 
@@ -994,8 +1024,13 @@ function createSymbolVariants(sourceSymbol) {
         newState.frame.x = symbolCurrentX + symbolCurrentWidth + 40;
         symbolCurrentX = newState.frame.x;
 
-        let internalText = getNamedChildLayer(newState, buttonTextName);
+        // Apply a Text style for each variant
+        // let internalText = getNamedChildLayer(newState, buttonTextName);
 
+        // internalText.selected = true;
+        // document.selectedLayers = [];
+
+        // Apply a Layer style for each variant
         let internalBackground = getNamedChildLayer(
             newState,
             buttonBackgroundName
@@ -1022,7 +1057,9 @@ function createSymbolVariants(sourceSymbol) {
                 "/" +
                 currentBackgroundStyleType;
 
-            let newLayerStyleID = getStyleIDFromName(newBackgroundStyleName);
+            let newLayerStyleID = getLayerStyleIDFromName(
+                newBackgroundStyleName
+            );
             if (newLayerStyleID !== "") {
                 let localIndex = arrayLayerStyleIDs.indexOf(newLayerStyleID);
                 internalBackground.sharedStyleId = newLayerStyleID;
