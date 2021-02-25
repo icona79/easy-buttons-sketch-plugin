@@ -98,18 +98,18 @@ if (arrayLayerStyleIDs.length > 0) {
 
 // ********************************** //
 // Helper variables                   //
-//                                    //
 // ********************************** //
 var xPos = 0;
 var yPos = 0;
 
-var existingSymbols = 0;
+var symbolCounter = 0;
 
+// TODO: create or move to the Button's page when hoit the Create button only //
 const buttonSymbolsPage = "Buttons";
 var page = selectPage(findOrCreatePage(document, buttonSymbolsPage));
+
 // ********************************** //
 // Plugin code                        //
-//                                    //
 // ********************************** //
 export default function() {
     /* Create the webview with the sizes */
@@ -453,7 +453,7 @@ export default function() {
             document.selectedLayers = [];
 
             /* Create the symbol's states variants */
-            CreateSymbolVariants(sourceSymbol);
+            createSymbolVariants(sourceSymbol);
 
             document.centerOnLayer(sourceSymbol);
             doc.setZoomValue(75 / 100);
@@ -848,7 +848,7 @@ function getStyleIDFromPartialName(name) {
 function setSymbolsInPage() {
     symbolsCounter();
 
-    if (existingSymbols > 0) {
+    if (symbolCounter > 0) {
         let lastSymbol = page.layers.slice(-1)[0];
 
         let lastSymbolY = lastSymbol.frame.y;
@@ -857,7 +857,7 @@ function setSymbolsInPage() {
         let lastSymbolW = lastSymbol.frame.width;
         // symbols name should not count all the generates button type states
         // count the first created button as variant 01
-        let symbolTypeCount = existingSymbols / states.length + 1;
+        let symbolTypeCount = symbolCounter / states.length + 1;
         // console.log(lastSymbol.name);
 
         xPos = 0;
@@ -899,7 +899,7 @@ function createSymbolFromLayer(item) {
     }
 }
 
-function CreateSymbolVariants(sourceSymbol) {
+function createSymbolVariants(sourceSymbol) {
     let symbol = sourceSymbol;
     let symbolCurrentName = symbol.name;
     let symbolCurrentX = symbol.frame.x;
@@ -973,6 +973,13 @@ function lockSymbolOverrides(item, options) {
             }
         }
     }
+}
+
+function symbolsCounter() {
+    var currentPage = doc.currentPage();
+    var listOfSymbols = currentPage.symbols();
+
+    symbolCounter = listOfSymbols.count();
 }
 
 // ******************************************************************* //
@@ -1056,13 +1063,6 @@ function findOrCreateSymbolPage(document) {
 function selectPage(page) {
     page.selected = true;
     return page;
-}
-
-function symbolsCounter() {
-    var currentPage = doc.currentPage();
-    var listOfSymbols = currentPage.symbols();
-
-    existingSymbols = listOfSymbols.count();
 }
 
 // ******************************************************************* //
