@@ -400,7 +400,7 @@ export default function() {
                 buttonContent, [false, false, false, false], [true, false]
             );
 
-            /* set the Button background */
+            /* Set the Button background (set the obj buttonBackground)*/
             if (buttonStyle === 0) {
                 backgroundWithStyle(
                     buttonArtboard,
@@ -421,6 +421,8 @@ export default function() {
                     buttonBackgroundColorValue,
                     buttonCornerRadius
                 );
+
+                createLayerStyle(buttonBackground, buttonName, true, true);
             }
 
             /* Create the Button hotspot */
@@ -842,6 +844,77 @@ function getStyleIDFromPartialName(name) {
     return styleID;
 }
 
+function createLayerStyle(item, styleName, apply = false, variants = false) {
+    // let document = sketch.getSelectedDocument();
+    try {
+        if (arrayLayerStyleNames.indexOf(styleName) === -1) {
+            // let sharedStyle = document.sharedTextStyles.push({
+            //     name: styleName,
+            //     style: item.style,
+            // });
+            let sharedStyle = sketch["default"].SharedStyle.fromStyle({
+                name: styleName,
+                style: item.style,
+                document: document,
+            });
+            updateLayerStyles();
+            if (apply === true) {
+                let newLayerStyleID = sharedStyle.id;
+                let localIndex = arrayLayerStyleIDs.indexOf(newLayerStyleID);
+                item.sharedStyleId = newLayerStyleID;
+                item.style = layerStyles[localIndex].style;
+            }
+            if (variants === true || states.length > 0) {
+                styleName = styleName.replace(states[0], "");
+                for (let vIndex = 1; vIndex < states.length; vIndex++) {
+                    styleName =
+                        styleName.replace(states[vIndex - 1], "") +
+                        states[vIndex];
+                    console.log(styleName);
+                    let sharedStyle = sketch["default"].SharedStyle.fromStyle({
+                        name: styleName,
+                        style: item.style,
+                        document: document,
+                    });
+                }
+            }
+            // return sharedStyle;
+        }
+    } catch (createLayerStyleErr) {
+        console.log(createLayerStyleErr);
+    }
+}
+
+function createTextStyle(layer, stylename) {
+    // let document = sketch.getSelectedDocument();
+    try {
+        if (arrayTextStyleNames.indexOf(layer.name) === -1) {
+            let sharedStyle = sketch["default"].SharedStyle.fromStyle({
+                name: stylename,
+                style: layer.style,
+                document: document,
+            });
+
+            // return sharedStyle;
+        } else {
+            console.log("already existing");
+        }
+    } catch (createTextStyleErr) {
+        console.log(createTextStyleErr);
+    }
+}
+
+function updateLayerStyles() {
+    layerStyles = sketch.getSelectedDocument().sharedLayerStyles;
+    arrayLayerStyleIDs = layerStyles.map((sharedstyle) => sharedstyle["id"]);
+    arrayLayerStyleNames = layerStyles.map(
+        (sharedstyle) => sharedstyle["name"]
+    );
+    arrayLayerStyleStyles = layerStyles.map(
+        (sharedstyle) => sharedstyle["style"]
+    );
+}
+
 // ******************************************************************* //
 // Symbols Management                                                  //
 // ******************************************************************* //
@@ -872,7 +945,6 @@ function setSymbolsInPage() {
             minimumFractionDigits: 0,
             useGrouping: false,
         });
-        //buttonName = symbolName + symbolTypeCount.toString() + symbolStatus;
         buttonName = symbolName + symbolIndex + symbolStatus;
     }
 }
@@ -910,6 +982,8 @@ function createSymbolVariants(sourceSymbol) {
         if (symbolCurrentName.includes(states[0])) {
             symbolBaseName = symbolCurrentName.replace(states[0], "");
         }
+
+        console.log(symbolBaseName);
 
         let newStatusSuffix = states[s];
 
