@@ -1,5 +1,6 @@
 # build artefacts
 easybuttons.sketchplugin
+easybuttons.sketchplugin.zip
 
 # npm
 node_modules
