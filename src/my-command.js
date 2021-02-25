@@ -196,20 +196,10 @@ export default function() {
                 buttonHeightValue,
                 buttonName
             );
-            // buttonArtboard = new artboard({
-            //     name: buttonName,
-            //     parent: page,
-            //     frame: {
-            //         x: xPos,
-            //         y: yPos,
-            //         width: buttonWidth,
-            //         height: buttonHeightValue,
-            //     },
-            // });
 
+            /* Manage the button text (only for button type 0 & 1) */
             let buttonTextHeight = 0;
             let buttonTextYPosition = 0;
-            let buttonTextColor = "";
 
             if (buttonType === 0 || buttonType === 1) {
                 /* text management */
@@ -248,10 +238,9 @@ export default function() {
                     (buttonHeightValue - buttonTextHeight) / 2
                 );
                 buttonText.frame.y = buttonTextYPosition;
-
-                buttonTextColor = buttonText.style.textColor;
             }
 
+            /* Manage the button icon (only for button type 1 & 2) */
             let iconSize = 0;
             let iconPaddingH = 0; // Horizontal padding
             let iconPaddingV = 0; // Vertical padding
@@ -324,9 +313,34 @@ export default function() {
                 console.log(iconCreationErr);
             }
 
-            /* automatic padding if Layout with Smart Layout */
-            /* or fized size for the Artboard and center position for the text */
+            // TODO: make the Icon a Symbol or a Symbol Instance
+            // if (buttonType === 1 || buttonType === 2) {
+            // var symbolsPage = Page.getSymbolsPage(document);
+            // if (symbolsPage != null) {
+            //     var symbolsPageLayers = symbolsPage.layers;
+            //     console.log(symbolsPageLayers);
+            //     for (let symbolsIndex = 0; symbolsIndex < symbolsPageLayers.length; symbolsIndex++) {
+            //         if ()
+            //     }
+            // }
+            // if () {
 
+            // } else {
+            // document.selectedLayers = [];
+
+            // buttonIcon.selected = true;
+
+            // let symbolIcon = createSymbolFromLayer(buttonIcon);
+
+            // document.selectedLayers = [];
+            // }
+            // }
+
+            // ********************************************** //
+            // Manage the text % icon position                //
+            // - Automatic padding if Layout 0 (Smart Layout) //
+            // - Fized center position if layout 1 (Fixed)    //
+            // ********************************************** //
             if (buttonType === 0 || buttonType === 1) {
                 if (buttonLayout === 0) {
                     // console.log("button size based on Smart Layout");
@@ -361,6 +375,7 @@ export default function() {
             }
             buttonArtboard.frame.width = buttonWidth;
 
+            /* Create a Content group for text & icon */
             if (buttonType === 0) {
                 buttonContent = createGroup(
                     buttonArtboard, [buttonText],
@@ -380,35 +395,12 @@ export default function() {
 
             buttonContent.adjustToFit();
 
-            // TODO: make the Icon a Symbol or a Symbol Instance
-            // if (buttonType === 1 || buttonType === 2) {
-            // var symbolsPage = Page.getSymbolsPage(document);
-            // if (symbolsPage != null) {
-            //     var symbolsPageLayers = symbolsPage.layers;
-            //     console.log(symbolsPageLayers);
-            //     for (let symbolsIndex = 0; symbolsIndex < symbolsPageLayers.length; symbolsIndex++) {
-            //         if ()
-            //     }
-            // }
-            // if () {
-
-            // } else {
-            // document.selectedLayers = [];
-
-            // buttonIcon.selected = true;
-
-            // let symbolIcon = createSymbolFromLayer(buttonIcon);
-
-            // document.selectedLayers = [];
-            // }
-            // }
-
-            /* set the content group contraint option */
+            /* set the Content group constraint option */
             setResizingConstraint(
                 buttonContent, [false, false, false, false], [true, false]
             );
 
-            /* background management */
+            /* set the Button background */
             if (buttonStyle === 0) {
                 backgroundWithStyle(
                     buttonArtboard,
@@ -431,7 +423,7 @@ export default function() {
                 );
             }
 
-            /* create an hotspot */
+            /* Create the Button hotspot */
             buttonHotspot = createHotspot(
                 buttonArtboard,
                 buttonWidth,
@@ -444,31 +436,31 @@ export default function() {
 
             buttonHotspot.moveToBack();
 
-            /* generate the symbol */
-            var mainSymbol = SymbolMaster.fromArtboard(buttonArtboard);
+            /* Generate the Source Symbol */
+            let sourceSymbol = SymbolMaster.fromArtboard(buttonArtboard);
 
-            /* set Smart Layout */
+            /* Set the symbol's Smart Layout options (Assumption: they're always centered) */
             if (buttonLayout === 0) {
-                setSmartLayout(mainSymbol, "horizontallyCenter");
+                setSmartLayout(sourceSymbol, "horizontallyCenter");
             }
 
-            /* Manage overrides */
-            lockSymbolOverrides(mainSymbol, overrideOptionsToLock);
+            /* Manage the symbol's overrides (background and styles are not overridable) */
+            lockSymbolOverrides(sourceSymbol, overrideOptionsToLock);
 
-            mainSymbol.selected = true;
+            sourceSymbol.selected = true;
 
             /* Unselect any previously selected item in the canvas */
             document.selectedLayers = [];
 
-            /* Create the states variants */
-            CreateSymbolVariants(mainSymbol);
+            /* Create the symbol's states variants */
+            CreateSymbolVariants(sourceSymbol);
 
-            document.centerOnLayer(mainSymbol);
+            document.centerOnLayer(sourceSymbol);
             doc.setZoomValue(75 / 100);
 
             browserWindow.close();
-        } catch (err) {
-            console.log(err);
+        } catch (pluginErr) {
+            console.log(pluginErr);
         }
     });
 
@@ -907,8 +899,8 @@ function createSymbolFromLayer(item) {
     }
 }
 
-function CreateSymbolVariants(mainSymbol) {
-    let symbol = mainSymbol;
+function CreateSymbolVariants(sourceSymbol) {
+    let symbol = sourceSymbol;
     let symbolCurrentName = symbol.name;
     let symbolCurrentX = symbol.frame.x;
     let symbolCurrentWidth = symbol.frame.width;
