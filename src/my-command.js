@@ -39,6 +39,9 @@ var buttonIcon;
 var buttonText;
 var buttonContent;
 var layerStyles = document.sharedLayerStyles;
+// var layerStyles = document.sharedLayerStyles.sort(
+//     (left, right) => left.name > right.name
+// );
 var textStyles = document.sharedTextStyles;
 var arrayLayerStyleIDs = layerStyles.map((sharedstyle) => sharedstyle["id"]);
 var arrayLayerStyleNames = layerStyles.map(
@@ -47,13 +50,20 @@ var arrayLayerStyleNames = layerStyles.map(
 var arrayLayerStyleStyles = layerStyles.map(
     (sharedstyle) => sharedstyle["style"]
 );
+var layerStylesOrdered = [...document.sharedLayerStyles].sort(
+    (left, right) => left.name > right.name
+);
+
 var arrayTextStyleIDs = textStyles.map((sharedstyle) => sharedstyle["id"]);
 var arrayTextStyleNames = textStyles.map((sharedstyle) => sharedstyle["name"]);
 var arrayTextStyleStyles = textStyles.map(
     (sharedstyle) => sharedstyle["style"]
 );
-var stylesString = JSON.stringify(layerStyles);
-var textString = JSON.stringify(textStyles);
+var textStylesOrdered = [...document.sharedTextStyles].sort(
+    (left, right) => left.name > right.name
+);
+var stylesString = JSON.stringify(layerStylesOrdered);
+var textString = JSON.stringify(textStylesOrdered);
 
 var buttonStyle = 0;
 var buttonLayout = 0;
@@ -191,7 +201,7 @@ export default function() {
             if (buttonType === 0 || buttonType === 1) {
                 /* text management */
                 if (buttonStyle === 0) {
-                    buttonText = createTextWithStyle(
+                    buttonText = createTextWithStyleID(
                         buttonArtboard,
                         buttonPaddingHorizontalValue,
                         buttonTextStyleID
@@ -419,7 +429,7 @@ export default function() {
                 buttonArtboard,
                 buttonWidth,
                 buttonHeightValue,
-                "Prototype"
+                "Hotspot"
             );
 
             delete buttonHotspot.flow.target;
@@ -432,7 +442,7 @@ export default function() {
 
             /* Set the symbol's Smart Layout options (Assumption: they're always centered) */
             if (buttonLayout === 0) {
-                setSmartLayout(sourceSymbol, "horizontallyCenter");
+                setSmartLayout(sourceSymbol, "HorizontallyCenter");
             }
 
             /* Manage the symbol's overrides (background and styles are not overridable) */
@@ -584,7 +594,7 @@ function createTextNoStyle(
     }
 }
 
-function createTextWithStyle(parentLayer, padding, styleID) {
+function createTextWithStyleID(parentLayer, padding, styleID) {
     let textX = padding;
     let textY = 10;
     let textParent = parentLayer;
@@ -592,6 +602,31 @@ function createTextWithStyle(parentLayer, padding, styleID) {
     let textValue = buttonTextName;
     let textName = buttonTextName;
 
+    let index = arrayTextStyleIDs.indexOf(textStyleID);
+
+    let newText = new Text({
+        parent: textParent,
+        text: textValue,
+    });
+
+    newText.frame.x = textX;
+    newText.frame.y = textY;
+    newText.sharedStyleId = textStyleID;
+    newText.style = textStyles[index].style;
+    newText.name = textName;
+
+    return newText;
+}
+
+function createTextWithStyleName(parentLayer, padding, styleName) {
+    let textX = padding;
+    let textY = 10;
+    let textParent = parentLayer;
+    let textStyleName = styleName;
+    let textValue = buttonTextName;
+    let textName = buttonTextName;
+
+    let textStyleID = getTextStyleIDFromName(textStyleName);
     let index = arrayTextStyleIDs.indexOf(textStyleID);
 
     let newText = new Text({
@@ -691,8 +726,6 @@ function createGroup(parentLayer, children, name) {
             name: name,
         });
 
-        // setResizingConstraint(newGroup, false, false, false, false, true, false);
-
         return newGroup;
     } catch (errGroup) {
         console.log(errGroup);
@@ -751,7 +784,7 @@ function setSmartLayout(item, type) {
     switch (smartLayoutType) {
         case "LeftToRight":
             return (item.smartLayout = SmartLayout.LeftToRight);
-        case "horizontallyCenter":
+        case "HorizontallyCenter":
             return (item.smartLayout = SmartLayout.HorizontallyCenter);
         case "RightToLeft":
             return (item.smartLayout = SmartLayout.RightToLeft);
@@ -765,7 +798,7 @@ function setSmartLayout(item, type) {
 }
 
 /* Check child name */
-function getNamedChildLayer(parentLayer, name) {
+function getChildLayerByName(parentLayer, name) {
     let newLayer = null;
 
     parentLayer.layers.forEach(function(item) {
@@ -775,6 +808,18 @@ function getNamedChildLayer(parentLayer, name) {
     });
 
     return newLayer;
+}
+
+function getChildrenLayerByName(parentLayer, name) {
+    let newLayers = [];
+
+    parentLayer.layers.forEach(function(item) {
+        if (item.name === name) {
+            newLayers.push(item);
+        }
+    });
+
+    return newLayers;
 }
 
 // ******************************************************************* //
@@ -1016,22 +1061,25 @@ function createSymbolVariants(sourceSymbol) {
         // console.log(symbolBaseName);
 
         let newStatusSuffix = states[s];
+        let symbolFolder = symbolBaseName.split("/")[0];
+        let symbolName = symbolBaseName.split("/")[1];
 
         let newState = symbol.duplicate();
-        let newStateName = symbolBaseName + newStatusSuffix;
+        let newStateName =
+            symbolFolder + "/xStates/" + symbolName + newStatusSuffix;
         newState.name = newStateName;
 
         newState.frame.x = symbolCurrentX + symbolCurrentWidth + 40;
         symbolCurrentX = newState.frame.x;
 
         // Apply a Text style for each variant
-        // let internalText = getNamedChildLayer(newState, buttonTextName);
+        // let internalText = getChildLayerByName(newState, buttonTextName);
 
         // internalText.selected = true;
         // document.selectedLayers = [];
 
         // Apply a Layer style for each variant
-        let internalBackground = getNamedChildLayer(
+        let internalBackground = getChildLayerByName(
             newState,
             buttonBackgroundName
         );
