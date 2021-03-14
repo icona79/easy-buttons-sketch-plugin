@@ -11,150 +11,133 @@
 <body>
     <div class="view">
         <p class="label--tabGroups">Create your buttons and their states</p>
-        <table>
-            <tbody>
-                <!-- Type -->
-                <tr class="tr-labeled">
-                    <td colspan="5">
-                        <div>
-                            <label class="label--tabGroups" for="buttonTypeGroup">Type</label>
-                        </div>
-                        <div>
-                            <ul class="buttonGroup buttonGroup-3" name="buttonTypeGroup" id="buttonTypeGroup">
-                                <li>
-                                    <input type="radio" id="buttonType1" name="buttonType" value="1" checked disabled />
-                                    <label class="button secondary button-first" for="buttonType1">Text</label>
-                                </li>
-                                <li>
-                                    <input type="radio" id="buttonType2" name="buttonType" value="2" />
-                                    <label class="button secondary" for="buttonType2">Icon & Text</label>
-                                </li>
-                                <li>
-                                    <input type="radio" id="buttonType3" name="buttonType" value="3" />
-                                    <label class="button secondary button-last" for="buttonType3">Icon</label>
-                                </li>
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
-                <tr class="hr">
-                    <td colspan="5"></td>
-                </tr>
-                <!-- Layout -->
-                <tr class="tr-labeled">
-                    <td colspan="5">
-                        <div>
-                            <label class="label--tabGroups" for="buttonLayoutGroup">Layout</label>
-                        </div>
-                        <div>
-                            <ul class="buttonGroup buttonGroup-2" name="buttonLayoutGroup" id="buttonLayoutGroup">
-                                <li>
-                                    <input type="radio" id="buttonLayout1" name="buttonLayout" value="1" checked /></span>
-                                    <label class="button secondary button-first" for="buttonLayout1">Smart Layout</label>
-                                </li>
-                                <li>
-                                    <input type="radio" id="buttonLayout2" name="buttonLayout" value="2" />
-                                    <label class="button secondary button-last" for="buttonLayout2">Fixed</label>
-                                </li>
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
-                <!-- Smart layout -->
-                <tr>
-                    <td id="smartLayout" class="cell cell-label">
-                        <label for="buttonWidth">Padding</label>
-                    </td>
-                    <td id="fixedLayout" class="cell cell-label" hidden>
-                        <label for="buttonWidth">Width</label>
-                    </td>
-                    <td class="cell cell-data cell-data-right">
-                        <input type="number" id="buttonWidth" name="buttonWidth" min=0 max=99 pattern="/^\d+$/" placeholder="16" />
-                    </td>
-                    <td class="cell cell-space"></td>
-                    <td class="cell cell-label">
-                        <label for="buttonHeight">Height</label>
-                    </td>
-                    <td class="cell cell-data cell-data-right">
-                        <input type="number" id="buttonHeight" name="buttonHeight" min=0 max=999 pattern="/^\d+$/" placeholder="40" />
-                    </td>
-                </tr>
-                <tr>
-                    <td class="cell cell-label">
-                        <label for="cornerRadius">Corners</label>
-                    </td>
-                    <td class="cell cell-data">
-                        <select id="cornerRadius" name="cornerRadius" class="select-css">
-                            <option value="1">Squared</option>
-                            <option value="2">Circled</option>
-                            <option value="3">Specific value</option>
-                        </select>
-                    </td>
-                    <td class="cell cell-space"></td>
-                    <td class="cell cell-label">
-                        <label for="cornerRadiusValue">Radius</label>
-                    </td>
-                    <td class="cell cell-data cell-data-right">
-                        <input type="number" id="cornerRadiusValue" name="cornerRadiusValue" pattern="/^\d+$/" placeholder="4" disabled />
-                    </td>
-                </tr>
-                <!-- Styles -->
-                <tr class="hr">
-                    <td colspan="5"></td>
-                </tr>
-                <tr class="tr-labeled">
-                    <td colspan="5">
-                        <div>
-                            <label class="label--tabGroups" for="buttonStyleGroup">Style</label>
-                        </div>
-                        <div>
-                            <ul class="buttonGroup buttonGroup-2" name="buttonStyleGroup" id="buttonStyleGroup">
-                                <li>
-                                    <input type="radio" id="buttonStyle1" name="buttonStyle" value="1" checked />
-                                    <label class="button secondary button-first" for="buttonStyle1" id="existingStylesLabel">Existing Styles</label>
-                                </li>
-                                <li>
-                                    <input type="radio" id="buttonStyle2" name="buttonStyle" value="2" />
-                                    <label class="button secondary button-last" for="buttonStyle2">New Styles</label>
-                                </li>
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
-                <tr id="existingStyles">
-                    <td class="cell cell-label">
-                        <label for="backgroundStyleValue">Background</label>
-                    </td>
-                    <td class="cell cell-data">
-                        <select id="backgroundStyleValue" name="backgroundStyleValue" class="select-css">
-                            
-                        </select>
-                    </td>
-                    <td class="cell cell-space"></td>
-                    <td class="cell cell-label">
-                        <label for="textStyleValue">Text</label>
-                    </td>
-                    <td class="cell cell-data">
-                        <select id="textStyleValue" name="textStyleValue" class="select-css">
-                            
-                        </select>
-                    </td>
-                </tr>
-                <tr id="newStyles" hidden>
-                    <td class="cell cell-label">
-                        <label for="backgroundColorValue">Background</label>
-                    </td>
-                    <td class="cell cell-data cell-data-left">
-                        <input type="text" id="backgroundColorValue" name="backgroundColorValue" maxlength="6" pattern="[0-9a-f]{6}" placeholder="fa6400" />
-                    </td>
-                    <td class="cell cell-space"></td>
-                    <td class="cell cell-label" colspan="2">
-                        <!-- <label style="display: inline" for="createNewStyles">Create new styles</label>
+        <div class="table">
+            <!-- Type -->
+            <div class="tr tr-labeled">
+                <div class="td" colspan="5">
+                    <div>
+                        <label class="label--tabGroups" for="buttonTypeGroup">Type</label>
+                    </div>
+                    <div>
+                        <ul class="buttonGroup buttonGroup-3" name="buttonTypeGroup" id="buttonTypeGroup">
+                            <li>
+                                <input type="radio" id="buttonType1" name="buttonType" value="1" checked />
+                                <label class="button secondary button-first" for="buttonType1">Text</label>
+                            </li>
+                            <li>
+                                <input type="radio" id="buttonType2" name="buttonType" value="2" />
+                                <label class="button secondary" for="buttonType2">Icon & Text</label>
+                            </li>
+                            <li>
+                                <input type="radio" id="buttonType3" name="buttonType" value="3" />
+                                <label class="button secondary button-last" for="buttonType3">Icon</label>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="hr">
+                <div></div>
+            </div>
+            <!-- Layout -->
+            <div class="tr tr-labeled">
+                <div class="td" colspan="5">
+                    <div>
+                        <label class="label--tabGroups" for="buttonLayoutGroup">Layout</label>
+                    </div>
+                    <div>
+                        <ul class="buttonGroup buttonGroup-2" name="buttonLayoutGroup" id="buttonLayoutGroup">
+                            <li>
+                                <input type="radio" id="buttonLayout1" name="buttonLayout" value="1" checked /></span>
+                                <label class="button secondary button-first" for="buttonLayout1">Smart Layout</label>
+                            </li>
+                            <li>
+                                <input type="radio" id="buttonLayout2" name="buttonLayout" value="2" />
+                                <label class="button secondary button-last" for="buttonLayout2">Fixed</label>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- Smart layout -->
+            <div class="tr">
+                <div id="smartLayout" class="td cell cell-data cell-data-right">
+                    <label for="buttonPadding">Padding</label>
+                    <input type="number" id="buttonPadding" name="buttonPadding" min=0 max=99 pattern="/^\d+$/" placeholder="16" />
+                </div>
+                <div id="fixedLayout" class="td cell cell-data cell-data-right" hidden>
+                    <label for="buttonWidth">Width</label>
+                    <input type="number" id="buttonWidth" name="buttonWidth" min=0 max=99 pattern="/^\d+$/" placeholder="16" />
+                </div>
+                <div class="td cell cell-space"></div>
+                <div class="td cell cell-data cell-data-right">
+                    <label for="buttonHeight">Height</label>
+                    <input type="number" id="buttonHeight" name="buttonHeight" min=0 max=999 pattern="/^\d+$/" placeholder="40" />
+                </div>
+            </div>
+            <div class="tr">
+                <div class="td cell cell-data">
+                    <label for="cornerRadius">Corners</label>
+                    <select id="cornerRadius" name="cornerRadius" class="select-css">
+                        <option value="1">Squared</option>
+                        <option value="2">Circled</option>
+                        <option value="3">Specific value</option>
+                    </select>
+                </div>
+                <div class="td cell cell-space"></div>
+                <div class="td cell cell-data cell-data-right">
+                    <label for="cornerRadiusValue">Radius</label>
+                    <input type="number" id="cornerRadiusValue" name="cornerRadiusValue" pattern="/^\d+$/" placeholder="4" disabled />
+                </div>
+            </div>
+            <!-- Styles -->
+            <div class="hr">
+                <div></div>
+            </div>
+            <div class="tr tr-labeled">
+                <div class="td" colspan="5">
+                    <div>
+                        <label class="label--tabGroups" for="buttonStyleGroup">Style</label>
+                    </div>
+                    <div>
+                        <ul class="buttonGroup buttonGroup-2" name="buttonStyleGroup" id="buttonStyleGroup">
+                            <li>
+                                <input type="radio" id="buttonStyle1" name="buttonStyle" value="1" checked />
+                                <label class="button secondary button-first" for="buttonStyle1" id="existingStylesLabel">Existing Styles</label>
+                            </li>
+                            <li>
+                                <input type="radio" id="buttonStyle2" name="buttonStyle" value="2" />
+                                <label class="button secondary button-last" for="buttonStyle2">New Styles</label>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="tr" id="existingStyles">
+                <div class="td cell cell-data">
+                    <label for="backgroundStyleValue">Background</label>
+                    <select id="backgroundStyleValue" name="backgroundStyleValue" class="select-css">        
+                    </select>
+                </div>
+                <div class="td cell cell-space"></div>
+                <div class="td cell cell-data">
+                    <label for="textStyleValue">Text</label>
+                    <select id="textStyleValue" name="textStyleValue" class="select-css">
+                    </select>
+                </div>
+            </div>
+            <div class="tr" id="newStyles" hidden>
+                <div class="td cell cell-data cell-data-left">
+                    <label for="backgroundColorValue">Background</label>
+                    <input type="text" id="backgroundColorValue" name="backgroundColorValue" maxlength="6" pattern="[0-9a-f]{6}" placeholder="fa6400" />
+                </div>
+                <div class="td cell cell-space"></div>
+                <div class="td cell cell-data">
+                    <!-- <label style="display: inline" for="createNewStyles">Create new styles</label>
                         <input type="checkbox" id="createNewStyle" name="createNewStyle" disabled /> -->
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                </div>
+            </div>
+        </div>
         <footer>
             <div class="footer-background">
                 <button class="primary" id="parametersSubmit">Create button</button>

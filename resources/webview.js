@@ -9,7 +9,7 @@
 // })
 
 // Enter Key = Click on Create Button button
-document.addEventListener("keyup", function(event) {
+document.addEventListener("keyup", function (event) {
     if (event.keyCode === 13) {
         document.getElementById("parametersSubmit").click();
     }
@@ -24,12 +24,42 @@ const uppercaseOnly = "/^[A-Z]+$/";
 const lowercaseOnly = "/^[a-z]+$/";
 const stringOnly = "/^[A-Za-z0-9]+$/";
 
+// const existingStyles = '<div class="td cell cell-label">';
+// existingStyles += '<label for="backgroundStyleValue">Background</label>';
+// existingStyles += "</div>";
+// existingStyles += '<div class="td cell cell-data">';
+// existingStyles +=
+//     '<select id="backgroundStyleValue" name="backgroundStyleValue" class="select-css">';
+// existingStyles += "</select>";
+// existingStyles += "</div>";
+// existingStyles += '<div class="td cell cell-space"></div>';
+// existingStyles += '<div class="td cell cell-label">';
+// existingStyles += '<label for="textStyleValue">Text</label>';
+// existingStyles += "</div>";
+// existingStyles += '<div class="td cell cell-data">;';
+// existingStyles +=
+//     '<select id="textStyleValue" name="textStyleValue" class="select-css">';
+// existingStyles += "</select>";
+// existingStyles += "</div>";
+
+// const newStyles = '<div class="td cell cell-label">';
+// newStyles += '<label for="backgroundColorValue">Background</label>';
+// newStyles += "</div>";
+// newStyles += '<div class="td cell cell-data cell-data-left">';
+// newStyles +=
+//     '<input type="text" id="backgroundColorValue" name="backgroundColorValue" maxlength="6" pattern="[0-9a-f]{6}" placeholder="fa6400" />';
+// newStyles += "</div>";
+// newStyles += '<div class="td cell cell-space"></div>';
+// newStyles += '<div class="td cell cell-label" colspan="2">';
+// newStyles += "</div>";
+
 // Type
 var buttonType = 0;
 var buttonType1 = document.getElementById("buttonType1");
 // Layout
 var buttonLayout = 0;
-var buttonPaddingHorizontalID = document.getElementById("buttonWidth");
+var buttonPaddingHorizontalID = document.getElementById("buttonPadding");
+var buttonWidthID = document.getElementById("buttonWidth");
 var buttonHeightID = document.getElementById("buttonHeight");
 var cornerRadiusID = document.getElementById("cornerRadius");
 var cornerRadiusValueID = document.getElementById("cornerRadiusValue");
@@ -58,12 +88,16 @@ document.getElementById("parametersSubmit").addEventListener("click", () => {
     // button Width or Paddding (based on Layout type)
     if (buttonLayout === 0) {
         var buttonPaddingHorizontalValue = 16;
+        if (buttonPaddingHorizontalID.value != "") {
+            buttonPaddingHorizontalValue = buttonPaddingHorizontalID.value;
+        }
     } else {
         var buttonPaddingHorizontalValue = 96;
+        if (buttonWidthID.value != "") {
+            buttonPaddingHorizontalValue = buttonWidthID.value;
+        }
     }
-    if (buttonPaddingHorizontalID.value != "") {
-        buttonPaddingHorizontalValue = buttonPaddingHorizontalID.value;
-    }
+
     // button Height
     var buttonHeightValue = 40;
     if (buttonHeightID.value != "") {
@@ -126,7 +160,7 @@ document.getElementById("parametersSubmit").addEventListener("click", () => {
 // ************************************************** //
 // Expose the value input for corner radius if needed //
 // ************************************************** //
-cornerRadiusID.addEventListener("change", function() {
+cornerRadiusID.addEventListener("change", function () {
     if (cornerRadiusID.value === "3") {
         document.getElementById("cornerRadiusValue").disabled = false;
     } else {
@@ -139,7 +173,7 @@ cornerRadiusID.addEventListener("change", function() {
 // ************************************************** //
 if (document.querySelector('input[name="buttonLayout"]')) {
     document.querySelectorAll('input[name="buttonLayout"]').forEach((elem) => {
-        elem.addEventListener("change", function(event) {
+        elem.addEventListener("change", function (event) {
             var item = event.target.value;
             if (item === "1") {
                 document.getElementById("smartLayout").hidden = false;
@@ -159,23 +193,36 @@ if (document.querySelector('input[name="buttonLayout"]')) {
 // ************************************************** //
 if (document.querySelector('input[name="buttonStyle"]')) {
     document.querySelectorAll('input[name="buttonStyle"]').forEach((elem) => {
-        elem.addEventListener("change", function(event) {
+        elem.addEventListener("change", function (event) {
             var item = event.target.value;
             if (item === "1") {
                 // Use existing Styles
                 document.getElementById("existingStyles").hidden = false;
                 document.getElementById("newStyles").hidden = true;
+                // document.getElementById(
+                //     "existingStyles"
+                // ).innerHTML = existingStyles;
+                // const parent = document.getElementById("newStyles");
+                // while (parent.firstChild) {
+                //     parent.firstChild.remove();
+                // }
             } else {
                 // Create new colors
                 document.getElementById("existingStyles").hidden = true;
                 document.getElementById("newStyles").hidden = false;
+                // document.getElementById("newStyles").innerHTML = newStyles;
+                // const parent = document.getElementById("existingStyles");
+                // while (parent.firstChild) {
+                //     parent.firstChild.remove();
+                // }
             }
         });
     });
 }
 
 // Function to populate the Styles dropdown
-window.fillLayerStylesDropdown = function(stylesArray) {
+window.fillLayerStylesDropdown = function (stylesArray) {
+    document.getElementById("newStyles").hidden = true;
     let select = document.getElementById("backgroundStyleValue");
     let option;
 
@@ -191,7 +238,6 @@ window.fillLayerStylesDropdown = function(stylesArray) {
     if (stylesArray.length === 0) {
         document.getElementById("existingStyles").hidden = true;
         document.getElementById("newStyles").hidden = false;
-        document.getElementById("newStyles").hidden = false;
         document.getElementById("buttonStyle1").checked = false;
         document.getElementById("buttonStyle2").checked = true;
         document.getElementById("existingStylesLabel").removeAttribute("for");
@@ -201,12 +247,8 @@ window.fillLayerStylesDropdown = function(stylesArray) {
     return "Styles loaded successfully";
 };
 
-window.fillTextStylesDropdown = function(stylesArray) {
-    console.log(stylesArray);
-    // stylesArray.forEach((style) => {
-    //     console.log(style.name);
-    //     console.log(style.id);
-    // });
+window.fillTextStylesDropdown = function (stylesArray) {
+    document.getElementById("newStyles").hidden = true;
     let select = document.getElementById("textStyleValue");
     let option;
 
@@ -221,7 +263,6 @@ window.fillTextStylesDropdown = function(stylesArray) {
     if (stylesArray.length === 0) {
         document.getElementById("existingStyles").hidden = true;
         document.getElementById("newStyles").hidden = false;
-        document.getElementById("newStyles").hidden = false;
         document.getElementById("buttonStyle1").checked = false;
         document.getElementById("buttonStyle2").checked = true;
         document.getElementById("existingStylesLabel").removeAttribute("for");
@@ -230,3 +271,6 @@ window.fillTextStylesDropdown = function(stylesArray) {
     // I will return a message that I'll log on the plugin's side, but you can send back anything you want
     return "Styles loaded successfully";
 };
+
+// document.getElementById("my-element").remove()
+//document.getElementById("tag-id").innerHTML = "<ol><li>html data</li></ol>";
