@@ -1,7 +1,7 @@
 // disable the context menu (eg. the right click menu) to have a more native feel
-// document.addEventListener('contextmenu', (e) => {
-//     e.preventDefault();
-// })
+document.addEventListener("contextmenu", (e) => {
+    e.preventDefault();
+});
 
 // call the plugin from the webview
 // document.getElementById('button').addEventListener('click', () => {
@@ -23,35 +23,6 @@ const decimalOnly = "/^s*-?[1-9]d*(.d{1,2})?s*$/";
 const uppercaseOnly = "/^[A-Z]+$/";
 const lowercaseOnly = "/^[a-z]+$/";
 const stringOnly = "/^[A-Za-z0-9]+$/";
-
-// const existingStyles = '<div class="td cell cell-label">';
-// existingStyles += '<label for="backgroundStyleValue">Background</label>';
-// existingStyles += "</div>";
-// existingStyles += '<div class="td cell cell-data">';
-// existingStyles +=
-//     '<select id="backgroundStyleValue" name="backgroundStyleValue" class="select-css">';
-// existingStyles += "</select>";
-// existingStyles += "</div>";
-// existingStyles += '<div class="td cell cell-space"></div>';
-// existingStyles += '<div class="td cell cell-label">';
-// existingStyles += '<label for="textStyleValue">Text</label>';
-// existingStyles += "</div>";
-// existingStyles += '<div class="td cell cell-data">;';
-// existingStyles +=
-//     '<select id="textStyleValue" name="textStyleValue" class="select-css">';
-// existingStyles += "</select>";
-// existingStyles += "</div>";
-
-// const newStyles = '<div class="td cell cell-label">';
-// newStyles += '<label for="backgroundColorValue">Background</label>';
-// newStyles += "</div>";
-// newStyles += '<div class="td cell cell-data cell-data-left">';
-// newStyles +=
-//     '<input type="text" id="backgroundColorValue" name="backgroundColorValue" maxlength="6" pattern="[0-9a-f]{6}" placeholder="fa6400" />';
-// newStyles += "</div>";
-// newStyles += '<div class="td cell cell-space"></div>';
-// newStyles += '<div class="td cell cell-label" colspan="2">';
-// newStyles += "</div>";
 
 // Type
 var buttonType = 0;
