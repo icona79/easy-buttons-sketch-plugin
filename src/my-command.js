@@ -109,7 +109,7 @@ var page = selectPage(findOrCreatePage(document, buttonSymbolsPage));
 // ********************************** //
 // Plugin code                        //
 // ********************************** //
-export default function () {
+export default function() {
     /* Create the webview with the sizes */
     const options = {
         identifier: webviewIdentifier,
@@ -278,9 +278,7 @@ export default function () {
 
                     /* set the icon contraint option */
                     setResizingConstraint(
-                        buttonIcon,
-                        [false, false, false, false],
-                        [true, true]
+                        buttonIcon, [false, false, false, false], [true, true]
                     );
                 } else if (buttonType === 2) {
                     let x = 0;
@@ -359,14 +357,14 @@ export default function () {
                         (buttonWidthValue -
                             buttonText.frame.width +
                             iconSpace) /
-                            2
+                        2
                     );
                     if (buttonType === 1) {
                         buttonIcon.frame.x = Math.floor(
                             (buttonWidthValue -
                                 buttonText.frame.width -
                                 iconSpace) /
-                                2
+                            2
                         );
                     }
                 }
@@ -379,20 +377,17 @@ export default function () {
             /* Create a Content group for text & icon */
             if (buttonType === 0) {
                 buttonContent = createGroup(
-                    buttonArtboard,
-                    [buttonText],
+                    buttonArtboard, [buttonText],
                     "Content"
                 );
             } else if (buttonType === 1) {
                 buttonContent = createGroup(
-                    buttonArtboard,
-                    [buttonIcon, buttonText],
+                    buttonArtboard, [buttonIcon, buttonText],
                     "Content"
                 );
             } else {
                 buttonContent = createGroup(
-                    buttonArtboard,
-                    [buttonIcon],
+                    buttonArtboard, [buttonIcon],
                     "Content"
                 );
             }
@@ -401,9 +396,7 @@ export default function () {
 
             /* set the Content group constraint option */
             setResizingConstraint(
-                buttonContent,
-                [false, false, false, false],
-                [true, false]
+                buttonContent, [false, false, false, false], [true, false]
             );
 
             /* Set the Button background (set the obj buttonBackground)*/
@@ -808,7 +801,7 @@ function setSmartLayout(item, type) {
 function getChildLayerByName(parentLayer, name) {
     let newLayer = null;
 
-    parentLayer.layers.forEach(function (item) {
+    parentLayer.layers.forEach(function(item) {
         if (item.name === name) {
             newLayer = item;
         }
@@ -820,7 +813,7 @@ function getChildLayerByName(parentLayer, name) {
 function getChildrenLayerByName(parentLayer, name) {
     let newLayers = [];
 
-    parentLayer.layers.forEach(function (item) {
+    parentLayer.layers.forEach(function(item) {
         if (item.name === name) {
             newLayers.push(item);
         }
@@ -1027,7 +1020,8 @@ function createSymbolFromLayer(item) {
             (layer) => layer.sketchObject
         );
 
-        let msLayerArray = MSLayerArray.arrayWithLayers(interalLayersArray);
+        //let msLayerArray = MSLayerArray.arrayWithLayers(interalLayersArray);
+        let msLayerArray = [interalLayersArray];
         // console.log(msLayerArray);
         MSSymbolCreator.createSymbolFromLayers_withName_onSymbolsPage(
             msLayerArray,
@@ -1132,9 +1126,7 @@ function lockSymbolOverrides(item, options) {
     for (let index = 0; index < item.overrides.length; index++) {
         let property = item.overrides[index].property;
         for (
-            let optionsIndex = 0;
-            optionsIndex < options.length;
-            optionsIndex++
+            let optionsIndex = 0; optionsIndex < options.length; optionsIndex++
         ) {
             if (property === options[optionsIndex]) {
                 item.overrides[index].editable = false;
@@ -1188,18 +1180,18 @@ function colorContrast(color) {
 
 function hexToRgb(hex) {
     var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-    hex = hex.replace(shorthandRegex, function (m, r, g, b) {
+    hex = hex.replace(shorthandRegex, function(m, r, g, b) {
         return r + r + g + g + b + b;
     });
 
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result
-        ? {
-              r: parseInt(result[1], 16),
-              g: parseInt(result[2], 16),
-              b: parseInt(result[3], 16),
-          }
-        : null;
+    return result ?
+        {
+            r: parseInt(result[1], 16),
+            g: parseInt(result[2], 16),
+            b: parseInt(result[3], 16),
+        } :
+        null;
 }
 
 // ******************************************************************* //
