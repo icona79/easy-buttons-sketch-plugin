@@ -1,9 +1,10 @@
 {
     "name": "easybuttons",
     "description": "Easily create button archetypes",
-    "version": "2.0.0",
+    "version": "0.0.1",
     "engines": {
-        "sketch": ">=3.0"
+        "sketch": ">=3.0",
+        "node": "16.15.0"
     },
     "skpm": {
         "name": "Easy Buttons",
@@ -21,7 +22,7 @@
         "postinstall": "npm run build && skpm-link"
     },
     "devDependencies": {
-        "@skpm/builder": "^0.7.4",
+        "@skpm/builder": "^0.8.0",
         "@skpm/extract-loader": "^2.0.2",
         "css-loader": "^3.2.0",
         "html-loader": "^0.5.5",
@@ -33,5 +34,9 @@
     "dependencies": {
         "sketch-module-web-view": "^3.1.4"
     },
-    "author": "Matteo Gratton <icona79@gmail.com>"
+    "author": "Matteo Gratton <icona79@gmail.com>",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/icona79/easy-buttons-sketch-plugin.git"
+    }
 }

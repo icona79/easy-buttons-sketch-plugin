@@ -1,22 +1,26 @@
 {
+    "name": "Easy Buttons",
+    "description": "Easily create button archetypes",
     "compatibleVersion": 3,
     "bundleVersion": 1,
-    "commands": [{
-        "name": "🎛 Easy Buttons",
-        "identifier": "prettybuttons.my-command-identifier",
-        "script": "./my-command.js",
-        "handlers": {
-            "run": "onRun",
-            "actions": {
-                "Shutdown": "onShutdown"
+    "icon": "icon.png",
+    "darkIcon": "easybutton_dark.png",
+    "commands": [
+        {
+            "name": "🎛 Easy Buttons",
+            "identifier": "easybuttons.my-command-identifier",
+            "script": "./easybuttons.js",
+            "handlers": {
+                "run": "onRun",
+                "actions": {
+                    "Shutdown": "onShutdown"
+                }
             }
         }
-    }],
+    ],
     "menu": {
         "title": "Easy Buttons",
-        "items": ["prettybuttons.my-command-identifier"],
+        "items": ["easybuttons.my-command-identifier"],
         "isRoot": true
-    },
-    "icon": "icon.png",
-    "darkIcon": "easybutton_dark.png"
+    }
 }
